@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ketua & Wakil - OSIS SMKN 1 Bantul</title>
+    <link rel="icon" type="image/jpeg" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="apple-touch-icon" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/struktur.css">
+    <link rel="stylesheet" href="/struktur/ph/ketua/style.css">
+    <style>
+        /* ============================================
+           Penyesuaian khusus halaman Ketua & Wakil:
+           setiap orang ditampilkan pakai gaya foto
+           "koordinator" (foto besar), bukan kartu kecil
+           seperti anggota sekbid. Blok genap dibalik
+           arahnya (foto di kanan) biar tidak monoton.
+           ============================================ */
+        .pengurus-section {
+            position: relative;
+            background: #f3f3f5;
+            padding: 70px 20px;
+            overflow: hidden;
+        }
+
+        .pengurus-section:nth-of-type(even) {
+            background: #ffffff;
+        }
+
+        .pengurus-grid {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .pengurus-grid.reverse {
+            grid-template-columns: 1.1fr 0.9fr;
+        }
+
+        .pengurus-grid.reverse .pengurus-photo-wrap {
+            order: 2;
+        }
+
+        .pengurus-grid.reverse .pengurus-info {
+            order: 1;
+        }
+
+        .pengurus-photo-wrap img {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 0;
+            box-shadow: none;
+            filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.18));
+            /* TODO: ganti src <img> dengan foto asli dari Supabase Storage
+               (idealnya PNG dengan background dihapus/transparan) */
+        }
+
+        .pengurus-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--sekbid-blue);
+            margin-bottom: 6px;
+        }
+
+        .pengurus-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--sekbid-ink);
+            letter-spacing: -1px;
+            margin-bottom: 6px;
+        }
+
+        .pengurus-kelas {
+            font-size: 0.95rem;
+            color: var(--sekbid-muted);
+            font-weight: 500;
+        }
+
+        @media (max-width: 900px) {
+            .pengurus-grid,
+            .pengurus-grid.reverse {
+                grid-template-columns: 1fr;
+                text-align: left;
+            }
+
+            .pengurus-grid.reverse .pengurus-photo-wrap,
+            .pengurus-grid.reverse .pengurus-info {
+                order: 0;
+            }
+
+            .pengurus-photo-wrap {
+                display: flex;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="/" class="brand">
+                <img src="/assets/logo-osis.png" alt="Logo OSIS" class="logo-img">
+                <span class="brand-text">OSIS <span>SMKN 1 Bantul</span></span>
+            </a>
+
+            <div class="hamburger" id="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="/" class="nav-link">Beranda</a></li>
+                <li><a href="/struktur" class="nav-link active">Struktur</a></li>
+                <li><a href="/open-recruitment" class="nav-link">Open Recruitment</a></li>
+                <li><a href="/info" class="nav-link">Info</a></li>
+                <li><a href="/ai" class="nav-link">AI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- ============================================
+         1. HERO
+         TODO: ganti src foto sampul di bawah dengan URL Supabase Storage
+         ============================================ -->
+    <section class="bidang-hero">
+        <img class="bidang-hero-photo" src="/assets/foto-sampul-sekbid/ketua.jpg" alt="Ketua dan Wakil Ketua OSIS">
+        <div class="overlay-gelap"></div>
+        <div class="bidang-hero-deco-circle"></div>
+        <div class="bidang-hero-deco-dots"></div>
+        <div class="bidang-hero-content">
+            <h1>Ketua & Wakil</h1>
+            <p>𝗞𝗘𝗧𝗨𝗔 𝗗𝗔𝗡 𝗪𝗔𝗞𝗜𝗟 𝗞𝗘𝗧𝗨𝗔 𝗢𝗦𝗜𝗦 𝗦𝗠𝗞𝗡 𝟭 𝗕𝗔𝗡𝗧𝗨𝗟</p>
+        </div>
+    </section>
+
+    <!-- ============================================
+         2. TUGAS UMUM
+         ============================================ -->
+    <section class="tugas-section">
+        <div class="tugas-grid" style="align-items: flex-start;">
+
+            <h2 style="margin-top: 0;">Tugas Umum</h2>
+
+            <div class="tugas-content-wrapper">
+                <p style="margin-top: 0;">Ketua dan Wakil Ketua bersama Ketua 1 dan Ketua 2 memegang tanggung jawab tertinggi dalam kepengurusan OSIS, memastikan seluruh kegiatan berjalan sesuai program kerja dan menjadi teladan bagi seluruh anggota.</p>
+
+                <div class="visi-misi-box" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px; border-left: 5px solid #0056b3;">
+                    <h3 style="margin-top: 0;">Fokus Utama Kami</h3>
+                    <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; margin-bottom: 0;">
+                        <li>Memimpin dan mengkoordinasi seluruh kegiatan OSIS.</li>
+                        <li>Mengawasi jalannya program kerja yang telah dirancang.</li>
+                        <li>Menjadi penghubung antara OSIS dengan pihak sekolah (guru, pembina, kepala sekolah).</li>
+                        <li>Mewakili OSIS dalam kegiatan internal maupun eksternal sekolah.</li>
+                        <li>Bertanggung jawab atas nama baik OSIS.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================
+         3. KETUA
+         TODO: ganti foto dengan foto Faiz Nabil Rajendra
+         ============================================ -->
+    <section class="pengurus-section">
+        <div class="koordinator-deco-dots"></div>
+        <div class="pengurus-grid">
+            <div class="pengurus-photo-wrap">
+                <img src="/assets/foto-struktur/jendra.png" alt="Foto Ketua OSIS">
+            </div>
+            <div class="pengurus-info">
+                <p class="pengurus-label">Ketua</p>
+                <h2 class="pengurus-name">Faiz Nabil Rajendra</h2>
+                <p class="pengurus-kelas">Kelas: XII DKV 1</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         4. WAKIL KETUA
+         TODO: ganti foto dengan foto Elfani Choirunnisa Putri
+         ============================================ -->
+    <section class="pengurus-section">
+        <div class="koordinator-deco-stripes"></div>
+        <div class="pengurus-grid reverse">
+            <div class="pengurus-photo-wrap">
+                <img src="/assets/foto-struktur/fani.png" alt="Foto Wakil Ketua OSIS">
+            </div>
+            <div class="pengurus-info">
+                <p class="pengurus-label">Wakil Ketua</p>
+                <h2 class="pengurus-name">Elfani Choirunnisa Putri</h2>
+                <p class="pengurus-kelas">Kelas: XII LPS</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         5. KETUA 1
+         TODO: ganti foto dengan foto Dafa Fadhila Dzikri
+         ============================================ -->
+    <section class="pengurus-section">
+        <div class="koordinator-deco-dots"></div>
+        <div class="pengurus-grid">
+            <div class="pengurus-photo-wrap">
+                <img src="/assets/foto-struktur/dafa.png" alt="Foto Ketua 1 OSIS">
+            </div>
+            <div class="pengurus-info">
+                <p class="pengurus-label">Ketua 1</p>
+                <h2 class="pengurus-name">Dafa Fadhila Dzikri</h2>
+                <p class="pengurus-kelas">Kelas: XI RPL 1</p>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- ============================================
+         6. KETUA 2
+         TODO: ganti foto dengan foto Nabila Aprilia Azzahra
+         ============================================ -->
+    <section class="pengurus-section">
+        <div class="koordinator-deco-stripes"></div>
+        <div class="pengurus-grid reverse">
+            <div class="pengurus-photo-wrap">
+                <img src="/assets/foto-struktur/nabila.png" alt="Foto Ketua 2 OSIS">
+            </div>
+            <div class="pengurus-info">
+                <p class="pengurus-label">Ketua 2</p>
+                <h2 class="pengurus-name">Nabila Aprilia Azzahra</h2>
+                <p class="pengurus-kelas">Kelas: XI LPS 2</p>
+            </div>
+        </div>
+    </section>
+    <section class="tugas-section" style="padding: 3rem 2rem; background-color: #ffffff; margin: 2rem auto; max-width: 1000px;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2>KETUA</h2>
+        <p style="color: #666; margin-top: 10px;">Tugas dan Tanggung Jawab Ketua OSIS</p>
+    </div>
+
+    <div class="tugas-box" style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border-left: 6px solid #d4af37; border-radius: 8px; padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <ol style="font-size: 1.1rem; line-height: 2; color: #444; padding-left: 1.5rem; margin: 0; font-weight: 500;">
+            <li>Memimpin dan mengkoordinasi seluruh kegiatan OSIS.</li>
+            <li>Mengawasi jalannya program kerja yang telah dirancang.</li>
+            <li>Menjadi penghubung antara OSIS dengan pihak sekolah (guru, pembina, kepala sekolah).</li>
+            <li>Mewakili OSIS dalam kegiatan internal maupun eksternal sekolah.</li>
+            <li>Bertanggung jawab atas nama baik OSIS.</li>
+        </ol>
+    </div>
+</section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-brand">
+                    <img src="/assets/logo-osis.png" alt="Logo OSIS" class="footer-logo">
+                    <span>OSIS SMKN 1 Bantul</span>
+                </div>
+                <p class="footer-desc">Wadah aspirasi, kreasi, dan inovasi seluruh siswa SMK Negeri 1 Bantul untuk mewujudkan generasi yang berkarakter unggul.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigasi</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Beranda</a></li>
+                    <li><a href="/struktur">Struktur Organisasi</a></li>
+                    <li><a href="/open-recruitment">Open Recruitment</a></li>
+                    <li><a href="/info">Pusat Info</a></li>
+                    <li><a href="/ai">OSIS-Bot AI</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Kontak & Lokasi</h4>
+                <p class="contact-item">📍 Jl. Parangtritis Km 11, Sabdodadi, Bantul, D.I. Yogyakarta</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Media Sosial</h4>
+                <div class="social-links">
+                <a href="https://www.instagram.com/osis.smkn1bantul/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+                <a href="https://www.youtube.com/@osissabavoscho6471/" target="_blank" rel="noopener noreferrer" class="social-btn">YouTube</a>
+                <a href="https://www.tiktok.com/@osissmkn1bantul" target="_blank" rel="noopener noreferrer" class="social-btn">TikTok</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 OSIS SMKN 1 Bantul. All Rights Reserved. Crafted with passion.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/sekbid.js"></script>
+    <script src="/struktur/ph/ketua/main.js"></script>
+</body>
+</html>

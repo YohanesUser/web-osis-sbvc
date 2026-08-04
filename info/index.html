@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pusat Info - OSIS SMKN 1 Bantul</title>
+    <link rel="icon" type="image/jpeg" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="apple-touch-icon" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/info.css">
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="/" class="brand">
+                <img src="/assets/logo-osis.png" alt="Logo OSIS" class="logo-img">
+                <span class="brand-text">OSIS <span>SMKN 1 Bantul</span></span>
+            </a>
+
+            <div class="hamburger" id="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="/" class="nav-link">Beranda</a></li>
+                <li><a href="/struktur" class="nav-link">Struktur</a></li>
+                <li><a href="/open-recruitment" class="nav-link">Open Recruitment</a></li>
+                <li><a href="/info" class="nav-link active">Info</a></li>
+                <li><a href="/ai" class="nav-link">AI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="info-page">
+        <div class="info-header">
+            <span class="badge-outline">📌 PUSAT INFORMASI</span>
+            <h1>Berita & Pengumuman</h1>
+            <p>Dapatkan informasi terbaru seputar jadwal kegiatan, program kerja, dan berita dari lingkungan OSIS SMKN 1 Bantul.</p>
+        </div>
+
+        <div id="news-filter" class="news-filter"></div>
+
+        <div id="news-grid" class="news-grid">
+            <!-- Kartu berita dirender otomatis oleh info.js -->
+        </div>
+    </main>
+
+    <!-- ===========================================
+         MODAL BACA BERITA LENGKAP
+         =========================================== -->
+    <div id="news-modal" class="news-modal hidden">
+        <div class="news-modal-backdrop" id="news-modal-backdrop"></div>
+        <div class="news-modal-card">
+            <button type="button" id="news-modal-close" class="news-modal-close" aria-label="Tutup">✕</button>
+
+            <div id="news-modal-cover-wrap" class="news-modal-cover-wrap hidden">
+                <img id="news-modal-cover-bg" class="news-modal-cover-bg" alt="">
+                <img id="news-modal-cover" class="news-modal-cover" alt="">
+            </div>
+
+            <div class="news-modal-meta">
+                <span id="news-modal-category" class="news-category"></span>
+                <span id="news-modal-date" class="news-modal-date"></span>
+            </div>
+            <h2 id="news-modal-title"></h2>
+            <p id="news-modal-content" class="news-modal-body"></p>
+            <div id="news-modal-gallery" class="news-modal-gallery hidden"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-brand">
+                    <img src="/assets/logo-osis.png" alt="Logo OSIS" class="footer-logo">
+                    <span>OSIS SMKN 1 Bantul</span>
+                </div>
+                <p class="footer-desc">Wadah aspirasi, kreasi, dan inovasi seluruh siswa SMK Negeri 1 Bantul untuk mewujudkan generasi yang berkarakter unggul.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigasi</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Beranda</a></li>
+                    <li><a href="/struktur">Struktur Organisasi</a></li>
+                    <li><a href="/open-recruitment">Open Recruitment</a></li>
+                    <li><a href="/info">Pusat Info</a></li>
+                    <li><a href="/ai">OSIS-Bot AI</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Kontak & Lokasi</h4>
+                <p class="contact-item">📍 Jl. Parangtritis Km 11, Sabdodadi, Bantul, D.I. Yogyakarta</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Media Sosial</h4>
+                <div class="social-links">
+                <a href="https://www.instagram.com/osis.smkn1bantul/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+                <a href="https://www.youtube.com/@osissabavoscho6471/" target="_blank" rel="noopener noreferrer" class="social-btn">YouTube</a>
+                <a href="https://www.tiktok.com/@osissmkn1bantul" target="_blank" rel="noopener noreferrer" class="social-btn">TikTok</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 OSIS SMKN 1 Bantul. All Rights Reserved. Crafted with passion.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="/js/info.js"></script>
+</body>
+</html>

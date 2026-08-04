@@ -1,0 +1,628 @@
+/* =========================================
+   PANEL ADMIN - OSIS SMKN 1 Bantul
+   Versi Modern (gaya Bootstrap 5)
+   ========================================= */
+
+:root {
+    --primary: #0b3d91;
+    --primary-hover: #092f70;
+    --primary-light: #e7edfb;
+    --success: #16a34a;
+    --success-light: #dcfce7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --warning: #d97706;
+    --border: #dee2e6;
+    --border-light: #e9ecef;
+    --text: #212529;
+    --text-muted: #6c757d;
+    --text-subtle: #adb5bd;
+    --bg: #f5f7fa;
+    --bg-surface: #ffffff;
+    --bg-subtle: #f8f9fa;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --radius-sm: 6px;
+    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+    --shadow: 0 4px 14px rgba(16, 24, 40, 0.08);
+    --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.10);
+    --transition: all 0.15s ease-in-out;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+}
+
+.hidden {
+    display: none !important;
+}
+
+a {
+    color: inherit;
+}
+
+/* =========================================
+   LOGIN SCREEN
+   ========================================= */
+.login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(160deg, #0b3d91 0%, #0b3d91 0%, var(--bg) 42%);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 40px 34px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+}
+
+.login-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--primary), #1450c4);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 16px rgba(11, 61, 145, 0.35);
+}
+
+.login-card h1 {
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin: 0 0 6px;
+    letter-spacing: -0.3px;
+}
+
+.login-sub {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0 0 26px;
+}
+
+.login-card label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.login-card input {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    font-size: 0.92rem;
+    margin-bottom: 18px;
+    background: var(--bg-subtle);
+    transition: var(--transition);
+    width: 100%;
+}
+
+.login-card input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(11, 61, 145, 0.15);
+}
+
+.login-error {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin: 12px 0 0;
+    min-height: 1em;
+    font-weight: 600;
+}
+
+/* =========================================
+   BUTTONS (gaya btn Bootstrap)
+   ========================================= */
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    line-height: 1.5;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: #ffffff;
+    padding: 10px 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(11, 61, 145, 0.25);
+}
+
+.btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid var(--border);
+    padding: 9px 16px;
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.btn-secondary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(11, 61, 145, 0.15);
+}
+
+.btn-danger {
+    background: #ffffff;
+    color: var(--danger);
+    border: 1px solid #f5c2c2;
+    padding: 9px 16px;
+}
+
+.btn-danger:hover {
+    background: var(--danger-light);
+    border-color: var(--danger);
+}
+
+.btn-danger:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.15);
+}
+
+/* =========================================
+   DASHBOARD LAYOUT
+   ========================================= */
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-light);
+    padding: 16px 28px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-brand {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--primary);
+    letter-spacing: -0.2px;
+}
+
+.admin-brand span {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.admin-header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.admin-email {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-light);
+}
+
+.admin-main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+}
+
+.admin-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.admin-toolbar h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.admin-loading,
+.admin-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding: 40px 20px;
+    background: var(--bg-surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+}
+
+/* =========================================
+   TAB NAVIGASI (gaya nav-tabs Bootstrap)
+   ========================================= */
+.admin-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-surface);
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 6px 6px 0;
+}
+
+.admin-tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 18px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition);
+    margin-bottom: -1px;
+}
+
+.admin-tab-btn:hover {
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.admin-tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    background: var(--primary-light);
+}
+
+/* =========================================
+   BADGE STATUS (opsional, dipakai jika ada elemen .badge)
+   ========================================= */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-success {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.badge-danger {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.badge-muted {
+    background: var(--bg-subtle);
+    color: var(--text-muted);
+    border: 1px solid var(--border-light);
+}
+
+/* =========================================
+   KARTU KOMENTAR (ADMIN)
+   ========================================= */
+.admin-comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-comment-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.admin-comment-card:hover {
+    box-shadow: var(--shadow);
+}
+
+.admin-comment-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.admin-comment-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.admin-comment-date {
+    font-size: 0.78rem;
+    color: var(--text-subtle);
+}
+
+.admin-field-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-subtle);
+    margin: 14px 0 6px;
+}
+
+.admin-field-label:first-of-type {
+    margin-top: 0;
+}
+
+.admin-comment-card textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    resize: vertical;
+    min-height: 70px;
+    background: var(--bg-subtle);
+    color: var(--text);
+    transition: var(--transition);
+}
+
+.admin-comment-card textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(11, 61, 145, 0.15);
+}
+
+.admin-reply-textarea {
+    border-color: #bfdbfe !important;
+    background: #f8fbff !important;
+}
+
+.admin-comment-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.admin-save-status {
+    font-size: 0.8rem;
+    color: var(--success);
+    font-weight: 600;
+    margin-right: auto;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* =========================================
+   FORM TAMBAH / EDIT BERITA (gaya form Bootstrap)
+   ========================================= */
+.news-form-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+}
+
+.news-form-card input[type="text"],
+.news-form-card textarea {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    background: var(--bg-subtle);
+    margin-bottom: 4px;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.news-form-card input[type="text"]:focus,
+.news-form-card textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(11, 61, 145, 0.15);
+}
+
+.news-form-card textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.news-form-card input[type="file"] {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    padding: 8px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-subtle);
+}
+
+.news-publish-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #334155;
+    margin: 14px 0 0;
+    font-weight: 500;
+}
+
+/* =========================================
+   PREVIEW GAMBAR (form berita)
+   ========================================= */
+.image-preview-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 8px 0 16px;
+}
+
+.image-preview-item {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.image-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.image-preview-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(15, 23, 42, 0.65);
+    color: #ffffff;
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: var(--transition);
+}
+
+.image-preview-remove:hover {
+    background: var(--danger);
+}
+
+/* Thumbnail sampul di daftar berita admin */
+.admin-news-thumb {
+    width: 100%;
+    max-height: 170px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* =========================================
+   SCROLLBAR HALUS (opsional, gaya modern)
+   ========================================= */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c7cfda;
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a9b4c4;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 600px) {
+    .admin-header {
+        padding: 14px 16px;
+    }
+
+    .admin-main {
+        padding: 24px 14px 60px;
+    }
+
+    .admin-comment-actions {
+        flex-wrap: wrap;
+    }
+
+    .login-card {
+        padding: 30px 24px;
+    }
+
+    .admin-toolbar {
+        align-items: flex-start;
+    }
+}

@@ -1,0 +1,355 @@
+/* =========================================
+   HALAMAN OPEN RECRUITMENT (TEMA TERANG)
+   ========================================= */
+
+.oprec-page {
+    max-width: 900px;
+    margin: 40px auto 100px;
+    padding: 0 20px;
+}
+
+.oprec-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.oprec-header h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin: 15px 0;
+    color: #111111;
+}
+
+/* =========================
+   STATUS BADGE
+========================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(34,197,94,.1);
+    border: 1px solid rgba(34,197,94,.3);
+    border-radius: 30px;
+    color: #16a34a;
+    font-size: .85rem;
+    font-weight: 700;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #22c55e;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    50%{
+        transform:scale(1.5);
+        opacity:.5;
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.oprec-section{
+
+    background:#fff;
+    border:1px solid rgba(0,0,0,.08);
+    box-shadow:0 8px 30px rgba(0,0,0,.06);
+    border-radius:24px;
+    padding:40px;
+    margin-bottom:30px;
+
+}
+
+.oprec-section h2{
+
+    font-size:1.8rem;
+    margin-bottom:25px;
+    color:#111;
+
+}
+
+/* =========================
+   PAMFLET
+========================= */
+
+.pamflet-box{
+
+    text-align:center;
+
+}
+
+.pamflet-img{
+
+    width:100%;
+    max-width:720px;
+
+    border-radius:18px;
+
+    border:1px solid #eee;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+
+    cursor:pointer;
+
+    transition:.35s ease;
+
+}
+
+.pamflet-img:hover{
+
+    transform:translateY(-8px) scale(1.02);
+
+    box-shadow:0 25px 60px rgba(0,0,0,.18);
+
+}
+
+.pamflet-caption{
+
+    margin-top:15px;
+
+    color:#777;
+
+    font-size:.95rem;
+
+}
+
+/* =========================
+   PERSYARATAN
+========================= */
+
+.req-list{
+
+    list-style:none;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.req-list li{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:12px;
+
+    color:#555;
+
+    line-height:1.6;
+
+}
+
+.req-list li::before{
+
+    content:"✓";
+
+    color:#16a34a;
+
+    font-weight:bold;
+
+    font-size:1.1rem;
+
+}
+
+/* =========================
+   TOMBOL GOOGLE FORM
+========================= */
+
+.btn-submit{
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:16px 34px;
+
+    background:linear-gradient(135deg,#111,#333);
+
+    color:#fff;
+
+    text-decoration:none;
+
+    border-radius:14px;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    transition:.3s;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+}
+
+.btn-submit:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 18px 40px rgba(0,0,0,.2);
+
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    .oprec-header h1{
+
+        font-size:2.3rem;
+
+    }
+
+    .oprec-section{
+
+        padding:25px;
+
+    }
+
+    .oprec-section h2{
+
+        font-size:1.4rem;
+
+    }
+
+    .btn-submit{
+
+        width:100%;
+
+    }
+
+
+
+}
+
+/* ==========================
+   CONTACT PERSON
+========================== */
+
+.oprec-contact{
+    margin-top:45px;
+    text-align:center;
+}
+
+.oprec-contact h3{
+    font-size:1.5rem;
+    margin-bottom:10px;
+    color:#111;
+}
+
+.oprec-contact p{
+    color:#666;
+    margin-bottom:25px;
+}
+
+.cp-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.cp-card{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:18px;
+    background:#fff;
+    border:1px solid #ececec;
+    border-radius:18px;
+    text-decoration:none;
+    color:#111;
+    transition:.3s;
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+.cp-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px rgba(0,0,0,.12);
+    border-color:#25D366;
+}
+
+.cp-photo{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid #25D366;
+    flex-shrink:0;
+}
+
+.cp-info{
+    text-align:left;
+}
+
+.cp-info strong{
+    display:block;
+    font-size:1.05rem;
+    margin-bottom:4px;
+}
+
+.cp-info small{
+    display:block;
+    color:#666;
+    margin-bottom:6px;
+}
+
+.cp-info span{
+    color:#25D366;
+    font-weight:600;
+}
+
+@media (max-width:768px){
+    .cp-card{
+        padding:16px;
+    }
+
+    .cp-photo{
+        width:60px;
+        height:60px;
+    }
+}
+
+/* WhatsApp Number */
+
+.wa-number{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#25D366;
+    font-weight:600;
+    margin-top:8px;
+}
+
+.wa-icon{
+    width:20px;
+    height:20px;
+    flex-shrink:0;
+}

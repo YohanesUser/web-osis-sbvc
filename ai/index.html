@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - OSIS SMKN 1 Bantul</title>
+    <link rel="icon" type="image/jpeg" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="apple-touch-icon" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/ai.css">
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="/" class="brand">
+                <img src="/assets/logo-osis.png" alt="Logo" class="logo-img">
+                <span class="brand-text">OSIS <span>SMKN 1 Bantul</span></span>
+            </a>
+
+            <div class="hamburger" id="hamburger-menu">
+                <span></span><span></span><span></span>
+            </div>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="/" class="nav-link">Beranda</a></li>
+                <li><a href="/struktur" class="nav-link">Struktur</a></li>
+                <li><a href="/open-recruitment" class="nav-link">Open Recruitment</a></li>
+                <li><a href="/info" class="nav-link">Info</a></li>
+                <li><a href="/ai" class="nav-link">AI</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="ai-page">
+        <div class="ai-header">
+            <h1>Tanya?</h1>
+            <p>Tanya apa saja seputar kegiatan sekolah dan program kerja kami.</p>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message ai">
+                    <div class="avatar-chat"><img src="/assets/logo-osis.png" alt="Avatar AI"></div>
+                    <div class="bubble">
+                        Halo! Saya adalah asisten virtual OSIS SMKN 1 Bantul. Ada yang bisa saya bantu hari ini? 
+                        Kamu bisa bertanya tentang Porseni, syarat pendaftaran OSIS, atau struktur pengurus.
+                    </div>
+                </div>
+                
+                <div class="message ai" id="typing-indicator-container" style="display: none;">
+                    <div class="avatar-chat"><img src="/assets/logo-osis.png" alt="Avatar AI"></div>
+                    <div class="typing-indicator" id="typing-indicator" style="display: flex;">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            </div>
+
+            <form class="chat-input-area" id="chat-form">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Ketik pertanyaanmu di sini..." autocomplete="off" required>
+                <button type="submit" class="btn-send">➤</button>
+            </form>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-brand">
+                    <img src="/assets/logo-osis.png" alt="Logo OSIS" class="footer-logo">
+                    <span>OSIS SMKN 1 Bantul</span>
+                </div>
+                <p class="footer-desc">Wadah aspirasi, kreasi, dan inovasi seluruh siswa SMK Negeri 1 Bantul untuk mewujudkan generasi yang berkarakter unggul.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigasi</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Beranda</a></li>
+                    <li><a href="/struktur">Struktur Organisasi</a></li>
+                    <li><a href="/open-recruitment">Open Recruitment</a></li>
+                    <li><a href="/info">Pusat Info</a></li>
+                    <li><a href="/ai">OSIS-Bot AI</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Kontak & Lokasi</h4>
+                <p class="contact-item">📍 Jl. Parangtritis Km 11, Sabdodadi, Bantul, D.I. Yogyakarta</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Media Sosial</h4>
+                <div class="social-links">
+                <a href="https://www.instagram.com/osis.smkn1bantul/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+                <a href="https://www.youtube.com/@osissabavoscho6471/" target="_blank" rel="noopener noreferrer" class="social-btn">YouTube</a>
+                <a href="https://www.tiktok.com/@osissmkn1bantul" target="_blank" rel="noopener noreferrer" class="social-btn">TikTok</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 OSIS SMKN 1 Bantul. All Rights Reserved. Crafted with passion.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="js/ai.js"></script>
+    
+</body>
+</html>

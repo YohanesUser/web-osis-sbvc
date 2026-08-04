@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - OSIS SMKN 1 Bantul</title>
+    <link rel="icon" type="image/jpeg" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="apple-touch-icon" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+    <div id="login-screen" class="login-screen">
+        <form id="login-form" class="login-card">
+            <div class="login-logo">
+                <img src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg" alt="Logo OSIS" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
+            </div>
+            
+            <h1>Panel Admin</h1>
+            <p class="login-sub">Masuk untuk mengelola komentar & berita.</p>
+
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" placeholder="@smkn1bantul.sch.id" required autocomplete="username">
+
+            <label for="login-password">Kata Sandi</label>
+            <input type="password" id="login-password" placeholder="isi password" required autocomplete="current-password">
+
+            <button type="submit" id="login-btn" class="btn-primary">Masuk</button>
+            <p id="login-error" class="login-error"></p>
+        </form>
+    </div>
+
+    <div id="dashboard" class="dashboard hidden">
+        <header class="admin-header">
+            <div class="admin-brand" style="display: flex; align-items: center; gap: 10px;">
+                <img src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg" alt="Logo OSIS" style="width: 35px; height: 35px; object-fit: cover; border-radius: 50%;">
+                <div>OSIS <span>Sbvc Admin</span></div>
+            </div>
+            
+            <div class="admin-header-right">
+                <span id="admin-email" class="admin-email"></span>
+                <button id="logout-btn" class="btn-secondary">Keluar</button>
+            </div>
+        </header>
+
+        <main class="admin-main">
+
+            <div class="admin-tabs">
+                <button type="button" class="admin-tab-btn active" data-tab="comments">Komentar Siswa</button>
+                <button type="button" class="admin-tab-btn" data-tab="news">Kelola Berita</button>
+                <button type="button" class="admin-tab-btn" data-tab="chatbot">Kelola Chatbot</button>
+            </div>
+
+            <section id="tab-comments" class="admin-tab-panel">
+                <div class="admin-toolbar">
+                    <h2>Komentar Siswa</h2>
+                    <button id="refresh-btn" class="btn-secondary">Muat Ulang</button>
+                </div>
+
+                <div id="admin-comment-list" class="admin-comment-list">
+                    <p class="admin-loading">Memuat komentar...</p>
+                </div>
+            </section>
+
+            <section id="tab-news" class="admin-tab-panel hidden">
+                <div class="admin-toolbar">
+                    <h2>Kelola Berita</h2>
+                    <button id="news-refresh-btn" class="btn-secondary">Muat Ulang</button>
+                </div>
+
+                <form id="news-form" class="news-form-card">
+                    <div class="admin-field-label">Kategori</div>
+                    <input type="text" id="news-category" placeholder="Kegiatan / Pengumuman / Seminar / Lomba" required>
+
+                    <div class="admin-field-label">Judul</div>
+                    <input type="text" id="news-title" placeholder="Judul berita" required>
+
+                    <div class="admin-field-label">Isi Berita</div>
+                    <textarea id="news-content" placeholder="Tulis isi berita di sini..." required></textarea>
+
+                    <div class="admin-field-label">Gambar Sampul (1 gambar)</div>
+                    <input type="file" id="news-cover-input" accept="image/*">
+                    <div id="news-cover-preview" class="image-preview-wrap"></div>
+
+                    <div class="admin-field-label">Gambar Isi (boleh lebih dari satu)</div>
+                    <input type="file" id="news-content-images-input" accept="image/*" multiple>
+                    <div id="news-content-images-preview" class="image-preview-wrap"></div>
+
+                    <label class="news-publish-toggle">
+                        <input type="checkbox" id="news-published" checked>
+                        Langsung publikasikan
+                    </label>
+
+                    <div class="admin-comment-actions">
+                        <span id="news-form-status" class="admin-save-status"></span>
+                        <button type="button" id="news-cancel-btn" class="btn-secondary hidden">Batal Edit</button>
+                        <button type="submit" id="news-submit-btn" class="btn-primary">Tambah Berita</button>
+                    </div>
+                </form>
+
+                <div id="admin-news-list" class="admin-comment-list">
+                    <p class="admin-loading">Memuat berita...</p>
+                </div>
+            </section>
+
+            <section id="tab-chatbot" class="admin-tab-panel hidden">
+                <div class="admin-toolbar">
+                    <h2>Kelola Chatbot</h2>
+                    <button id="chatbot-refresh-btn" class="btn-secondary" onclick="loadIntents()">Muat Ulang</button>
+                </div>
+
+                <form id="intent-form" class="news-form-card">
+                    <h3 id="form-title" style="margin-top: 0; color: var(--text-color); font-size: 1.1rem; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;">Tambah Data Bot Baru</h3>
+                    
+                    <div class="admin-field-label">ID (Unique Identifier)</div>
+                    <input type="text" id="intent-id" placeholder="contoh: sekbid-2" required>
+
+                    <div class="admin-field-label">Keywords / Kata Kunci (Pisahkan dengan koma)</div>
+                    <input type="text" id="intent-keywords" placeholder="contoh: sekbid 2, sekbid dua, ketaqris" required>
+
+                    <div class="admin-field-label">Jawaban Default (Wajib)</div>
+                    <textarea id="field-default" placeholder="Jawaban umum bot..." required></textarea>
+
+                    <div class="admin-field-label">Jawaban Khusus "Ketua" (Opsional)</div>
+                    <textarea id="field-ketua" placeholder="Informasi ketua..."></textarea>
+
+                    <div class="admin-field-label">Jawaban Khusus "Anggota" (Opsional)</div>
+                    <textarea id="field-anggota" placeholder="Informasi anggota..."></textarea>
+
+                    <div class="admin-comment-actions">
+                        <button type="button" id="btn-cancel-intent" class="btn-secondary hidden" onclick="resetIntentForm()">Batal Edit</button>
+                        <button type="submit" class="btn-primary">Simpan ke Database</button>
+                    </div>
+                </form>
+
+                <div id="intent-list" class="admin-comment-list">
+                    <p class="admin-loading">Memuat data chatbot...</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

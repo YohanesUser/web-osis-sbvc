@@ -1,0 +1,871 @@
+/* =========================================
+   HALAMAN DETAIL SEKBID — GAYA MAJALAH/PROFIL TIM
+   ========================================= */
+
+:root {
+    --sekbid-blue: #2563eb;
+    --sekbid-blue-dark: #1d4ed8;
+    --sekbid-gold: #f39c12;
+    --sekbid-gold-dark: #b8730f;
+    --sekbid-navy: #14123a;
+    --sekbid-navy-2: #1c1a4a;
+    --sekbid-ink: #111111;
+    --sekbid-muted: #6b6b6b;
+    --sekbid-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* =========================================
+   Dukungan Foto HEIF/HEIC
+   <picture> default-nya inline, dipaksa block supaya
+   ukurannya konsisten dan tidak bikin celah kecil di grid/flex.
+   ========================================= */
+.bidang-hero picture,
+.koordinator-photo-wrap picture,
+.anggota-tim-card picture,
+.galeri-strip picture,
+.next-bidang-section picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* =========================================
+   1. HERO — Foto Tim Full-Bleed
+   ========================================= */
+.bidang-hero {
+    position: relative;
+    min-height: 82vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #0a0a0a;
+}
+
+.bidang-hero-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 160%;
+    object-fit: cover;
+    
+    /* Tambahkan baris di bawah ini */
+    object-position: center 80%; 
+}
+
+
+
+/* Overlay gradasi gelap di bawah supaya teks terbaca */
+.bidang-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.85) 100%);
+}
+
+/* Bulatan dekoratif di pojok kiri atas */
+.bidang-hero-deco-circle {
+    position: absolute;
+    top: -60px;
+    left: -60px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--sekbid-blue) 0%, rgba(37,99,235,0) 70%);
+    opacity: 0.55;
+    z-index: 2;
+}
+
+/* Pola titik-titik dekoratif */
+.bidang-hero-deco-dots {
+    position: absolute;
+    top: 40px;
+    left: 24px;
+    width: 70px;
+    height: 70px;
+    background-image: radial-gradient(rgba(255,255,255,0.4) 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+    z-index: 2;
+}
+
+.bidang-hero-content {
+    position: absolute;
+    bottom: 100px;      /* <-- Angka ini sudah saya naikkan dari 80px ke 140px */
+    left: 0;
+    right: 0;
+    z-index: 3;
+    width: 100%;
+    text-align: center;
+    color: #ffffff;
+    padding: 0 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.bidang-hero-content .badge-gold {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+    backdrop-filter: blur(6px);
+}
+
+.bidang-hero-content h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin: 14px 0 10px;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+
+.bidang-hero-content p {
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+}
+
+/* Efek memudar ke putih di bagian paling bawah */
+.bidang-hero::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 140px; /* Sesuaikan angka ini: semakin besar, semakin tinggi area pudarnya */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+    z-index: 2; /* Disetel ke 2 agar berada di atas foto/overlay gelap, tapi di bawah teks (z-index: 3) */
+}
+/* Animasi masuk untuk hero — jalan otomatis begitu halaman dibuka,
+   tidak perlu nunggu discroll karena hero selalu langsung terlihat. */
+@keyframes hero-fade-up {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.bidang-hero-content .badge-gold {
+    animation: hero-fade-up 0.8s var(--sekbid-ease) both;
+    animation-delay: 0.1s;
+}
+
+.bidang-hero-content h1 {
+    animation: hero-fade-up 0.9s var(--sekbid-ease) both;
+    animation-delay: 0.28s;
+}
+
+.bidang-hero-content p {
+    animation: hero-fade-up 0.9s var(--sekbid-ease) both;
+    animation-delay: 0.46s;
+}
+
+.bidang-hero-deco-circle {
+    animation: hero-fade-in 1.4s ease both;
+}
+
+.bidang-hero-deco-dots {
+    animation: hero-fade-in 1.4s ease both;
+    animation-delay: 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bidang-hero-content .badge-gold,
+    .bidang-hero-content h1,
+    .bidang-hero-content p,
+    .bidang-hero-deco-circle,
+    .bidang-hero-deco-dots {
+        animation: none;
+    }
+}
+
+/* =========================================
+   2. TUGAS UMUM
+   ========================================= */
+.tugas-section {
+    background: #ffffff;
+    padding: 70px 20px;
+}
+
+.tugas-grid {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.tugas-grid h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--sekbid-ink);
+    letter-spacing: -0.5px;
+}
+
+.tugas-grid p {
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333333;
+}
+
+/* =========================================
+   3. SOROTAN KOORDINATOR
+   ========================================= */
+.koordinator-section {
+    position: relative;
+    background: #f3f3f5;
+    padding: 80px 20px;
+    overflow: hidden;
+}
+
+.koordinator-deco-dots {
+    position: absolute;
+    top: 50px;
+    left: 24px;
+    width: 80px;
+    height: 80px;
+    background-image: radial-gradient(rgba(0,0,0,0.15) 1.5px, transparent 1.5px);
+    background-size: 16px 16px;
+}
+
+.koordinator-deco-stripes {
+    position: absolute;
+    top: 0;
+    right: -40px;
+    width: 220px;
+    height: 100%;
+    background: repeating-linear-gradient(
+        115deg,
+        rgba(0,0,0,0.06),
+        rgba(0,0,0,0.06) 6px,
+        transparent 6px,
+        transparent 22px
+    );
+    pointer-events: none;
+}
+
+.koordinator-grid {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.koordinator-photo-wrap img {
+    width: 100%;
+    max-width: 460px;
+    /* Bingkai kotak & shadow rectangular sengaja dihilangkan —
+       ini disiapkan untuk foto PNG transparan (background dihapus),
+       supaya fotonya "menyatu" langsung ke section, bukan kelihatan
+       seperti kotak foto biasa. Kalau fotonya belum transparan
+       (masih JPG background putih/polos), efeknya belum kelihatan. */
+    border-radius: 0;
+    box-shadow: none;
+    filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.18));
+    /* TODO: ganti src <img> dengan foto koordinator dari Supabase Storage
+       (idealnya PNG dengan background sudah dihapus/transparan) */
+}
+
+.koordinator-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--sekbid-blue);
+    margin-bottom: 6px;
+}
+
+.koordinator-name {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--sekbid-ink);
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+}
+
+/* Info kelas — tampil di bawah nama koordinator */
+.koordinator-kelas {
+    font-size: 0.95rem;
+    color: var(--sekbid-muted);
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+/* Kartu Motto */
+.motto-card {
+    background: linear-gradient(135deg, var(--sekbid-navy), var(--sekbid-navy-2));
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 20px 40px -18px rgba(20, 18, 58, 0.5);
+}
+
+.motto-card-label {
+    text-align: center;
+    padding: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.motto-card-quote {
+    text-align: center;
+    padding: 18px 20px;
+    color: #ffffff;
+    font-style: italic;
+    font-size: 0.95rem;
+}
+
+/* Kartu Pengalaman Organisasi & Kepanitiaan */
+.pengalaman-card {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.05);
+}
+
+.pengalaman-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #444444;
+    margin-bottom: 14px;
+}
+
+.pengalaman-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pengalaman-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.pengalaman-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sekbid-blue), var(--sekbid-gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.pengalaman-item h4 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--sekbid-ink);
+    margin-bottom: 2px;
+}
+
+.pengalaman-item span {
+    font-size: 0.78rem;
+    color: #888888;
+}
+
+/* =========================================
+   4. ANGGOTA TIM (Dark Section)
+   ========================================= */
+.anggota-tim-section {
+    background: var(--sekbid-navy);
+    padding: 90px 20px 100px;
+}
+
+.anggota-tim-head {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 50px;
+}
+
+.anggota-tim-eyebrow {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #a5a3ff;
+    font-style: italic;
+    margin-bottom: 8px;
+}
+
+.anggota-tim-head h2 {
+    font-size: clamp(1.9rem, 4vw, 2.4rem);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+}
+
+.anggota-tim-head p {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.95rem;
+}
+
+.anggota-tim-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 26px;
+}
+
+.anggota-tim-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.anggota-tim-card img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    /* TODO: ganti src <img> dengan foto anggota dari Supabase Storage */
+}
+
+.anggota-tim-card h3 {
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+/* Info kelas — tampil di bawah nama, sebelum badge role */
+.anggota-tim-kelas {
+    display: block;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.anggota-tim-role {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.12);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+}
+
+.anggota-tim-card .motto-card {
+    margin-bottom: 14px;
+}
+
+.anggota-tim-card .pengalaman-card {
+    margin-bottom: 0;
+}
+
+/* =========================================
+   5. WHAT WE DO
+   ========================================= */
+.whatwedo-section {
+    background: #17151a;
+    padding: 90px 20px;
+}
+
+.whatwedo-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 0.9fr 1.4fr;
+    gap: 50px;
+}
+
+.whatwedo-heading h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.whatwedo-intro {
+    font-style: italic;
+    color: rgba(255,255,255,0.55);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    align-self: center;
+}
+
+.whatwedo-list {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px 40px;
+    margin-top: 10px;
+}
+
+.whatwedo-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.whatwedo-icon {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(147, 132, 255, 0.15);
+    color: #a78bfa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.whatwedo-item h3 {
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.whatwedo-item p {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+/* =========================================
+   6. GALERI DOKUMENTASI
+   ========================================= */
+.galeri-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
+
+.galeri-strip img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+    /* TODO: ganti src <img> dengan foto dokumentasi kegiatan dari Supabase Storage */
+}
+
+/* =========================================
+   7. TEASER BIDANG BERIKUTNYA
+   ========================================= */
+.next-bidang-section {
+    position: relative;
+    min-height: 45vh;
+    display: flex;
+    align-items: center;
+    background-color: #0a0a0a;
+    overflow: hidden;
+}
+
+.next-bidang-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    /* TODO: ganti src <img> dengan foto bidang berikutnya dari Supabase Storage */
+}
+
+.next-bidang-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.9) 100%);
+}
+
+.next-bidang-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.next-bidang-content h2 {
+    color: #ffffff;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.next-bidang-content p {
+    color: rgba(255,255,255,0.6);
+    font-style: italic;
+    font-size: 0.95rem;
+}
+
+.btn-next-bidang {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ec4899;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 28px;
+    border-radius: 30px;
+    box-shadow: 0 14px 30px -8px rgba(236, 72, 153, 0.5);
+    transition: transform 0.3s var(--sekbid-ease), box-shadow 0.3s var(--sekbid-ease);
+    white-space: nowrap;
+}
+
+.btn-next-bidang:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 36px -8px rgba(236, 72, 153, 0.6);
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 900px) {
+    .tugas-grid,
+    .koordinator-grid,
+    .whatwedo-grid {
+        grid-template-columns: 1fr;
+        text-align: left;
+    }
+
+    .koordinator-photo-wrap {
+        display: flex;
+        justify-content: center;
+    }
+
+    .galeri-strip {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .bidang-hero-photo {
+    
+    height: 100%;
+}
+}
+
+@media (max-width: 640px) {
+    .bidang-hero {
+        min-height: 62vh;
+        align-items: center; /* konten di tengah, bukan numpuk di bawah */
+    }
+
+    .bidang-hero-content {
+        padding: 0 20px;
+    }
+
+    .bidang-hero-deco-circle {
+        width: 150px;
+        height: 150px;
+        top: -40px;
+        left: -40px;
+    }
+
+    .bidang-hero-deco-dots {
+        top: 20px;
+        left: 16px;
+        width: 50px;
+        height: 50px;
+        background-size: 11px 11px;
+    }
+
+    .anggota-tim-section,
+    .whatwedo-section,
+    .koordinator-section,
+    .tugas-section {
+        padding: 55px 20px;
+    }
+
+    .galeri-strip {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .galeri-strip img {
+        height: 160px;
+    }
+
+    .next-bidang-section {
+        min-height: auto;
+        padding: 50px 0;
+    }
+
+    .next-bidang-content {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .btn-next-bidang {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 400px) {
+    .bidang-hero {
+        min-height: 55vh;
+    }
+
+    .bidang-hero-content h1 {
+        font-size: 1.9rem;
+    }
+
+    .anggota-tim-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .whatwedo-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================
+   ANIMASI SCROLL — Foto Muncul dari Kanan ke Kiri
+   Class "reveal-right" ditambahkan otomatis oleh sekbid.js
+   ke foto-foto (koordinator, anggota tim, galeri).
+   Tidak perlu ditulis manual di HTML.
+   ========================================= */
+.reveal-right {
+    opacity: 0;
+    transform: translateX(70px);
+    transition: opacity 0.7s var(--sekbid-ease), transform 0.7s var(--sekbid-ease);
+    transition-delay: var(--reveal-delay, 0s);
+}
+
+.reveal-right.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-right {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* =========================================
+   ANIMASI SCROLL — Teks & Kartu Muncul dari Bawah (Fade Up)
+   Dipakai untuk judul section, deskripsi, motto-card, pengalaman-card,
+   dan whatwedo-item. Class ditambahkan otomatis oleh sekbid.js.
+   ========================================= */
+.reveal-up {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s var(--sekbid-ease), transform 0.7s var(--sekbid-ease);
+    transition-delay: var(--reveal-delay, 0s);
+}
+
+.reveal-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-up {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+/* =========================================
+   LIGHTBOX — Klik foto untuk lihat full
+   ========================================= */
+.lb-clickable {
+    cursor: zoom-in;
+}
+
+.lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    padding: 30px;
+}
+
+.lightbox-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-overlay img {
+    max-width: 90vw;
+    max-height: 88vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.92);
+    transition: transform 0.3s ease;
+    cursor: default;
+}
+
+.lightbox-overlay.is-open img {
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #ffffff;
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+@media (max-width: 640px) {
+    .lightbox-close {
+        top: 14px;
+        right: 14px;
+        width: 36px;
+        height: 36px;
+        font-size: 1.3rem;
+    }
+}
