@@ -1,0 +1,5 @@
+User-agent: *
+
+Allow: /
+
+Sitemap: https://osissmkn1bantul.pages.dev/sitemap.xml
