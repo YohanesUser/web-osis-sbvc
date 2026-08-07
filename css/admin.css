@@ -73,21 +73,47 @@ a {
     flex-direction: column;
 }
 
-.login-logo {
-    width: 50px;
-    height: 50px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--primary), #1450c4);
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 0.85rem;
+/* Logo di layar login */
+.login-logo-group {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
-    box-shadow: 0 6px 16px rgba(11, 61, 145, 0.35);
+    gap: 14px;
+    margin-bottom: 22px;
 }
 
+.login-logo-img {
+    width: 68px;
+    height: 68px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    background: #ffffff;
+}
+
+/* Logo di header dashboard */
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-logo-img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    background: #ffffff;
+}
 .login-card h1 {
     font-size: 1.45rem;
     font-weight: 800;

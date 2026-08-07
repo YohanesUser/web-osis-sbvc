@@ -7,13 +7,16 @@
     <link rel="icon" type="image/jpeg" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
     <link rel="apple-touch-icon" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
     <link rel="stylesheet" href="/css/admin.css">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0f172a">
 </head>
 <body>
 
     <div id="login-screen" class="login-screen">
         <form id="login-form" class="login-card">
-            <div class="login-logo">
+            <div class="login-logo" style="display: flex; align-items: center; justify-content: center; gap: 12px;">
                 <img src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg" alt="Logo OSIS" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
+                <img src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/603c489b-b278-4a9e-82c1-0a433097bcea.png" alt="Logo Tambahan" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
             </div>
             
             <h1>Panel Admin</h1>
@@ -32,10 +35,13 @@
 
     <div id="dashboard" class="dashboard hidden">
         <header class="admin-header">
-            <div class="admin-brand" style="display: flex; align-items: center; gap: 10px;">
-                <img src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg" alt="Logo OSIS" style="width: 35px; height: 35px; object-fit: cover; border-radius: 50%;">
-                <div>OSIS <span>Sbvc Admin</span></div>
-            </div>
+            <div class="admin-brand">
+    <div class="admin-logo-group">
+        <img src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg" alt="Logo OSIS" class="admin-logo-img">
+        <img src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/603c489b-b278-4a9e-82c1-0a433097bcea.png" alt="Logo Tambahan" class="admin-logo-img">
+    </div>
+    <div>OSIS <span>Sbvc Admin</span></div>
+</div>
             
             <div class="admin-header-right">
                 <span id="admin-email" class="admin-email"></span>
@@ -107,7 +113,7 @@
 
             <section id="tab-whatwedo" class="admin-tab-panel hidden">
     <div class="admin-toolbar">
-        <h2>Kelola "What We Do"</h2>
+        <h2>Kelola "Proker"</h2>
         <button id="whatwedo-refresh-btn" class="btn-secondary">Muat Ulang</button>
     </div>
 

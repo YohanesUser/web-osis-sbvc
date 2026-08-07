@@ -31,7 +31,7 @@
             }
 
             if (!data || data.length === 0) {
-                container.innerHTML = '<p style="color:#888;font-size:0.9rem;">Belum ada program kerja yang ditambahkan oleh sekbid.</p>';
+                container.innerHTML = '<p style="color:#888;font-size:0.9rem;">Belum ada program kerja yang diunggah oleh sekbid.</p>';
                 return;
             }
 

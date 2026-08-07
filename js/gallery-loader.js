@@ -98,7 +98,7 @@
             if (!data || data.length === 0) {
     container.innerHTML = `
         <div class="galeri-kosong">
-            <p>Foto belum ditambahkan oleh anggota sekbid.</p>
+            <p>Foto belum diunggah oleh anggota sekbid.</p>
         </div>
     `;
     return;

@@ -2,24 +2,24 @@
   "name": "OSIS SMKN 1 Bantul",
   "short_name": "OSIS SMKN1",
   "description": "Website resmi Organisasi Siswa Intra Sekolah SMK Negeri 1 Bantul.",
+  "lang": "id-ID",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#0f172a",
-  "lang": "id",
   "icons": [
     {
-      "src": "/assets/logo-osis.png",
+      "src": "https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/assets/logo-osis.png",
+      "src": "https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ]

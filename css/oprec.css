@@ -250,106 +250,215 @@
 
 }
 
-/* ==========================
-   CONTACT PERSON
-========================== */
+/* ==========================================
+   CONTACT PERSON (VERSI KALEM & ELEGAN)
+   ========================================== */
 
 .oprec-contact{
-    margin-top:45px;
-    text-align:center;
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 20px;
 }
 
 .oprec-contact h3{
-    font-size:1.5rem;
-    margin-bottom:10px;
-    color:#111;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1e293b; /* Hitam arang yang lebih lembut */
+    margin-bottom: 12px;
 }
 
-.oprec-contact p{
-    color:#666;
-    margin-bottom:25px;
+.oprec-contact>p{
+    text-align: center;
+    color: #64748b;
+    font-size: 1rem;
+    margin-bottom: 45px;
+    line-height: 1.7;
 }
 
 .cp-list{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
 }
 
+/* ================= CARD ================= */
+
 .cp-card{
-    display:flex;
-    align-items:center;
-    gap:18px;
-    padding:18px;
-    background:#fff;
-    border:1px solid #ececec;
-    border-radius:18px;
-    text-decoration:none;
-    color:#111;
-    transition:.3s;
-    box-shadow:0 10px 25px rgba(0,0,0,.06);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #ffffff;
+    
+    /* Border lebih tipis dan warna abu-abu sangat muda */
+    border: 1px solid #f1f5f9;
+    border-radius: 24px;
+
+    padding: 40px 25px;
+    text-decoration: none;
+    color: #1e293b;
+    overflow: hidden;
+
+    /* Transisi lebih halus */
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    /* Bayangan (shadow) dibuat sangat tipis dan lembut (soft shadow) */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+/* Garis atas card dibuat gradasi abu-abu kalem */
+.cp-card::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, #cbd5e1, #94a3b8);
 }
 
 .cp-card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 20px 40px rgba(0,0,0,.12);
-    border-color:#25D366;
+    transform: translateY(-6px); /* Efek naik tidak terlalu tinggi */
+    border-color: #cbd5e1;
+    /* Bayangan saat di-hover tetap lembut, tidak mencolok */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
 }
+
+/* ================= FOTO ================= */
 
 .cp-photo{
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    object-fit:cover;
-    border:3px solid #25D366;
-    flex-shrink:0;
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #f8fafc; /* Bingkai putih keabu-abuan tipis */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    margin-bottom: 20px;
 }
 
+/* ================= NAMA ================= */
+
 .cp-info{
-    text-align:left;
+    width: 100%;
 }
 
 .cp-info strong{
-    display:block;
-    font-size:1.05rem;
-    margin-bottom:4px;
+    display: block;
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 6px;
+    font-weight: 700;
 }
 
-.cp-info small{
-    display:block;
-    color:#666;
-    margin-bottom:6px;
-}
-
-.cp-info span{
-    color:#25D366;
-    font-weight:600;
-}
-
-@media (max-width:768px){
-    .cp-card{
-        padding:16px;
-    }
-
-    .cp-photo{
-        width:60px;
-        height:60px;
-    }
-}
-
-/* WhatsApp Number */
+/* ================= NOMOR ================= */
 
 .wa-number{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    color:#25D366;
-    font-weight:600;
-    margin-top:8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    
+    /* Warna hijau WhatsApp versi muted (pastel/kalem) */
+    background: #f0fdf4;
+    color: #15803d;
+    
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid #dcfce7;
 }
 
 .wa-icon{
-    width:20px;
-    height:20px;
-    flex-shrink:0;
+    width: 18px;
+    height: 18px;
+}
+
+/* ================= BUTTON ================= */
+
+.cp-card::after{
+    content: "💬 Chat via WhatsApp";
+    display: block;
+    margin-top: 25px;
+    
+    /* Tombol warna gelap netral (menyesuaikan tema terang kita) */
+    background: #0f172a;
+    color: #ffffff;
+    
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+/* Hover Button jadi sedikit lebih terang/abu-abu */
+.cp-card:hover::after{
+    background: #334155;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px){
+
+    .cp-list{
+        display:flex;
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .cp-card{
+        max-width:100%;
+        width:100%;
+
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        justify-content:flex-start;
+
+        padding:14px 16px;
+
+        border-radius:14px;
+    }
+
+    .cp-photo{
+        width:65px;
+        height:65px;
+        margin:0 15px 0 0;
+        flex-shrink:0;
+    }
+
+    .cp-info{
+        flex:1;
+        text-align:left;
+    }
+
+    .cp-info strong{
+        font-size:1rem;
+        margin-bottom:6px;
+    }
+
+    .wa-number{
+        font-size:.82rem;
+        padding:6px 12px;
+    }
+
+    .wa-icon{
+        width:16px;
+        height:16px;
+    }
+
+    .cp-card::after{
+        content:"Chat";
+        width:auto;
+        margin:0 0 0 12px;
+        padding:8px 14px;
+        font-size:.8rem;
+        border-radius:8px;
+    }
+
 }
