@@ -46,10 +46,12 @@
         <main class="admin-main">
 
             <div class="admin-tabs">
-                <button type="button" class="admin-tab-btn active" data-tab="comments">Komentar Siswa</button>
-                <button type="button" class="admin-tab-btn" data-tab="news">Kelola Berita</button>
-                <button type="button" class="admin-tab-btn" data-tab="chatbot">Kelola Chatbot</button>
-            </div>
+<button type="button" class="admin-tab-btn active" data-tab="comments">Komentar Siswa</button>
+<button type="button" class="admin-tab-btn" data-tab="news">Kelola Berita</button>
+<button type="button" class="admin-tab-btn" data-tab="gallery">Galeri Sekbid</button>
+<button type="button" class="admin-tab-btn" data-tab="whatwedo">Proker</button>
+<button type="button" class="admin-tab-btn" data-tab="chatbot">Kelola Chatbot</button>
+</div>
 
             <section id="tab-comments" class="admin-tab-panel">
                 <div class="admin-toolbar">
@@ -61,6 +63,97 @@
                     <p class="admin-loading">Memuat komentar...</p>
                 </div>
             </section>
+
+            <section id="tab-gallery" class="admin-tab-panel hidden">
+    <div class="admin-toolbar">
+        <h2>Galeri Dokumentasi Sekbid</h2>
+        <button id="gallery-refresh-btn" class="btn-secondary">Muat Ulang</button>
+    </div>
+
+    <form id="gallery-form" class="news-form-card">
+        <div class="admin-field-label">ID Sekbid</div>
+        <select id="gallery-sekbid-select" required>
+            <option value="">-- Pilih Sekbid --</option>
+            <option value="ketaqis">1. Ketaqwaan Islam</option>
+            <option value="ketaqris">2. Ketaqwaan Kristen/Katolik</option>
+            <option value="politik">3. Politik & Kepemimpinan</option>
+            <option value="belneg">4. Bela Negara</option>
+            <option value="kwu">5. Kewirausahaan</option>
+            <option value="apres">6. Apresiasi Seni</option>
+            <option value="jasmani">7. Jasmani & Kesehatan</option>
+            </select>
+
+            <div class="admin-field-label">Upload Foto (boleh lebih dari satu)</div>
+            <input type="file" id="gallery-images-input" accept="image/*" multiple>
+            <div id="gallery-images-preview" class="image-preview-wrap"></div>
+
+            <div class="admin-comment-actions">
+                <span id="gallery-form-status" class="admin-save-status"></span>
+             <button type="submit" id="gallery-submit-btn" class="btn-primary">Unggah ke Galeri</button>
+             </div>
+            </form>
+
+            <div id="gallery-filter-wrap" style="margin: 15px 0;">
+            <label for="gallery-filter-select" style="font-size:0.85rem;color:#64748b;">Tampilkan galeri:</label>
+            <select id="gallery-filter-select">
+            <option value="">Semua Sekbid</option>
+            </select>
+            </div>
+
+            <div id="admin-gallery-list" class="admin-comment-list">
+             <p class="admin-loading">Memuat galeri...</p>
+            </div>
+            </section>
+
+            <section id="tab-whatwedo" class="admin-tab-panel hidden">
+    <div class="admin-toolbar">
+        <h2>Kelola "What We Do"</h2>
+        <button id="whatwedo-refresh-btn" class="btn-secondary">Muat Ulang</button>
+    </div>
+
+    <form id="whatwedo-form" class="news-form-card">
+        <div class="admin-field-label">ID Sekbid</div>
+        <select id="whatwedo-sekbid-select" required>
+            <option value="">-- Pilih Sekbid --</option>
+            <option value="ketaqis">1. Ketaqwaan Islam</option>
+            <option value="ketaqris">2. Ketaqwaan Kristen/Katolik</option>
+            <option value="politik">3. Politik & Kepemimpinan</option>
+            <option value="belneg">4. Bela Negara</option>
+            <option value="kwu">5. Kewirausahaan</option>
+            <option value="apres">6. Apresiasi Seni</option>
+            <option value="jasmani">7. Jasmani & Kesehatan</option>
+        </select>
+
+        <div class="admin-field-label">Ikon (emoji, contoh: 📖)</div>
+        <input type="text" id="whatwedo-icon" placeholder="📖" maxlength="4">
+
+        <div class="admin-field-label">Judul Program</div>
+        <input type="text" id="whatwedo-title" placeholder="Kajian Rutin" required>
+
+        <div class="admin-field-label">Deskripsi</div>
+        <textarea id="whatwedo-description" placeholder="Penjelasan singkat program ini..."></textarea>
+
+        <div class="admin-field-label">Urutan Tampil (angka kecil tampil duluan)</div>
+        <input type="number" id="whatwedo-sort" placeholder="0" value="0">
+
+        <div class="admin-comment-actions">
+            <span id="whatwedo-form-status" class="admin-save-status"></span>
+            <button type="button" id="whatwedo-cancel-btn" class="btn-secondary hidden">Batal Edit</button>
+            <button type="submit" id="whatwedo-submit-btn" class="btn-primary">Tambah Program</button>
+        </div>
+    </form>
+
+    <div id="whatwedo-filter-wrap" style="margin: 15px 0;">
+        <label for="whatwedo-filter-select" style="font-size:0.85rem;color:#64748b;">Tampilkan:</label>
+        <select id="whatwedo-filter-select">
+            <option value="">Semua Sekbid</option>
+        </select>
+    </div>
+
+    <div id="admin-whatwedo-list" class="admin-comment-list">
+        <p class="admin-loading">Memuat data...</p>
+    </div>
+</section>
 
             <section id="tab-news" class="admin-tab-panel hidden">
                 <div class="admin-toolbar">
@@ -143,5 +236,55 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="/js/admin.js"></script>
+    
+         
+    <script>
+    let inactivityTimer;
+    const INACTIVITY_LIMIT = 4 * 1000; // 4 detik dalam milidetik
+
+    // Fungsi buat ngelakuin logout otomatis
+    function triggerAutoLogout() {
+        // Hapus sesi login
+        sessionStorage.removeItem('is_admin_logged_in');
+        
+        // Sembunyikan dashboard dan tampilin layar login
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('login-screen').classList.remove('hidden');
+        
+        // Opsional: Kasih tahu pesan error di layar login
+        const errorEl = document.getElementById('login-error');
+        if (errorEl) {
+            errorEl.textContent = 'Sesi habis karena tidak ada aktivitas selama 1 menit.';
+        }
+    }
+
+    // Fungsi buat reset timer setiap kali user aktif (gerak mouse, ketik, klik)
+    function resetInactivityTimer() {
+        // Cek dulu apakah user sedang di posisi login atau udah masuk dashboard
+        const isLoggedIn = sessionStorage.getItem('is_admin_logged_in');
+        if (isLoggedIn === 'true') {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(triggerAutoLogout, INACTIVITY_LIMIT);
+        }
+    }
+
+    // Pasang pemantau aktivitas di browser
+    window.addEventListener('load', function() {
+        const isLoggedIn = sessionStorage.getItem('is_admin_logged_in');
+        if (isLoggedIn === 'true') {
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('login-screen').classList.add('hidden');
+            
+            // Mulai hitung mundur waktu pas pertama kali masuk
+            resetInactivityTimer();
+        }
+    });
+
+    // Event aktivitas user yang bakal nge-reset hitung mundur 1 menit
+    window.addEventListener('mousemove', resetInactivityTimer);
+    window.addEventListener('keydown', resetInactivityTimer);
+    window.addEventListener('click', resetInactivityTimer);
+    window.addEventListener('scroll', resetInactivityTimer);
+</script>
 </body>
 </html>

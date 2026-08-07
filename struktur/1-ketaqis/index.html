@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/struktur.css">
     <link rel="stylesheet" href="/struktur/1-ketaqis/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+    <script src="/js/gallery-loader.js" defer></script>
+    <script src="/js/whatwedo-loader.js" defer></script>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0f172a">
 </head>
 <body>
 
@@ -135,49 +140,35 @@
     <!-- ============================================
          5. WHAT WE DO — diisi dari Program Kerja
          ============================================ -->
-    <section class="whatwedo-section">
-        <div class="whatwedo-grid">
-            <div class="whatwedo-heading">
-                <h2>What we do.</h2>
-            </div>
-            <p class="whatwedo-intro">Sekbid Ketaqwaan Islam mengurus segala yang berhubungan dengan kegiatan keagamaan siswa muslim di sekolah.</p>
-
-            <div class="whatwedo-list">
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">📖</span>
-                    <div>
-                        <h3>Kajian Rutin</h3>
-                        <p>Kajian keislaman mingguan bagi siswa dan siswi muslim di sekolah.</p>
-                    </div>
-                </div>
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">🕌</span>
-                    <div>
-                        <h3>Peringatan Hari Besar Islam</h3>
-                        <p>Menyelenggarakan peringatan PHBI seperti Maulid Nabi dan Isra Mi'raj.</p>
-                    </div>
-                </div>
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">🌙</span>
-                    <div>
-                        <h3>Tadarus Bersama</h3>
-                        <p>Kegiatan tadarus Al-Qur'an bersama, terutama menjelang bulan Ramadhan.</p>
-                    </div>
-                </div>
-            </div>
+    <!-- ============================================
+     5. WHAT WE DO — diambil dari database
+     ============================================ -->
+<section class="whatwedo-section">
+    <div class="whatwedo-grid">
+        <div class="whatwedo-heading">
+            <h2>Program Kerja</h2>
         </div>
-    </section>
+        <p class="whatwedo-intro">Sekbid Ketaqwaan Islam</p>
+
+        <div class="whatwedo-list" id="whatwedo-dokumentasi" data-sekbid="ketaqis">
+            <p class="admin-loading">Memuat program kerja...</p>
+        </div>
+    </div>
+</section>
 
     <!-- ============================================
          6. GALERI DOKUMENTASI
          TODO: ganti dengan foto dokumentasi kegiatan sekbid ini
          ============================================ -->
-    <div class="galeri-strip">
-        <img src="/assets/dokumentasi-sekbid/ketaqis/ilham.jpeg" alt="Dokumentasi kegiatan 1">
-        <img src="/assets/dokumentasi-sekbid/ketaqis/ilham.jpeg" alt="Dokumentasi kegiatan 2">
-        <img src="/assets/dokumentasi-sekbid/ketaqis/ilham.jpeg" alt="Dokumentasi kegiatan 3">
-        <img src="/assets/dokumentasi-sekbid/ketaqis/tks.png" alt="Dokumentasi kegiatan 4">
-    </div>
+    <section class="galeri-heading-section">
+        <div class="galeri-heading-wrap">
+            <h2>Dokumentasi Kegiatan</h2>
+        </div>
+    </section>
+
+    <div class="galeri-strip" id="galeri-dokumentasi" data-sekbid="ketaqis">
+    <p class="admin-loading">Memuat dokumentasi...</p>
+</div>
 
     <section class="syarat-section" style="padding: 3rem 2rem; background-color: #ffffff; margin: 2rem auto; max-width: 1000px;">
         <div style="text-align: center; margin-bottom: 2rem;">

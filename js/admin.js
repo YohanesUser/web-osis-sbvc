@@ -105,10 +105,12 @@
     /* ===================== TAB SWITCHING ===================== */
     const tabButtons = document.querySelectorAll('.admin-tab-btn');
     const tabPanels = {
-        comments: document.getElementById('tab-comments'),
-        news: document.getElementById('tab-news'),
-        chatbot: document.getElementById('tab-chatbot') // TAMBAHAN: Tab Chatbot
-    };
+comments: document.getElementById('tab-comments'),
+news: document.getElementById('tab-news'),
+gallery: document.getElementById('tab-gallery'),
+whatwedo: document.getElementById('tab-whatwedo'),
+chatbot: document.getElementById('tab-chatbot')
+};
 
     tabButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -120,10 +122,14 @@
             });
 
             if (btn.dataset.tab === 'news') {
-                loadNews();
-            } else if (btn.dataset.tab === 'chatbot') {
-                loadIntents(); // TAMBAHAN: Load data bot saat tab diklik
-            }
+    loadNews();
+} else if (btn.dataset.tab === 'gallery') {
+    loadGallery();
+} else if (btn.dataset.tab === 'whatwedo') {
+    loadWhatwedo();
+} else if (btn.dataset.tab === 'chatbot') {
+    loadIntents();
+} 
         });
     });
 
@@ -294,6 +300,353 @@
         renderCoverPreview();
         renderContentImagesPreview();
     }
+
+    /* ===================== GALERI SEKBID ===================== */
+const galleryForm = document.getElementById('gallery-form');
+const gallerySekbidSelect = document.getElementById('gallery-sekbid-select');
+const galleryImagesInput = document.getElementById('gallery-images-input');
+const galleryImagesPreviewWrap = document.getElementById('gallery-images-preview');
+const galleryFormStatus = document.getElementById('gallery-form-status');
+const gallerySubmitBtn = document.getElementById('gallery-submit-btn');
+const galleryListEl = document.getElementById('admin-gallery-list');
+const galleryRefreshBtn = document.getElementById('gallery-refresh-btn');
+const galleryFilterSelect = document.getElementById('gallery-filter-select');
+
+// Setiap item sekarang berupa { file, caption }
+let newGalleryItems = [];
+
+function renderGalleryImagesPreview() {
+    galleryImagesPreviewWrap.innerHTML = '';
+    newGalleryItems.forEach(function (item, idx) {
+        const wrap = document.createElement('div');
+        wrap.className = 'image-preview-item';
+        wrap.style.display = 'flex';
+        wrap.style.flexDirection = 'column';
+        wrap.style.gap = '4px';
+
+        wrap.innerHTML =
+            '<img src="' + URL.createObjectURL(item.file) + '" alt="Pratinjau">' +
+            '<button type="button" class="image-preview-remove">✕</button>' +
+            '<input type="text" class="gallery-caption-input" placeholder="Caption (opsional)" value="' + escapeHtml(item.caption) + '" style="font-size:0.8rem;padding:4px 6px;border:1px solid #cbd5e1;border-radius:4px;">';
+
+        wrap.querySelector('.image-preview-remove').addEventListener('click', function () {
+            newGalleryItems.splice(idx, 1);
+            renderGalleryImagesPreview();
+        });
+
+        wrap.querySelector('.gallery-caption-input').addEventListener('input', function (e) {
+            newGalleryItems[idx].caption = e.target.value;
+        });
+
+        galleryImagesPreviewWrap.appendChild(wrap);
+    });
+}
+
+galleryImagesInput.addEventListener('change', function () {
+    if (galleryImagesInput.files) {
+        const newFiles = Array.from(galleryImagesInput.files).map(function (file) {
+            return { file: file, caption: '' };
+        });
+        newGalleryItems = newGalleryItems.concat(newFiles);
+        renderGalleryImagesPreview();
+        galleryImagesInput.value = '';
+    }
+});
+
+async function uploadGalleryImage(file) {
+    const ext = file.name.split('.').pop();
+    const path = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+
+    const { error } = await client.storage
+        .from('sekbid-gallery')
+        .upload(path, file, { upsert: false });
+
+    if (error) throw error;
+
+    const { data } = client.storage.from('sekbid-gallery').getPublicUrl(path);
+    return data.publicUrl;
+}
+
+galleryForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const sekbidId = gallerySekbidSelect.value;
+    if (!sekbidId) {
+        galleryFormStatus.style.color = '#dc2626';
+        galleryFormStatus.textContent = 'Pilih sekbid dulu.';
+        return;
+    }
+    if (newGalleryItems.length === 0) {
+        galleryFormStatus.style.color = '#dc2626';
+        galleryFormStatus.textContent = 'Pilih minimal 1 foto.';
+        return;
+    }
+
+    gallerySubmitBtn.disabled = true;
+    galleryFormStatus.style.color = '#16a34a';
+    galleryFormStatus.textContent = 'Mengunggah...';
+
+    try {
+        const rows = [];
+        for (const item of newGalleryItems) {
+            const url = await uploadGalleryImage(item.file);
+            rows.push({
+                sekbid_id: sekbidId,
+                image_url: url,
+                caption: item.caption.trim() || null
+            });
+        }
+
+        const { error } = await client.from('sekbid_gallery').insert(rows);
+        if (error) throw error;
+
+        galleryFormStatus.textContent = 'Tersimpan.';
+        newGalleryItems = [];
+        renderGalleryImagesPreview();
+        galleryForm.reset();
+        loadGallery();
+    } catch (err) {
+        console.error(err);
+        galleryFormStatus.style.color = '#dc2626';
+        galleryFormStatus.textContent = 'Gagal mengunggah galeri.';
+    } finally {
+        gallerySubmitBtn.disabled = false;
+    }
+});
+
+galleryRefreshBtn.addEventListener('click', loadGallery);
+galleryFilterSelect.addEventListener('change', loadGallery);
+
+async function loadGallery() {
+    galleryListEl.innerHTML = '<p class="admin-loading">Memuat galeri...</p>';
+
+    let query = client.from('sekbid_gallery').select('*').order('sekbid_id').order('created_at', { ascending: false });
+    if (galleryFilterSelect.value) {
+        query = query.eq('sekbid_id', galleryFilterSelect.value);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        galleryListEl.innerHTML = '<p class="admin-empty">Gagal memuat galeri: ' + escapeHtml(error.message) + '</p>';
+        return;
+    }
+
+    const uniqueIds = Array.from(new Set((data || []).map(function (d) { return d.sekbid_id; })));
+    const currentFilter = galleryFilterSelect.value;
+    galleryFilterSelect.innerHTML = '<option value="">Semua Sekbid</option>' +
+        uniqueIds.map(function (id) { return '<option value="' + escapeHtml(id) + '">' + escapeHtml(id) + '</option>'; }).join('');
+    galleryFilterSelect.value = currentFilter;
+
+    renderGalleryList(data);
+}
+
+function renderGalleryList(items) {
+    if (!items || items.length === 0) {
+        galleryListEl.innerHTML = '<p class="admin-empty">Belum ada foto galeri.</p>';
+        return;
+    }
+
+    galleryListEl.innerHTML = '';
+
+    items.forEach(function (g) {
+        const card = document.createElement('div');
+        card.className = 'admin-comment-card';
+        card.innerHTML =
+            '<img src="' + g.image_url + '" class="admin-news-thumb" alt="Dokumentasi">' +
+            '<div class="admin-comment-head">' +
+                '<span class="admin-comment-name">' + escapeHtml(g.sekbid_id) + '</span>' +
+                '<span class="admin-comment-date">' + formatTanggal(g.created_at) + '</span>' +
+            '</div>' +
+            '<div class="admin-field-label">Caption</div>' +
+            '<input type="text" class="gallery-caption-edit" value="' + escapeHtml(g.caption || '') + '" placeholder="Caption (opsional)" style="width:100%;padding:6px 8px;border:1px solid #cbd5e1;border-radius:4px;margin-bottom:8px;">' +
+            '<div class="admin-comment-actions">' +
+                '<span class="admin-save-status"></span>' +
+                '<button type="button" class="btn-danger btn-gallery-delete">Hapus</button>' +
+                '<button type="button" class="btn-primary btn-gallery-save">Simpan Caption</button>' +
+            '</div>';
+
+        galleryListEl.appendChild(card);
+
+        const statusEl = card.querySelector('.admin-save-status');
+
+        card.querySelector('.btn-gallery-save').addEventListener('click', async function () {
+            const newCaption = card.querySelector('.gallery-caption-edit').value.trim();
+            const { error } = await client
+                .from('sekbid_gallery')
+                .update({ caption: newCaption || null })
+                .eq('id', g.id);
+
+            if (error) {
+                statusEl.style.color = '#dc2626';
+                statusEl.textContent = 'Gagal menyimpan.';
+                return;
+            }
+            statusEl.style.color = '#16a34a';
+            statusEl.textContent = 'Tersimpan.';
+        });
+
+        card.querySelector('.btn-gallery-delete').addEventListener('click', async function () {
+            const yakin = confirm('Hapus foto ini dari galeri "' + g.sekbid_id + '"?');
+            if (!yakin) return;
+
+            const { error } = await client.from('sekbid_gallery').delete().eq('id', g.id);
+            if (error) {
+                alert('Gagal menghapus foto.');
+                return;
+            }
+            card.remove();
+        });
+    });
+}
+
+/* ===================== WHAT WE DO ===================== */
+const whatwedoForm = document.getElementById('whatwedo-form');
+const whatwedoSekbidSelect = document.getElementById('whatwedo-sekbid-select');
+const whatwedoIcon = document.getElementById('whatwedo-icon');
+const whatwedoTitle = document.getElementById('whatwedo-title');
+const whatwedoDescription = document.getElementById('whatwedo-description');
+const whatwedoSort = document.getElementById('whatwedo-sort');
+const whatwedoFormStatus = document.getElementById('whatwedo-form-status');
+const whatwedoSubmitBtn = document.getElementById('whatwedo-submit-btn');
+const whatwedoCancelBtn = document.getElementById('whatwedo-cancel-btn');
+const whatwedoListEl = document.getElementById('admin-whatwedo-list');
+const whatwedoRefreshBtn = document.getElementById('whatwedo-refresh-btn');
+const whatwedoFilterSelect = document.getElementById('whatwedo-filter-select');
+
+let editingWhatwedoId = null;
+
+function resetWhatwedoForm() {
+    editingWhatwedoId = null;
+    whatwedoForm.reset();
+    whatwedoSort.value = 0;
+    whatwedoSubmitBtn.textContent = 'Tambah Program';
+    whatwedoCancelBtn.classList.add('hidden');
+    whatwedoFormStatus.textContent = '';
+}
+
+whatwedoCancelBtn.addEventListener('click', resetWhatwedoForm);
+whatwedoRefreshBtn.addEventListener('click', loadWhatwedo);
+whatwedoFilterSelect.addEventListener('change', loadWhatwedo);
+
+whatwedoForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const sekbidId = whatwedoSekbidSelect.value;
+    if (!sekbidId) {
+        whatwedoFormStatus.style.color = '#dc2626';
+        whatwedoFormStatus.textContent = 'Pilih sekbid dulu.';
+        return;
+    }
+
+    whatwedoSubmitBtn.disabled = true;
+    whatwedoFormStatus.style.color = '#16a34a';
+    whatwedoFormStatus.textContent = 'Menyimpan...';
+
+    const payload = {
+        sekbid_id: sekbidId,
+        icon: whatwedoIcon.value.trim() || null,
+        title: whatwedoTitle.value.trim(),
+        description: whatwedoDescription.value.trim() || null,
+        sort_order: parseInt(whatwedoSort.value, 10) || 0
+    };
+
+    let error;
+    if (editingWhatwedoId) {
+        ({ error } = await client.from('sekbid_whatwedo').update(payload).eq('id', editingWhatwedoId));
+    } else {
+        ({ error } = await client.from('sekbid_whatwedo').insert(payload));
+    }
+
+    whatwedoSubmitBtn.disabled = false;
+
+    if (error) {
+        console.error(error);
+        whatwedoFormStatus.style.color = '#dc2626';
+        whatwedoFormStatus.textContent = 'Gagal menyimpan.';
+        return;
+    }
+
+    whatwedoFormStatus.style.color = '#16a34a';
+    whatwedoFormStatus.textContent = 'Tersimpan.';
+    resetWhatwedoForm();
+    loadWhatwedo();
+});
+
+async function loadWhatwedo() {
+    whatwedoListEl.innerHTML = '<p class="admin-loading">Memuat data...</p>';
+
+    let query = client.from('sekbid_whatwedo').select('*').order('sekbid_id').order('sort_order', { ascending: true });
+    if (whatwedoFilterSelect.value) {
+        query = query.eq('sekbid_id', whatwedoFilterSelect.value);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        whatwedoListEl.innerHTML = '<p class="admin-empty">Gagal memuat data: ' + escapeHtml(error.message) + '</p>';
+        return;
+    }
+
+    const uniqueIds = Array.from(new Set((data || []).map(function (d) { return d.sekbid_id; })));
+    const currentFilter = whatwedoFilterSelect.value;
+    whatwedoFilterSelect.innerHTML = '<option value="">Semua Sekbid</option>' +
+        uniqueIds.map(function (id) { return '<option value="' + escapeHtml(id) + '">' + escapeHtml(id) + '</option>'; }).join('');
+    whatwedoFilterSelect.value = currentFilter;
+
+    renderWhatwedoList(data);
+}
+
+function renderWhatwedoList(items) {
+    if (!items || items.length === 0) {
+        whatwedoListEl.innerHTML = '<p class="admin-empty">Belum ada program kerja.</p>';
+        return;
+    }
+
+    whatwedoListEl.innerHTML = '';
+
+    items.forEach(function (w) {
+        const card = document.createElement('div');
+        card.className = 'admin-comment-card';
+        card.innerHTML =
+            '<div class="admin-comment-head">' +
+                '<span class="admin-comment-name">' + (w.icon ? w.icon + ' ' : '') + escapeHtml(w.title) + '</span>' +
+                '<span class="admin-comment-date">' + escapeHtml(w.sekbid_id) + ' &middot; urutan ' + w.sort_order + '</span>' +
+            '</div>' +
+            '<p style="font-size:0.88rem;color:#334155;">' + escapeHtml(w.description || '-') + '</p>' +
+            '<div class="admin-comment-actions">' +
+                '<button type="button" class="btn-danger btn-whatwedo-delete">Hapus</button>' +
+                '<button type="button" class="btn-secondary btn-whatwedo-edit">Edit</button>' +
+            '</div>';
+
+        whatwedoListEl.appendChild(card);
+
+        card.querySelector('.btn-whatwedo-edit').addEventListener('click', function () {
+            editingWhatwedoId = w.id;
+            whatwedoSekbidSelect.value = w.sekbid_id;
+            whatwedoIcon.value = w.icon || '';
+            whatwedoTitle.value = w.title;
+            whatwedoDescription.value = w.description || '';
+            whatwedoSort.value = w.sort_order || 0;
+
+            whatwedoSubmitBtn.textContent = 'Simpan Perubahan';
+            whatwedoCancelBtn.classList.remove('hidden');
+            whatwedoForm.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        card.querySelector('.btn-whatwedo-delete').addEventListener('click', async function () {
+            const yakin = confirm('Hapus program "' + w.title + '"?');
+            if (!yakin) return;
+
+            const { error } = await client.from('sekbid_whatwedo').delete().eq('id', w.id);
+            if (error) {
+                alert('Gagal menghapus.');
+                return;
+            }
+            card.remove();
+        });
+    });
+}
 
     function renderCoverPreview() {
         coverPreviewWrap.innerHTML = '';
@@ -648,5 +1001,7 @@
         btnCancelIntent.classList.add('hidden');
         intentForm.querySelector('button[type="submit"]').textContent = 'Simpan ke Database';
     }
+
+    
 
 })();

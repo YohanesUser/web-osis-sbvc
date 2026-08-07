@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/struktur.css">
     <link rel="stylesheet" href="/struktur/6-apres/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+    <script src="/js/gallery-loader.js" defer></script>
+    <script src="/js/whatwedo-loader.js" defer></script>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0f172a">
 </head>
 <body>
 
@@ -60,14 +65,6 @@
             <div class="tugas-content-wrapper">
                 <p style="margin-top: 0;">Menumbuhkan apresiasi dan daya kreasi seni siswa, serta mengembangkan bakat seni dan mengkoordinir kegiatan bernuansa seni budaya di lingkungan sekolah.</p>
                 
-                <div class="visi-misi-box" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px; border-left: 5px solid #0056b3;">
-                    <h3 style="margin-top: 0;">Fokus Utama Kami</h3>
-                    <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; margin-bottom: 0;">
-                        <li>Menumbuhkan rasa percaya diri siswa dalam berkarya seni.</li>
-                        <li>Mengembangkan bakat seni suara, musik, dan paduan suara.</li>
-                        <li>Mengkoordinir dan membawakan acara-acara sekolah, baik formal maupun non-formal.</li>
-                    </ul>
-                </div>
             </div>
 
         </div>
@@ -142,48 +139,31 @@
          5. WHAT WE DO — diisi dari Program Kerja
          ============================================ -->
     <section class="whatwedo-section">
-        <div class="whatwedo-grid">
-            <div class="whatwedo-heading">
-                <h2>What we do.</h2>
-            </div>
-            <p class="whatwedo-intro">Sekbid Persepsi Apresiasi dan Daya Kreasi Seni mengurus segala yang berhubungan dengan pengembangan bakat dan apresiasi seni siswa di sekolah.</p>
-
-            <div class="whatwedo-list">
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">🎤</span>
-                    <div>
-                        <h3>Paduan Suara</h3>
-                        <p>Membina dan memimpin kegiatan paduan suara sekolah.</p>
-                    </div>
-                </div>
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">🎭</span>
-                    <div>
-                        <h3>Koordinasi Acara Sekolah</h3>
-                        <p>Mengkoordinir jalannya acara-acara sekolah baik formal maupun non-formal.</p>
-                    </div>
-                </div>
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">🎙️</span>
-                    <div>
-                        <h3>Pembawa Acara (MC)</h3>
-                        <p>Menyediakan dan melatih pembawa acara untuk berbagai kegiatan sekolah.</p>
-                    </div>
-                </div>
-            </div>
+    <div class="whatwedo-grid">
+        <div class="whatwedo-heading">
+            <h2>Program Kerja</h2>
         </div>
-    </section>
+        <p class="whatwedo-intro">Sekbid Persepsi Apresiasi dan Daya Kreasi Seni</p>
+
+        <div class="whatwedo-list" id="whatwedo-dokumentasi" data-sekbid="apres">
+            <p class="admin-loading">Memuat program kerja...</p>
+        </div>
+    </div>
+</section>
 
     <!-- ============================================
          6. GALERI DOKUMENTASI
          TODO: ganti dengan foto dokumentasi kegiatan sekbid ini
          ============================================ -->
-    <div class="galeri-strip">
-        <img src="/assets/dokumentasi-sekbid/apres/tks.png" alt="Dokumentasi kegiatan 1">
-        <img src="/assets/dokumentasi-sekbid/apres/tks.png" alt="Dokumentasi kegiatan 2">
-        <img src="/assets/dokumentasi-sekbid/apres/tks.png" alt="Dokumentasi kegiatan 3">
-        <img src="/assets/dokumentasi-sekbid/apres/tks.png" alt="Dokumentasi kegiatan 4">
-    </div>
+    <section class="galeri-heading-section">
+        <div class="galeri-heading-wrap">
+            <h2>Dokumentasi Kegiatan</h2>
+        </div>
+    </section>
+
+    <div class="galeri-strip" id="galeri-dokumentasi" data-sekbid="apres">
+    <p class="admin-loading">Memuat dokumentasi...</p>
+</div>
 
     <section class="syarat-section" style="padding: 3rem 2rem; background-color: #ffffff; margin: 2rem auto; max-width: 1000px;">
         <div style="text-align: center; margin-bottom: 2rem;">

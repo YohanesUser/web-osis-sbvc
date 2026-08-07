@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/struktur.css">
     <link rel="stylesheet" href="/struktur/2-ketaqris/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+    <script src="/js/gallery-loader.js" defer></script>
+    <script src="/js/whatwedo-loader.js" defer></script>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0f172a">
 </head>
 <body>
 
@@ -61,14 +66,6 @@
             <div class="tugas-content-wrapper">
                 <p style="margin-top: 0;">Membina keimanan dan ketaqwaan siswa Kristiani (Katholik/Kristen) terhadap Tuhan Yang Maha Esa melalui kegiatan keagamaan rutin di lingkungan sekolah, serta membentuk karakter siswa yang berakhlak mulia dan berbudi pekerti luhur.</p>
                 
-                <div class="visi-misi-box" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px; border-left: 5px solid #0056b3;">
-                    <h3 style="margin-top: 0;">Fokus Utama Kami</h3>
-                    <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; margin-bottom: 0;">
-                        <li>Meningkatkan kesadaran beribadah warga sekolah.</li>
-                        <li>Menjadikan lingkungan sekolah yang religius dan toleran.</li>
-                        <li>Mengembangkan potensi minat dan bakat siswa di bidang keagamaan (paduan suara, persekutuan doa, dll).</li>
-                    </ul>
-                </div>
             </div>
 
         </div>
@@ -136,47 +133,29 @@
          5. WHAT WE DO — diisi dari Program Kerja
          ============================================ -->
     <section class="whatwedo-section">
-        <div class="whatwedo-grid">
-            <div class="whatwedo-heading">
-                <h2>What we do.</h2>
-            </div>
-            <p class="whatwedo-intro">Sekbid Ketaqwaan Kristiani mengurus segala yang berhubungan dengan kegiatan keagamaan siswa Kristiani (Katholik/Kristen) di sekolah.</p>
-
-            <div class="whatwedo-list">
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">📖</span>
-                    <div>
-                        <h3>Persekutuan Doa Rutin</h3>
-                        <p>Persekutuan doa mingguan bagi siswa-siswi Kristiani di sekolah.</p>
-                    </div>
-                </div>
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">✝️</span>
-                    <div>
-                        <h3>Peringatan Hari Besar Kristiani</h3>
-                        <p>Menyelenggarakan peringatan seperti Natal dan Paskah.</p>
-                    </div>
-                </div>
-                <div class="whatwedo-item">
-                    <span class="whatwedo-icon">🎶</span>
-                    <div>
-                        <h3>Paduan Suara & Pelayanan</h3>
-                        <p>Kegiatan paduan suara dan pelayanan rohani bersama, terutama menjelang perayaan hari besar keagamaan.</p>
-                    </div>
-                </div>
-            </div>
+    <div class="whatwedo-grid">
+        <div class="whatwedo-heading">
+            <h2>Program Kerja</h2>
         </div>
-    </section>
+        <p class="whatwedo-intro">Sekbid Ketaqwaan Kristiani</p>
 
+        <div class="whatwedo-list" id="whatwedo-dokumentasi" data-sekbid="ketaqris">
+            <p class="admin-loading">Memuat program kerja...</p>
+        </div>
+    </div>
+</section>
     <!-- ============================================
          6. GALERI DOKUMENTASI
          TODO: ganti dengan foto dokumentasi kegiatan sekbid ini
          ============================================ -->
-    <div class="galeri-strip">
-        <img src="/assets/dokumentasi-sekbid/ketaqkris/1.JPG" alt="Dokumentasi kegiatan 1">
-        <img src="/assets/dokumentasi-sekbid/ketaqkris/2.jpeg" alt="Dokumentasi kegiatan 2">
-        <img src="/assets/dokumentasi-sekbid/ketaqkris/3.JPG" alt="Dokumentasi kegiatan 3">
-        <img src="/assets/dokumentasi-sekbid/ketaqkris/4.jpeg" alt="Dokumentasi kegiatan 4">
+    <section class="galeri-heading-section">
+        <div class="galeri-heading-wrap">
+            <h2>Dokumentasi Kegiatan</h2>
+        </div>
+    </section>
+
+    <div class="galeri-strip" id="galeri-dokumentasi" data-sekbid="ketaqris">
+    <p class="admin-loading">Memuat dokumentasi...</p>
     </div>
 
     <section class="syarat-section" style="padding: 3rem 2rem; background-color: #ffffff; margin: 2rem auto; max-width: 1000px;">
