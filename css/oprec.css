@@ -67,6 +67,22 @@
 }
 
 /* =========================
+   STATUS BADGE - CLOSED
+========================= */
+
+.status-badge.closed {
+    background: rgba(239,68,68,.1);
+    border: 1px solid rgba(239,68,68,.3);
+    color: #dc2626;
+}
+
+.status-badge.closed .dot {
+    background: #ef4444;
+    box-shadow: 0 0 10px #ef4444;
+    animation: none;
+}
+
+/* =========================
    SECTION
 ========================= */
 
@@ -217,6 +233,22 @@
 }
 
 /* =========================
+   TOMBOL DISABLED (RECRUITMENT DITUTUP)
+========================= */
+
+.btn-disabled {
+    background: #cbd5e1 !important;
+    color: #64748b !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    pointer-events: none;
+}
+
+.btn-disabled:hover {
+    transform: none !important;
+}
+
+/* =========================
    RESPONSIVE
 ========================= */
 
@@ -264,7 +296,7 @@
     text-align: center;
     font-size: 2.2rem;
     font-weight: 700;
-    color: #1e293b; /* Hitam arang yang lebih lembut */
+    color: #1e293b;
     margin-bottom: 12px;
 }
 
@@ -291,8 +323,7 @@
     align-items: center;
     text-align: center;
     background: #ffffff;
-    
-    /* Border lebih tipis dan warna abu-abu sangat muda */
+
     border: 1px solid #f1f5f9;
     border-radius: 24px;
 
@@ -301,14 +332,11 @@
     color: #1e293b;
     overflow: hidden;
 
-    /* Transisi lebih halus */
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 
-    /* Bayangan (shadow) dibuat sangat tipis dan lembut (soft shadow) */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
-/* Garis atas card dibuat gradasi abu-abu kalem */
 .cp-card::before{
     content: "";
     position: absolute;
@@ -320,9 +348,8 @@
 }
 
 .cp-card:hover{
-    transform: translateY(-6px); /* Efek naik tidak terlalu tinggi */
+    transform: translateY(-6px);
     border-color: #cbd5e1;
-    /* Bayangan saat di-hover tetap lembut, tidak mencolok */
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
 }
 
@@ -333,7 +360,7 @@
     height: 110px;
     object-fit: cover;
     border-radius: 50%;
-    border: 4px solid #f8fafc; /* Bingkai putih keabu-abuan tipis */
+    border: 4px solid #f8fafc;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
     margin-bottom: 20px;
 }
@@ -360,11 +387,10 @@
     justify-content: center;
     gap: 8px;
     margin-top: 8px;
-    
-    /* Warna hijau WhatsApp versi muted (pastel/kalem) */
+
     background: #f0fdf4;
     color: #15803d;
-    
+
     padding: 8px 16px;
     border-radius: 999px;
     font-weight: 600;
@@ -383,11 +409,10 @@
     content: "💬 Chat via WhatsApp";
     display: block;
     margin-top: 25px;
-    
-    /* Tombol warna gelap netral (menyesuaikan tema terang kita) */
+
     background: #0f172a;
     color: #ffffff;
-    
+
     width: 100%;
     padding: 12px;
     border-radius: 14px;
@@ -396,7 +421,6 @@
     transition: background 0.3s ease;
 }
 
-/* Hover Button jadi sedikit lebih terang/abu-abu */
 .cp-card:hover::after{
     background: #334155;
 }
