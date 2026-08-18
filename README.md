@@ -55,19 +55,20 @@ Proyek ini dikembangkan dan dikelola secara mandiri oleh pengurus/tim IT OSIS SM
 
 ## 🗂️ Struktur Folder
 
+```text
 web-osis-sbvc/
-├── admin/                        # Panel admin & manajemen konten
-├── ai/                           # Fitur OSIS-Bot AI
+├── admin/                         # Panel admin & manajemen konten
+├── ai/                            # Fitur OSIS-Bot AI
 │   ├── js/
 │   └── index.html
-├── assets/                       # Aset gambar & dokumentasi
+├── assets/                        # Aset gambar & dokumentasi
 │   ├── dokumentasi-sekbid/
 │   ├── foto-sampul-sekbid/
 │   ├── foto-struktur/
 │   ├── foto-sekolah.png
 │   ├── kepala.jpeg
 │   └── logo-osis.png
-├── css/                          # Seluruh stylesheet halaman
+├── css/                           # Seluruh stylesheet halaman
 │   ├── admin.css
 │   ├── ai.css
 │   ├── home.css
@@ -76,9 +77,9 @@ web-osis-sbvc/
 │   ├── sekbid.css
 │   ├── struktur.css
 │   └── style.css
-├── info/                         # Halaman pusat informasi & pengumuman
+├── info/                          # Halaman pusat informasi & pengumuman
 │   └── index.html
-├── js/                           # Script JavaScript utama & pendukung
+├── js/                            # Script JavaScript utama & pendukung
 │   ├── admin.js
 │   ├── berita.js
 │   ├── comment.js
@@ -87,17 +88,17 @@ web-osis-sbvc/
 │   ├── main.js
 │   ├── sekbid.js
 │   └── whatwedo-loader.js
-├── open-recruitment/            # Halaman open recruitment
+├── open-recruitment/             # Halaman open recruitment
 │   └── index.html
-├── struktur/                     # Halaman struktur organisasi & sekbid
-├── 404.html                      # Halaman error kustom
-├── google02304c37b289606a.html   # Verifikasi Google Search Console
-├── index.html                    # Halaman utama (landing page)
-├── manifest.webmanifest          # Konfigurasi PWA
-├── robots.txt                    # Aturan crawler mesin pencari
-├── sitemap.xml                   # Peta situs untuk SEO
-└── README.md                     # Dokumentasi proyek
-
+├── struktur/                      # Halaman struktur organisasi & sekbid
+├── 404.html                       # Halaman error kustom
+├── google02304c37b289606a.html    # Verifikasi Google Search Console
+├── index.html                     # Halaman utama (landing page)
+├── manifest.webmanifest           # Konfigurasi PWA
+├── robots.txt                     # Aturan crawler mesin pencari
+├── sitemap.xml                    # Peta situs untuk SEO
+└── README.md                      # Dokumentasi proyek
+```
 
 ## 🛠️ Teknologi yang Digunakan
 
