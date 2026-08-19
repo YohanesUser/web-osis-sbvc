@@ -203,7 +203,7 @@ Gunakan awalan berikut agar riwayat commit rapi:
 - [x] Integrasi OSIS-Bot AI
 - [x] Sistem berita & komentar
 - [x] Galeri dokumentasi sekbid
-- [ ] Sistem login untuk panel admin
+- [x] Sistem login untuk panel admin
 - [ ] Halaman prestasi & penghargaan
 - [ ] Mode gelap (dark mode)
 
