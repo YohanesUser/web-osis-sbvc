@@ -147,7 +147,7 @@ web-osis/
 ├── robots.txt                     # Aturan crawler mesin pencari
 ├── sitemap.xml                    # Peta situs untuk SEO
 └── README.md                      # Dokumentasi & panduan proyek
-ubah bagian strukturnya
+
 ```
 
 ## 🛠️ Teknologi yang Digunakan
