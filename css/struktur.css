@@ -1,5 +1,11 @@
 /* =========================================
-   TATA LETAK STRUKTUR PREMIUM (TEMA TERANG)
+   HALAMAN STRUKTUR ORGANISASI — VERSI ELEGAN
+   Disederhanakan dari versi sebelumnya: satu
+   warna aksen konsisten (bukan gradasi emas-biru
+   yang bersaing), easing tenang tanpa efek
+   "mantul" berlebihan, overlay foto satu bahasa
+   visual untuk BPH maupun Sekbid. Memakai token
+   yang sama dari style-elegant.css.
    ========================================= */
 
 .struktur-container {
@@ -14,15 +20,16 @@
 }
 
 .section-intro h2 {
-    font-size: 2.2rem;
-    font-weight: 800;
-    letter-spacing: -1px;
-    color: #111111;
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
     margin-bottom: 12px;
 }
 
 .section-intro p {
-    color: #777777;
+    color: var(--ink-soft);
     font-size: 1rem;
     max-width: 550px;
     margin: 0 auto;
@@ -31,38 +38,38 @@
 .badge-gold {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     padding: 6px 16px;
-    background: rgba(243, 156, 18, 0.08);
-    border: 1px solid rgba(243, 156, 18, 0.35);
-    color: #b8730f;
-    border-radius: 20px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent);
+    border-radius: var(--radius-pill);
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
 }
 
 .badge-gold::before {
     content: '';
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: #f39c12;
-    box-shadow: 0 0 8px rgba(243, 156, 18, 0.6);
+    background: var(--accent);
 }
 
 /* =========================================
-   BPH LAYOUT — Kartu "Executive Profile"
-   Disamakan gaya foto full-bleed + overlay seperti Sekbid,
-   tapi overlay emas & garis aksen atas membedakannya
-   sebagai kartu profil personal, bukan kartu program.
+   BPH — Kartu profil pengurus inti
+   Satu garis aksen tipis di atas, overlay gelap
+   polos, CTA berupa teks — pembeda dari Sekbid
+   cukup lewat bentuk CTA-nya saja, bukan lewat
+   warna overlay yang berbeda-beda.
    ========================================= */
 .bph-grid {
     display: flex;
     justify-content: center;
-    gap: 25px;
+    gap: 24px;
     flex-wrap: wrap;
     margin-bottom: 110px;
 }
@@ -71,79 +78,62 @@
     position: relative;
     width: 280px;
     height: 250px;
-    border-radius: 20px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                box-shadow 0.35s ease,
-                border-color 0.35s ease;
+    border: 1px solid var(--line);
+    transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease);
 }
 
-/* Garis aksen emas-biru di atas — penanda khas kartu BPH,
-   tidak dimiliki kartu Sekbid */
 .bph-card::before {
     content: '';
     position: absolute;
     top: 0;
     left: 50%;
+    width: 32px;
+    height: 2px;
+    background: var(--accent);
     transform: translateX(-50%);
-    width: 40%;
-    height: 3px;
-    background: linear-gradient(90deg, #f39c12, #2563eb);
-    border-radius: 0 0 4px 4px;
     z-index: 3;
     opacity: 0.85;
-    transition: opacity 0.35s ease, width 0.35s ease;
+    transition: width var(--ease), opacity var(--ease);
 }
 
 .bph-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(22, 21, 26, 0.1);
+    border-color: var(--accent-line);
 }
 
 .bph-card:hover::before {
+    width: 52px;
     opacity: 1;
-    width: 60%;
 }
 
-/* Foto mengisi seluruh kartu, sama seperti Sekbid */
 .bph-card img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0;
-    margin: 0;
-    border: none;
-    box-shadow: none;
     z-index: 0;
-    transition: transform 0.45s ease;
+    transition: transform 0.5s var(--ease);
 }
 
 .bph-card:hover img {
-    transform: scale(1.05);
+    transform: scale(1.04);
 }
 
-/* Overlay gelap-emas — beda dari overlay biru Sekbid,
-   supaya kesan "profil eksekutif" tetap terasa */
 .bph-card::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(20, 15, 5, 0.15) 0%, rgba(20, 15, 5, 0.8) 100%);
+    background: linear-gradient(180deg, rgba(22, 21, 26, 0.1) 0%, rgba(22, 21, 26, 0.82) 100%);
     z-index: 1;
-    transition: background 0.4s ease;
-}
-
-.bph-card:hover::after {
-    background: linear-gradient(180deg, rgba(184, 115, 15, 0.3) 0%, rgba(184, 115, 15, 0.88) 100%);
 }
 
 .bph-card h3,
@@ -155,8 +145,8 @@
 }
 
 .bph-card h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.08rem;
+    font-weight: 600;
     color: #fff;
     margin-bottom: 4px;
     padding: 0 20px;
@@ -164,21 +154,19 @@
 
 .bph-card p {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.78);
     font-weight: 500;
     margin-bottom: 12px;
 }
 
-/* CTA tetap teks-link tipis (bukan pill seperti Sekbid) —
-   pembeda gaya interaksi antara kartu profil vs kartu program */
 .bph-cta {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    color: #f5c26b;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: #f0d9a8;
     text-transform: uppercase;
     padding: 10px 20px 18px;
     justify-content: center;
@@ -186,28 +174,30 @@
 
 .bph-cta-arrow {
     display: inline-block;
-    transition: transform 0.3s ease;
+    transition: transform var(--ease);
 }
 
 .bph-card:hover .bph-cta-arrow {
-    transform: translateX(4px);
+    transform: translateX(3px);
 }
 
 /* =========================================
-   BIDANG GRID (Sekbid) — Kartu "Photo Program"
-   CTA di sini berupa pill semi-transparan di atas foto,
-   berbeda gaya dari tautan teks polos di kartu BPH.
+   SEKBID — Kartu program kerja
+   CTA pill, overlay netral memakai warna tinta
+   (bukan navy) supaya bahasa visualnya konsisten
+   dengan seluruh halaman lain, aksen kuningan
+   cukup tampil di garis bawah judul & pill CTA.
    ========================================= */
 .bidang-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 25px;
+    gap: 24px;
 }
 
 .bidang-card {
     position: relative;
     height: 250px;
-    border-radius: 20px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     background-size: cover;
     background-position: center;
@@ -215,24 +205,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                box-shadow 0.45s ease;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--line);
+    transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease);
 }
 
 .bidang-card:hover {
-    transform: scale(1.03) translateY(-4px);
-    box-shadow: 0 24px 45px rgba(11, 61, 145, 0.18);
-    border-color: #f39c12;
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(22, 21, 26, 0.1);
+    border-color: var(--accent-line);
 }
 
-/* Overlay Gelap di Atas Gambar Bidang */
-/* Overlay ini sengaja tetap gelap karena berada di atas foto,
-   supaya teks putih di atasnya tetap terbaca jelas.
-   Menggunakan gradient (bukan gelap rata) agar terasa lebih premium. */
 .bidang-overlay {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.65) 100%);
     width: 100%;
     height: 100%;
     display: flex;
@@ -241,39 +224,40 @@
     justify-content: center;
     padding: 20px;
     text-align: center;
-    transition: background 0.4s ease;
+    background: linear-gradient(180deg, rgba(22, 21, 26, 0.2) 0%, rgba(22, 21, 26, 0.72) 100%);
+    transition: background var(--ease);
 }
 
 .bidang-card:hover .bidang-overlay {
-    background: linear-gradient(180deg, rgba(11, 61, 145, 0.35) 0%, rgba(11, 61, 145, 0.8) 100%);
+    background: linear-gradient(180deg, rgba(22, 21, 26, 0.35) 0%, rgba(22, 21, 26, 0.85) 100%);
 }
 
 .bidang-overlay h2 {
     color: #fff;
-    font-size: 1.8rem;
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
     margin-bottom: 6px;
-    letter-spacing: 2px;
+    letter-spacing: -0.01em;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .bidang-overlay p {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-/* Garis kecil dekoratif di bawah judul overlay, muncul saat hover */
 .bidang-overlay h2::after {
     content: '';
     display: block;
-    width: 30px;
+    width: 26px;
     height: 2px;
-    background: #f39c12;
+    background: var(--accent);
     margin: 10px auto 0;
     opacity: 0;
     transform: scaleX(0);
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    transition: opacity var(--ease), transform var(--ease);
 }
 
 .bidang-card:hover .bidang-overlay h2::after {
@@ -281,54 +265,50 @@
     transform: scaleX(1);
 }
 
-/* CTA pill "Lihat Selengkapnya" — selalu terlihat samar,
-   menegaskan solid & terang saat hover supaya jelas bisa diklik. */
 .bidang-cta {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     margin-top: 16px;
     padding: 8px 18px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 30px;
-    backdrop-filter: blur(4px);
-    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: var(--radius-pill);
+    transition: background var(--ease), border-color var(--ease), color var(--ease);
 }
 
 .bidang-card:hover .bidang-cta {
-    background: #f39c12;
-    border-color: #f39c12;
-    color: #14123a;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
 }
 
 .bidang-cta-arrow {
     display: inline-block;
-    transition: transform 0.3s ease;
+    transition: transform var(--ease);
 }
 
 .bidang-card:hover .bidang-cta-arrow {
-    transform: translateX(4px);
+    transform: translateX(3px);
 }
 
 /* =========================================
-   MODE PC (DESKTOP)
-   BPH disusun piramida: Ketua di baris atas sendirian di tengah,
-   Sekretaris & Bendahara berdampingan di bawahnya.
-   Sekbid terakhir (Jasmani) dipusatkan pada baris terakhir
-   jika jumlahnya ganjil (7 kartu, 3 kolom -> baris terakhir 1 kartu).
+   MODE DESKTOP
+   Ketua sendiri di baris atas, Sekretaris &
+   Bendahara berdampingan di bawahnya. Sekbid
+   terakhir dipusatkan bila jumlahnya ganjil.
    ========================================= */
 @media (min-width: 769px) {
     .bph-grid {
         display: grid;
         grid-template-columns: repeat(2, 280px);
         justify-content: center;
-        gap: 25px;
+        gap: 24px;
     }
 
     .bph-card:nth-child(1) {
@@ -345,7 +325,6 @@
     }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .bidang-grid {
         grid-template-columns: 1fr;
