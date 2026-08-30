@@ -177,19 +177,22 @@
                     <div class="admin-field-label">Isi Berita</div>
                     <textarea id="news-content" placeholder="Tulis isi berita di sini..." required></textarea>
 
-                    <div class="admin-field-label">Gambar Sampul (1 gambar)</div>
-                    <input type="file" id="news-cover-input" accept="image/*">
-                    <div id="news-cover-preview" class="image-preview-wrap"></div>
+                    <div class="admin-field-label">Gambar/Video Sampul (1 file — video akan autoplay tanpa suara)</div>
+<input type="file" id="news-cover-input" accept="image/*,video/*">
+<div id="news-cover-preview" class="image-preview-wrap"></div>
 
-                    <div class="admin-field-label">Gambar Isi (boleh lebih dari satu)</div>
-                    <input type="file" id="news-content-images-input" accept="image/*" multiple>
-                    <div id="news-content-images-preview" class="image-preview-wrap"></div>
+<div class="admin-field-label">Gambar Isi (boleh lebih dari satu)</div>
+<input type="file" id="news-content-images-input" accept="image/*" multiple>
+<div id="news-content-images-preview" class="image-preview-wrap"></div>
 
-                    <label class="news-publish-toggle">
-                        <input type="checkbox" id="news-published" checked>
-                        Langsung publikasikan
-                    </label>
+<div class="admin-field-label">Video Berita (opsional, upload file .mp4)</div>
+<input type="file" id="news-video-input" accept="video/*">
+<div id="news-video-preview" class="image-preview-wrap"></div>
 
+<label class="news-publish-toggle">
+    <input type="checkbox" id="news-published" checked>
+    Langsung publikasikan
+</label>
                     <div class="admin-comment-actions">
                         <span id="news-form-status" class="admin-save-status"></span>
                         <button type="button" id="news-cancel-btn" class="btn-secondary hidden">Batal Edit</button>

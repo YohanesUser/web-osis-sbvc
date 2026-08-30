@@ -22,6 +22,7 @@
     const modalCoverWrap = document.getElementById('news-modal-cover-wrap');
     const modalCoverBg = document.getElementById('news-modal-cover-bg');
     const modalCover = document.getElementById('news-modal-cover');
+    const modalCoverVideo = document.getElementById('news-modal-cover-video');
     const modalCategory = document.getElementById('news-modal-category');
     const modalDate = document.getElementById('news-modal-date');
     const modalTitle = document.getElementById('news-modal-title');
@@ -50,6 +51,11 @@
         if (!str) return '';
         if (str.length <= maks) return str;
         return str.slice(0, maks).trim() + '...';
+    }
+
+    /* --- Helper deteksi video (kolom Sampul kini bisa foto ATAU video) --- */
+    function isVideoUrl(url) {
+        return !!url && /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i.test(url);
     }
 
     /* ===================== SKELETON LOADING ===================== */
@@ -103,12 +109,22 @@
             const isLatest = index === 0 && activeCategory === 'Semua';
             const latestTag = isLatest ? '<span class="latest-tag">Terbaru</span>' : '';
             const cardClass = isLatest ? 'news-card news-card-latest' : 'news-card';
-            const cover = n.cover_image_url
-                ? '<div class="news-card-cover-wrap">' +
-                    '<img src="' + n.cover_image_url + '" class="news-card-cover-bg" alt="">' +
-                    '<img src="' + n.cover_image_url + '" class="news-card-cover" alt="' + escapeHtml(n.title) + '">' +
-                  '</div>'
-                : '';
+
+            let cover = '';
+            if (n.cover_image_url) {
+                if (isVideoUrl(n.cover_image_url)) {
+                    // Sampul berupa video: autoplay, tanpa suara, loop.
+                    cover = '<div class="news-card-cover-wrap">' +
+                                '<video class="news-card-cover-video" src="' + n.cover_image_url + '" autoplay muted loop playsinline></video>' +
+                            '</div>';
+                } else {
+                    cover = '<div class="news-card-cover-wrap">' +
+                                '<img src="' + n.cover_image_url + '" class="news-card-cover-bg" alt="">' +
+                                '<img src="' + n.cover_image_url + '" class="news-card-cover" alt="' + escapeHtml(n.title) + '">' +
+                                (n.video_url ? '<span class="news-card-video-badge">▶ Video</span>' : '') +
+                            '</div>';
+                }
+            }
 
             return (
                 '<div class="' + cardClass + '" data-id="' + n.id + '">' +
@@ -135,19 +151,57 @@
         });
     }
 
+    /* ===================== VIDEO DI MODAL (video isi berita, bukan sampul) ===================== */
+    function getYoutubeEmbedUrl(url) {
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+        return match ? 'https://www.youtube.com/embed/' + match[1] : null;
+    }
+
+    function renderModalVideo(url) {
+        if (!url) return '';
+        const ytEmbed = getYoutubeEmbedUrl(url);
+        if (ytEmbed) {
+            return '<div class="news-modal-video-wrap">' +
+                        '<iframe src="' + ytEmbed + '" allowfullscreen loading="lazy"></iframe>' +
+                   '</div>';
+        }
+        // Anggap URL video langsung (mp4, hasil upload ke Supabase Storage, dll)
+        return '<div class="news-modal-video-wrap">' +
+                    '<video src="' + url + '" controls preload="metadata"></video>' +
+               '</div>';
+    }
+
     /* ===================== MODAL ===================== */
     function openModal(id) {
         const n = allNews.find(function (item) { return String(item.id) === String(id); });
         if (!n) return;
 
         if (n.cover_image_url) {
-            modalCoverBg.src = n.cover_image_url;
-            modalCover.src = n.cover_image_url;
+            if (isVideoUrl(n.cover_image_url)) {
+                // Sampul video: tampilkan elemen <video>, sembunyikan <img> sampul.
+                modalCover.classList.add('hidden');
+                modalCoverBg.classList.add('hidden');
+                modalCover.removeAttribute('src');
+                modalCoverBg.removeAttribute('src');
+
+                modalCoverVideo.src = n.cover_image_url;
+                modalCoverVideo.classList.remove('hidden');
+            } else {
+                modalCoverVideo.classList.add('hidden');
+                modalCoverVideo.removeAttribute('src');
+
+                modalCoverBg.src = n.cover_image_url;
+                modalCover.src = n.cover_image_url;
+                modalCoverBg.classList.remove('hidden');
+                modalCover.classList.remove('hidden');
+            }
             modalCoverWrap.classList.remove('hidden');
         } else {
             modalCoverWrap.classList.add('hidden');
             modalCoverBg.removeAttribute('src');
             modalCover.removeAttribute('src');
+            modalCoverVideo.classList.add('hidden');
+            modalCoverVideo.removeAttribute('src');
         }
 
         modalCategory.textContent = n.category;
@@ -170,6 +224,14 @@
             modalGallery.classList.add('hidden');
         }
 
+        // Hapus video isi berita lama (kalau ada dari berita sebelumnya) lalu render video baru
+        const existingVideoEl = modal.querySelector('.news-modal-video-wrap');
+        if (existingVideoEl) existingVideoEl.remove();
+
+        if (n.video_url) {
+            modalGallery.insertAdjacentHTML('afterend', renderModalVideo(n.video_url));
+        }
+
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
@@ -177,6 +239,15 @@
     function closeModal() {
         modal.classList.add('hidden');
         document.body.style.overflow = '';
+
+        // Hentikan video isi berita yang mungkin sedang diputar
+        const videoEl = modal.querySelector('.news-modal-video-wrap video');
+        if (videoEl) videoEl.pause();
+        const iframeEl = modal.querySelector('.news-modal-video-wrap iframe');
+        if (iframeEl) iframeEl.src = iframeEl.src; // reload supaya video YouTube berhenti
+
+        // Hentikan video sampul juga
+        modalCoverVideo.pause();
     }
 
     modalBackdrop.addEventListener('click', closeModal);

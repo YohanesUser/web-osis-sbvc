@@ -154,6 +154,15 @@
     display: block;
 }
 
+.news-card-cover-video,
+.news-modal-cover-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+}
+
 .news-card-cover-wrap + .latest-tag,
 .news-card-cover-wrap + .news-meta {
     margin-top: 14px;
@@ -473,4 +482,20 @@
     .news-modal-gallery-item {
         height: 180px;
     }
+}
+
+.news-modal-video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-top: 22px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+}
+
+.news-modal-video-wrap video {
+    width: 100%;
+    height: 100%;
+    display: block;
 }

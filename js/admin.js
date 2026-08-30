@@ -44,6 +44,15 @@
         });
     }
 
+    /* --- Helper deteksi video (dipakai untuk kolom Sampul yang kini bisa foto/video) --- */
+    function isVideoFile(file) {
+        return !!(file && file.type && file.type.startsWith('video/'));
+    }
+
+    function isVideoUrl(url) {
+        return !!url && /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i.test(url);
+    }
+
     function showDashboard(session) {
         loginScreen.classList.add('hidden');
         dashboard.classList.remove('hidden');
@@ -285,6 +294,13 @@ chatbot: document.getElementById('tab-chatbot')
     let existingContentImages = [];
     let newContentImageFiles = [];
 
+    /* --- Video Berita --- */
+    const newsVideoInput = document.getElementById('news-video-input');
+    const newsVideoPreviewWrap = document.getElementById('news-video-preview');
+
+    let existingVideoUrl = null;
+    let newVideoFile = null;
+
     function resetNewsForm() {
         editingNewsId = null;
         newsForm.reset();
@@ -297,8 +313,11 @@ chatbot: document.getElementById('tab-chatbot')
         newCoverFile = null;
         existingContentImages = [];
         newContentImageFiles = [];
+        existingVideoUrl = null;
+        newVideoFile = null;
         renderCoverPreview();
         renderContentImagesPreview();
+        renderVideoPreview();
     }
 
     /* ===================== GALERI SEKBID ===================== */
@@ -648,15 +667,20 @@ function renderWhatwedoList(items) {
     });
 }
 
+    /* --- Preview & upload sampul (kini bisa foto ATAU video) --- */
     function renderCoverPreview() {
         coverPreviewWrap.innerHTML = '';
         const url = newCoverFile ? URL.createObjectURL(newCoverFile) : existingCoverUrl;
         if (!url) return;
 
+        const isVideo = newCoverFile ? isVideoFile(newCoverFile) : isVideoUrl(existingCoverUrl);
+
         const item = document.createElement('div');
         item.className = 'image-preview-item';
         item.innerHTML =
-            '<img src="' + url + '" alt="Pratinjau sampul">' +
+            (isVideo
+                ? '<video src="' + url + '" muted loop autoplay playsinline></video>'
+                : '<img src="' + url + '" alt="Pratinjau sampul">') +
             '<button type="button" class="image-preview-remove">✕</button>';
 
         item.querySelector('.image-preview-remove').addEventListener('click', function () {
@@ -714,6 +738,35 @@ function renderWhatwedoList(items) {
         }
     });
 
+    /* --- Preview & upload video berita (video "isi", terpisah dari sampul) --- */
+    function renderVideoPreview() {
+        newsVideoPreviewWrap.innerHTML = '';
+        const url = newVideoFile ? URL.createObjectURL(newVideoFile) : existingVideoUrl;
+        if (!url) return;
+
+        const item = document.createElement('div');
+        item.className = 'image-preview-item';
+        item.innerHTML =
+            '<video src="' + url + '" controls style="width:100%;max-height:180px;border-radius:8px;"></video>' +
+            '<button type="button" class="image-preview-remove">✕</button>';
+
+        item.querySelector('.image-preview-remove').addEventListener('click', function () {
+            newVideoFile = null;
+            existingVideoUrl = null;
+            newsVideoInput.value = '';
+            renderVideoPreview();
+        });
+
+        newsVideoPreviewWrap.appendChild(item);
+    }
+
+    newsVideoInput.addEventListener('change', function () {
+        if (newsVideoInput.files && newsVideoInput.files[0]) {
+            newVideoFile = newsVideoInput.files[0];
+            renderVideoPreview();
+        }
+    });
+
     async function uploadNewsImage(file) {
         const ext = file.name.split('.').pop();
         const path = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
@@ -725,6 +778,20 @@ function renderWhatwedoList(items) {
         if (error) throw error;
 
         const { data } = client.storage.from('news-images').getPublicUrl(path);
+        return data.publicUrl;
+    }
+
+    async function uploadNewsVideo(file) {
+        const ext = file.name.split('.').pop();
+        const path = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+
+        const { error } = await client.storage
+            .from('news-videos')
+            .upload(path, file, { upsert: false });
+
+        if (error) throw error;
+
+        const { data } = client.storage.from('news-videos').getPublicUrl(path);
         return data.publicUrl;
     }
 
@@ -740,13 +807,22 @@ function renderWhatwedoList(items) {
         try {
             let coverUrl = existingCoverUrl;
             if (newCoverFile) {
-                coverUrl = await uploadNewsImage(newCoverFile);
+                // Sampul kini boleh foto atau video — upload ke bucket sesuai jenis filenya.
+                coverUrl = isVideoFile(newCoverFile)
+                    ? await uploadNewsVideo(newCoverFile)
+                    : await uploadNewsImage(newCoverFile);
             }
 
             let contentImageUrls = existingContentImages.slice();
             for (const file of newContentImageFiles) {
                 const url = await uploadNewsImage(file);
                 contentImageUrls.push(url);
+            }
+
+            let videoUrl = existingVideoUrl;
+            if (newVideoFile) {
+                newsFormStatus.textContent = 'Mengunggah video...';
+                videoUrl = await uploadNewsVideo(newVideoFile);
             }
 
             const payload = {
@@ -756,6 +832,7 @@ function renderWhatwedoList(items) {
                 is_published: newsPublished.checked,
                 cover_image_url: coverUrl || null,
                 content_images: contentImageUrls,
+                video_url: videoUrl || null,
                 updated_at: new Date().toISOString()
             };
 
@@ -810,7 +887,9 @@ function renderWhatwedoList(items) {
             card.className = 'admin-comment-card';
 
             const thumb = n.cover_image_url
-                ? '<img src="' + n.cover_image_url + '" class="admin-news-thumb" alt="Sampul">'
+                ? (isVideoUrl(n.cover_image_url)
+                    ? '<video src="' + n.cover_image_url + '" class="admin-news-thumb" muted loop autoplay playsinline></video>'
+                    : '<img src="' + n.cover_image_url + '" class="admin-news-thumb" alt="Sampul">')
                 : '';
 
             card.innerHTML =
@@ -823,6 +902,7 @@ function renderWhatwedoList(items) {
                     'Kategori: ' + escapeHtml(n.category) + ' &middot; ' +
                     (n.is_published ? '<span style="color:#16a34a;">Terbit</span>' : '<span style="color:#dc2626;">Draft</span>') +
                     ' &middot; ' + ((n.content_images || []).length) + ' gambar isi' +
+                    (n.video_url ? ' &middot; 🎬 ada video' : '') +
                 '</p>' +
                 '<p style="font-size:0.88rem;color:#334155;">' + escapeHtml(n.content) + '</p>' +
                 '<div class="admin-comment-actions">' +
@@ -843,8 +923,11 @@ function renderWhatwedoList(items) {
                 newCoverFile = null;
                 existingContentImages = (n.content_images || []).slice();
                 newContentImageFiles = [];
+                existingVideoUrl = n.video_url || null;
+                newVideoFile = null;
                 renderCoverPreview();
                 renderContentImagesPreview();
+                renderVideoPreview();
 
                 newsSubmitBtn.textContent = 'Simpan Perubahan';
                 newsCancelBtn.classList.remove('hidden');
