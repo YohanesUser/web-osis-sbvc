@@ -29,8 +29,15 @@
     const modalContent = document.getElementById('news-modal-content');
     const modalGallery = document.getElementById('news-modal-gallery');
 
+    /* --- Elemen fitur share (satu tombol, diklik baru muncul 2 opsi) --- */
+    const shareBlock = document.querySelector('.news-share-block');
+    const shareToggleBtn = document.getElementById('news-share-toggle');
+    const shareCopyBtn = document.getElementById('share-copy-link');
+    const shareWhatsapp = document.getElementById('share-whatsapp');
+
     let allNews = [];
     let activeCategory = 'Semua';
+    let currentNewsId = null;
 
     function escapeHtml(str) {
         const div = document.createElement('div');
@@ -171,10 +178,82 @@
                '</div>';
     }
 
+    /* ===================== SHARE BERITA ===================== */
+    function buildShareUrl(id) {
+        return window.location.origin + window.location.pathname + '?berita=' + encodeURIComponent(id);
+    }
+
+    function showToast(msg) {
+        let toast = document.querySelector('.share-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.className = 'share-toast';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(function () {
+            toast.classList.remove('show');
+        }, 2000);
+    }
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        // Fallback untuk browser lama
+        const tmp = document.createElement('textarea');
+        tmp.value = text;
+        tmp.style.position = 'fixed';
+        tmp.style.opacity = '0';
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand('copy');
+        document.body.removeChild(tmp);
+        return Promise.resolve();
+    }
+
+    function updateShareTargets(n) {
+        const url = buildShareUrl(n.id);
+        const pesan = 'Baca berita "' + n.title + '" dari OSIS SMKN 1 Bantul: ' + url;
+
+        if (shareWhatsapp) {
+            shareWhatsapp.href = 'https://wa.me/?text=' + encodeURIComponent(pesan);
+        }
+
+        if (shareCopyBtn) {
+            shareCopyBtn.onclick = function () {
+                copyToClipboard(url).then(function () {
+                    showToast('Link berita disalin!');
+                    if (shareBlock) shareBlock.classList.remove('expanded');
+                });
+            };
+        }
+    }
+
+    if (shareToggleBtn) {
+        shareToggleBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            shareBlock.classList.toggle('expanded');
+        });
+    }
+
+    document.addEventListener('click', function (e) {
+        if (shareBlock && shareBlock.classList.contains('expanded') && !shareBlock.contains(e.target)) {
+            shareBlock.classList.remove('expanded');
+        }
+    });
+
     /* ===================== MODAL ===================== */
     function openModal(id) {
         const n = allNews.find(function (item) { return String(item.id) === String(id); });
         if (!n) return;
+
+        currentNewsId = n.id;
+        updateShareTargets(n);
+        if (shareBlock) shareBlock.classList.remove('expanded');
+        history.pushState({ newsId: n.id }, '', buildShareUrl(n.id));
 
         if (n.cover_image_url) {
             if (isVideoUrl(n.cover_image_url)) {
@@ -239,6 +318,7 @@
     function closeModal() {
         modal.classList.add('hidden');
         document.body.style.overflow = '';
+        currentNewsId = null;
 
         // Hentikan video isi berita yang mungkin sedang diputar
         const videoEl = modal.querySelector('.news-modal-video-wrap video');
@@ -248,12 +328,28 @@
 
         // Hentikan video sampul juga
         modalCoverVideo.pause();
+
+        // Bersihkan parameter ?berita= dari URL kalau ada
+        if (window.location.search.includes('berita=')) {
+            history.pushState({}, '', window.location.pathname);
+        }
     }
 
     modalBackdrop.addEventListener('click', closeModal);
     modalClose.addEventListener('click', closeModal);
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeModal();
+    });
+
+    /* ===================== NAVIGASI BACK/FORWARD BROWSER ===================== */
+    window.addEventListener('popstate', function () {
+        const params = new URLSearchParams(window.location.search);
+        const beritaId = params.get('berita');
+        if (beritaId) {
+            openModal(beritaId);
+        } else {
+            closeModal();
+        }
     });
 
     /* ===================== LOAD DATA ===================== */
@@ -275,6 +371,13 @@
         allNews = data || [];
         renderFilter();
         renderNews();
+
+        // Buka otomatis kalau ada ?berita=ID di URL (hasil klik link share)
+        const params = new URLSearchParams(window.location.search);
+        const beritaId = params.get('berita');
+        if (beritaId) {
+            openModal(beritaId);
+        }
     }
 
     /* ===================== LIGHTBOX FULLSCREEN ===================== */

@@ -56,12 +56,37 @@
     <div id="news-modal" class="news-modal hidden">
         <div class="news-modal-backdrop" id="news-modal-backdrop"></div>
         <div class="news-modal-card">
+            
             <button type="button" id="news-modal-close" class="news-modal-close" aria-label="Tutup">✕</button>
 
             <div id="news-modal-cover-wrap" class="news-modal-cover-wrap hidden">
+                
     <img id="news-modal-cover-bg" class="news-modal-cover-bg" alt="">
     <img id="news-modal-cover" class="news-modal-cover" alt="">
     <video id="news-modal-cover-video" class="news-modal-cover-video hidden" muted loop autoplay playsinline></video>
+</div>
+<div class="news-share-block">
+    <button type="button" id="news-share-toggle" class="share-toggle-btn">
+    <svg class="share-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+        <polyline points="16 6 12 2 8 6"></polyline>
+        <line x1="12" y1="2" x2="12" y2="15"></line>
+    </svg>
+    Bagikan
+</button>
+    <div class="share-options">
+        <a id="share-whatsapp" class="share-icon-btn wa" target="_blank" rel="noopener noreferrer">
+    <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="" class="share-icon-img">
+    WhatsApp
+</a>
+<button type="button" id="share-copy-link" class="share-icon-btn copy">
+    <svg class="share-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+    Salin Link
+</button>
+    </div>
 </div>
 
             <div class="news-modal-meta">
