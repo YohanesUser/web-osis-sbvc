@@ -38,6 +38,11 @@
         return str.slice(0, maks).trim() + '...';
     }
 
+    /* --- Helper deteksi video (kolom Sampul kini bisa foto ATAU video) --- */
+    function isVideoUrl(url) {
+        return !!url && /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i.test(url);
+    }
+
     async function loadBerandaNews() {
         const { data, error } = await client
             .from('news')
@@ -62,9 +67,12 @@
         }
 
         gridEl.innerHTML = items.map(function (n) {
-            const cover = n.cover_image_url
-                ? '<img src="' + n.cover_image_url + '" alt="' + escapeHtml(n.title) + '" class="berita-card-cover">'
-                : '';
+            let cover = '';
+            if (n.cover_image_url) {
+                cover = isVideoUrl(n.cover_image_url)
+                    ? '<video src="' + n.cover_image_url + '" class="berita-card-cover-video" autoplay muted loop playsinline></video>'
+                    : '<img src="' + n.cover_image_url + '" alt="' + escapeHtml(n.title) + '" class="berita-card-cover">';
+            }
 
             return (
                 '<div class="berita-card">' +

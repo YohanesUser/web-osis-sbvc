@@ -373,6 +373,15 @@
     display: block;
 }
 
+.berita-card-cover-video {
+    width: calc(100% + 60px);
+    margin: -30px -30px 16px;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+}
+
 .berita-date {
     font-size: 0.8rem;
     font-weight: 700;

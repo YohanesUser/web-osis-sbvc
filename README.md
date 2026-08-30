@@ -55,100 +55,49 @@ Proyek ini dikembangkan dan dikelola secara mandiri oleh pengurus/tim IT OSIS SM
 
 ## 🗂️ Struktur Folder
 
-```text
-web-osis/
-├── admin/                         # Panel admin & manajemen konten
-│   └── index.html                 # [Dari ZIP] Halaman utama admin
-├── ai/                            # Fitur OSIS-Bot AI
-│   ├── js/                        # Script pendukung AI
-│   │   ├── ai.js                  # [Dari ZIP] Logika utama AI
-│   │   └── database/              # Database lokal AI
-│   │       └── database.json      # [Dari ZIP] Data/pengetahuan AI
-│   └── index.html                 # [Dari ZIP] Interface UI OSIS-Bot AI
-├── assets/                                # Seluruh aset media & gambar
-│   ├── dokumentasi-sekbid/                # Dokumentasi kegiatan per sekbid
-│   │   ├── apres/                         # Foto kegiatan sekbid Apresiasi & Seni
-│   │   ├── belneg/                        # Foto kegiatan sekbid Bela Negara
-│   │   │   └── tks.png                    # Foto kegiatan
-│   │   ├── jasmani/                       # Foto kegiatan sekbid Jasmani & Olahraga
-│   │   │   └── tks.png                    # Foto kegiatan
-│   │   ├── ketaqis/                       # Foto kegiatan sekbid Ketakwaan Islam
-│   │   │   ├── ilham.jpeg                 # Dokumentasi/foto kegiatan
-│   │   │   └── tks.png                    # Foto kegiatan
-│   │   ├── ketaqris/                      # Foto kegiatan sekbid Ketakwaan Kristen/Katholik
-│   │   ├── kwu/                           # Foto kegiatan sekbid Kewirausahaan
-│   │   └── politik/                       # Foto kegiatan sekbid Pembinaan Politik & Bangsa
-│   ├── foto-sampul-sekbid/                # Gambar banner/sampul sekbid
-│   ├── foto-struktur/                     # Foto pengurus & pembina
-│   ├── foto-sekolah.png                   # Gambar utama halaman sekolah
-│   ├── kepala.jpeg                        # Foto Kepala Sekolah
-│   └── logo-osis.png                      # Logo resmi OSIS
-├── css/                           # Seluruh stylesheet (Modular CSS)
-│   ├── admin.css                  # Style khusus panel admin
-│   ├── ai.css                     # Style khusus widget/halaman AI
-│   ├── home.css                   # Style khusus landing page
-│   ├── info.css                   # Style pusat informasi
-│   ├── oprec.css                  # Style halaman recruitment
-│   ├── sekbid.css                 # Style halaman sekbid
-│   ├── struktur.css               # Style diagram/kartu struktur
-│   └── style.css                  # Style global / reset
-├── info/                          # Pusat Informasi & Pengumuman
-│   └── index.html                 # Halaman pusat informasi
-├── js/                            # Script JavaScript Utama & Loader
-│   ├── admin.js                   # Logika antarmuka admin
-│   ├── berita.js                  # Handler berita/pengumuman
-│   ├── comment.js                 # Handler sistem komentar
-│   ├── gallery-loader.js          # Dynamic loader galeri
-│   ├── info.js                    # Handler halaman info
-│   ├── main.js                    # Script global / interaksi dasar
-│   ├── sekbid.js                  # Handler filter & data sekbid
-│   └── whatwedo-loader.js         # Loader program kerja
-├── open-recruitment/              # Halaman Pendaftaran / Oprec
-│   └── index.html                 # Halaman form/info oprec
-├── struktur/                              # Halaman Struktur Organisasi, Sekbid, & PH
-│   ├── 1-ketaqis/                         # Sekbid 1: Ketakwaan Islam
-│   │   ├── index.html                     # Halaman detail Sekbid 1
-│   │   └── style.css                      # Style khusus Sekbid 1
-│   ├── 2-ketaqris/                        # Sekbid 2: Ketakwaan Kristen/Katholik
-│   │   ├── index.html                     # Halaman detail Sekbid 2
-│   │   └── style.css                      # Style khusus Sekbid 2
-│   ├── 3-politik/                         # Sekbid 3: Pembinaan Politik & Bangsa
-│   │   ├── index.html                     # Halaman detail Sekbid 3
-│   │   └── style.css                      # Style khusus Sekbid 3
-│   ├── 4-belneg/                          # Sekbid 4: Bela Negara
-│   │   ├── index.html                     # Halaman detail Sekbid 4
-│   │   └── style.css                      # Style khusus Sekbid 4
-│   ├── 5-kwu/                             # Sekbid 5: Kewirausahaan
-│   │   ├── index.html                     # Halaman detail Sekbid 5
-│   │   └── style.css                      # Style khusus Sekbid 5
-│   ├── 6-apres/                           # Sekbid 6: Apresiasi & Seni
-│   │   ├── index.html                     # Halaman detail Sekbid 6
-│   │   └── style.css                      # Style khusus Sekbid 6
-│   ├── 7-jasmani/                         # Sekbid 7: Jasmani & Olahraga
-│   │   ├── index.html                     # Halaman detail Sekbid 7
-│   │   └── style.css                      # Style khusus Sekbid 7
-│   ├── ph/                                # Pengurus Harian
-│   │   ├── bendahara/                     # Divisi Bendahara
-│   │   │   ├── index.html                 # Halaman detail Bendahara
-│   │   │   ├── main.js                    # Script khusus Bendahara
-│   │   │   └── style.css                  # Style khusus Bendahara
-│   │   ├── ketua/                         # Divisi Ketua OSIS
-│   │   │   ├── index.html                 # Halaman detail Ketua
-│   │   │   ├── main.js                    # Script khusus Ketua
-│   │   │   └── style.css                  # Style khusus Ketua
-│   │   └── sekretaris/                    # Divisi Sekretaris
-│   │       ├── index.html                 # Halaman detail Sekretaris
-│   │       └── style.css                  # Style khusus Sekretaris
-│   └── index.html                         # Halaman utama grafik & daftar struktur
-├── 404.html                       # [Dari ZIP] Halaman error kustom
-├── google02304c37b289606a.html     # Verifikasi Google Search Console
-├── index.html                     # Halaman utama (landing page)
-├── manifest.webmanifest           # Konfigurasi PWA (Progressive Web App)
-├── robots.txt                     # Aturan crawler mesin pencari
-├── sitemap.xml                    # Peta situs untuk SEO
-└── README.md                      # Dokumentasi & panduan proyek
+web-osis-sbvc/
+├── admin/ # Panel admin & manajemen konten
+├── ai/ # Fitur OSIS-Bot AI
+│ ├── js/
+│ └── index.html
+├── assets/ # Aset gambar & dokumentasi
+│ ├── dokumentasi-sekbid/
+│ ├── foto-sampul-sekbid/
+│ ├── foto-struktur/
+│ ├── foto-sekolah.png
+│ ├── kepala.jpeg
+│ └── logo-osis.png
+├── css/ # Seluruh stylesheet halaman
+│ ├── admin.css
+│ ├── ai.css
+│ ├── home.css
+│ ├── info.css
+│ ├── oprec.css
+│ ├── sekbid.css
+│ ├── struktur.css
+│ └── style.css
+├── info/ # Halaman pusat informasi & pengumuman
+│ └── index.html
+├── js/ # Script JavaScript
+│ ├── admin.js
+│ ├── berita.js
+│ ├── comment.js
+│ ├── gallery-loader.js
+│ ├── info.js
+│ ├── main.js
+│ ├── sekbid.js
+│ └── whatwedo-loader.js
+├── open-recruitment/ # Halaman open recruitment
+│ └── index.html
+├── struktur/ # Halaman struktur organisasi & sekbid
+├── 404.html # Halaman error kustom
+├── google02304c37b289606a.html # Verifikasi Google Search Console
+├── index.html # Halaman utama
+├── manifest.webmanifest # Konfigurasi PWA
+├── robots.txt # Aturan crawler mesin pencari
+├── sitemap.xml # Peta situs untuk SEO
+└── README.md # Dokumentasi proyek ini
 
-```
 
 ## 🛠️ Teknologi yang Digunakan
 
@@ -253,7 +202,7 @@ Gunakan awalan berikut agar riwayat commit rapi:
 - [x] Integrasi OSIS-Bot AI
 - [x] Sistem berita & komentar
 - [x] Galeri dokumentasi sekbid
-- [x] Sistem login untuk panel admin
+- [ ] Sistem login untuk panel admin
 - [ ] Halaman prestasi & penghargaan
 - [ ] Mode gelap (dark mode)
 
