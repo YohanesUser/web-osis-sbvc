@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>404 - Halaman Tidak Ditemukan | OSIS SMKN 1 Bantul</title>
+    <title>503 - Server Sedang Sibuk | OSIS SMKN 1 Bantul</title>
 
-    <meta name="description" content="Halaman yang Anda cari tidak ditemukan. Kembali ke website resmi OSIS SMKN 1 Bantul.">
+    <meta name="description" content="Server sedang sibuk atau dalam pemeliharaan. Silakan coba beberapa saat lagi.">
 
     <meta name="robots" content="noindex">
 
@@ -155,6 +155,8 @@
             text-transform:uppercase;
             border-radius:2px;
             transition:all .35s cubic-bezier(.16,1,.3,1);
+            border:none;
+            cursor:pointer;
         }
 
         .primary{
@@ -169,11 +171,37 @@
         .secondary{
             border:1px solid var(--line);
             color:var(--ink-dim);
+            background:#fff;
         }
         .secondary:hover{
             border-color:var(--gold);
             color:var(--gold);
             letter-spacing:.14em;
+        }
+
+        .status-dot{
+            display:inline-block;
+            width:7px;
+            height:7px;
+            border-radius:50%;
+            background:var(--gold);
+            margin-right:8px;
+            animation:pulse 1.6s ease-in-out infinite;
+        }
+
+        @keyframes pulse{
+            0%,100%{ opacity:1; transform:scale(1); }
+            50%{ opacity:.4; transform:scale(.75); }
+        }
+
+        .status-line{
+            font-family:"Segoe UI",Tahoma,sans-serif;
+            margin-top:26px;
+            font-size:12px;
+            font-weight:600;
+            letter-spacing:.08em;
+            text-transform:uppercase;
+            color:var(--ink-dim);
         }
 
         .footer{
@@ -203,20 +231,24 @@
 
     <div class="eyebrow">OSIS SMKN 1 Bantul</div>
 
-    <div class="error">404</div>
+    <div class="error">503</div>
 
     <div class="rule"></div>
 
-    <h1>Halaman Tidak Ditemukan</h1>
+    <h1>Server Sedang Sibuk</h1>
 
     <p>
-        Halaman yang Anda cari tidak tersedia atau telah dipindahkan.
-        Silakan kembali ke beranda atau telusuri informasi terbaru kami.
+        Website sedang mengalami lonjakan trafik atau dalam pemeliharaan singkat.
+        Silakan muat ulang halaman ini dalam beberapa saat.
     </p>
 
+    <div class="status-line">
+        <span class="status-dot"></span>Memeriksa status server
+    </div>
+
     <div class="btn-group">
-        <a href="/" class="btn primary">Kembali ke Beranda</a>
-        <a href="/info" class="btn secondary">Lihat Informasi</a>
+        <button class="btn primary" onclick="location.reload()">Muat Ulang Halaman</button>
+        <a href="/" class="btn secondary">Kembali ke Beranda</a>
     </div>
 
     <div class="footer">© 2026 OSIS SMKN 1 Bantul</div>
