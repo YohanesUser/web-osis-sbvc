@@ -13,11 +13,11 @@
     <meta name="theme-color" content="#0f172a">
     <style>
         /* ============================================
-           Penyesuaian khusus halaman Sekretaris:
-           setiap orang ditampilkan pakai gaya foto
-           "koordinator" (foto besar), bukan kartu kecil
-           seperti anggota sekbid. Blok genap dibalik
-           arahnya (foto di kanan) biar tidak monoton.
+           Halaman Pengurus Harian.
+           Seluruh isi (foto, nama, kelas, tugas) diambil
+           dari Supabase lewat /js/ph-loader.js. Selama
+           database masih kosong, semua slot menampilkan
+           "Belum ada data" / "Belum ada gambar".
            ============================================ */
         .pengurus-section {
             position: relative;
@@ -26,7 +26,7 @@
             overflow: hidden;
         }
 
-        .pengurus-section:nth-of-type(even) {
+        .pengurus-section.is-alt {
             background: #ffffff;
         }
 
@@ -59,8 +59,6 @@
             border-radius: 0;
             box-shadow: none;
             filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.18));
-            /* TODO: ganti src <img> dengan foto asli dari Supabase Storage
-               (idealnya PNG dengan background dihapus/transparan) */
         }
 
         .pengurus-label {
@@ -86,6 +84,26 @@
             font-weight: 500;
         }
 
+        /* ---- Gaya untuk slot yang datanya belum ada ---- */
+        .ph-empty {
+            color: #94a3b8 !important;
+            font-style: italic;
+            font-weight: 500 !important;
+            letter-spacing: normal !important;
+            text-transform: none !important;
+        }
+
+        .ph-empty-img {
+            filter: none !important;
+            opacity: 0.85;
+            cursor: default;
+            border-radius: 10px;
+        }
+
+        .bidang-hero-content .ph-empty {
+            color: #e2e8f0 !important;
+        }
+
         @media (max-width: 900px) {
             .pengurus-grid,
             .pengurus-grid.reverse {
@@ -105,7 +123,7 @@
         }
     </style>
 </head>
-<body>
+<body data-ph-group="sekretaris">
 
     <header>
         <div class="navbar">
@@ -132,16 +150,17 @@
 
     <!-- ============================================
          1. HERO
-         TODO: ganti src foto sampul di bawah dengan URL Supabase Storage
+         Cover: tabel struktur_covers (slug ph-sekretaris)
+         Judul & subjudul: tabel ph_profile
          ============================================ -->
     <section class="bidang-hero">
-        <img class="bidang-hero-photo" src="/assets/foto-sampul-sekbid/sekretaris.jpg" alt="Sekretaris 1 dan Sekretaris 2 OSIS">
+        <img class="bidang-hero-photo ph-empty-img" id="ph-hero-photo" src="" alt="Belum ada gambar">
         <div class="overlay-gelap"></div>
         <div class="bidang-hero-deco-circle"></div>
         <div class="bidang-hero-deco-dots"></div>
         <div class="bidang-hero-content">
-            <h1>Sekretaris</h1>
-            <p>𝗦𝗘𝗞𝗥𝗘𝗧𝗔𝗥𝗜𝗦 𝟭 𝗗𝗔𝗡 𝗦𝗘𝗞𝗥𝗘𝗧𝗔𝗥𝗜𝗦 𝟮 𝗢𝗦𝗜𝗦 𝗦𝗠𝗞𝗡 𝟭 𝗕𝗔𝗡𝗧𝗨𝗟</p>
+            <h1 id="ph-hero-title" class="ph-empty">Belum ada data</h1>
+            <p id="ph-hero-subtitle" class="ph-empty">Belum ada data</p>
         </div>
     </section>
 
@@ -154,15 +173,12 @@
             <h2 style="margin-top: 0;">Tugas Umum</h2>
 
             <div class="tugas-content-wrapper">
-                <p style="margin-top: 0;">Sekretaris 1 dan Sekretaris 2 bertanggung jawab atas seluruh administrasi dan kearsipan OSIS, memastikan setiap hasil rapat, dokumen, dan kegiatan tercatat dengan rapi dan mudah diakses.</p>
+                <p id="ph-tugas-umum" class="ph-empty" style="margin-top: 0;">Belum ada data</p>
 
                 <div class="visi-misi-box" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px; border-left: 5px solid #0056b3;">
                     <h3 style="margin-top: 0;">Fokus Utama Kami</h3>
-                    <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; margin-bottom: 0;">
-                        <li>Mencatat seluruh hasil rapat dan kegiatan OSIS dalam bentuk notulen.</li>
-                        <li>Mengelola dan menyimpan arsip atau dokumen OSIS.</li>
-                        <li>Dapat mengoperasikan layanan Microsoft Word, Excel, PowerPoint serta memahami fungsi fitur di dalamnya.</li>
-                        <li>Bersedia mendampingi ketua dalam kegiatan rapat di luar.</li>
+                    <ul class="ph-tugas-list" style="margin-top: 10px; padding-left: 20px; line-height: 1.6; margin-bottom: 0;">
+                        <li class="ph-empty">Belum ada data</li>
                     </ul>
                 </div>
             </div>
@@ -171,56 +187,46 @@
     </section>
 
     <!-- ============================================
-         3. SEKRETARIS 1
-         TODO: ganti foto dengan foto Keyzha Alya Mukhbita
+         3. DAFTAR PENGURUS
+         Diisi otomatis dari tabel ph_members
+         (group_slug = 'sekretaris'). Kelola lewat tab
+         "Pengurus Harian" di panel admin.
+         Bisa berisi beberapa orang (Sekretaris 1,
+         Sekretaris 2, dst) — ph-loader.js akan meng-clone
+         blok di bawah untuk tiap anggota dan otomatis
+         membalik arah (reverse) secara berselang-seling.
          ============================================ -->
-    <section class="pengurus-section">
-        <div class="koordinator-deco-dots"></div>
-        <div class="pengurus-grid">
-            <div class="pengurus-photo-wrap">
-                <img src="/assets/foto-struktur/keyzha.png" alt="Foto Sekretaris 1 OSIS">
+    <div id="ph-members">
+        <section class="pengurus-section">
+            <div class="koordinator-deco-dots"></div>
+            <div class="pengurus-grid">
+                <div class="pengurus-photo-wrap">
+                    <img class="ph-empty-img" src="" alt="Belum ada gambar">
+                </div>
+                <div class="pengurus-info">
+                    <p class="pengurus-label ph-empty">Belum ada data</p>
+                    <h2 class="pengurus-name ph-empty">Belum ada data</h2>
+                    <p class="pengurus-kelas ph-empty">Belum ada data</p>
+                </div>
             </div>
-            <div class="pengurus-info">
-                <p class="pengurus-label">Sekretaris 1</p>
-                <h2 class="pengurus-name">Keyzha Alya Mukhbita</h2>
-                <p class="pengurus-kelas">Kelas: XII AKL 4</p>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!-- ============================================
-         4. SEKRETARIS 2
-         TODO: ganti foto dengan foto Shafara Aletha Prasetyo
+         4. RINCIAN TUGAS
          ============================================ -->
-    <section class="pengurus-section">
-        <div class="koordinator-deco-stripes"></div>
-        <div class="pengurus-grid reverse">
-            <div class="pengurus-photo-wrap">
-                <img src="/assets/foto-struktur/aletha.png" alt="Foto Sekretaris 2 OSIS">
-            </div>
-            <div class="pengurus-info">
-                <p class="pengurus-label">Sekretaris 2</p>
-                <h2 class="pengurus-name">Shafara Aletha Prasetyo</h2>
-                <p class="pengurus-kelas">Kelas: XI TKJ 2</p>
-            </div>
+    <section class="tugas-section" style="padding: 3rem 2rem; background-color: #ffffff; margin: 2rem auto; max-width: 1000px;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 id="ph-tugas-judul" class="ph-empty">Belum ada data</h2>
+            <p style="color: #666; margin-top: 10px;">Tugas dan Tanggung Jawab</p>
+        </div>
+
+        <div class="tugas-box" style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border-left: 6px solid #d4af37; border-radius: 8px; padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <ol class="ph-tugas-list" style="font-size: 1.1rem; line-height: 2; color: #444; padding-left: 1.5rem; margin: 0; font-weight: 500;">
+                <li class="ph-empty">Belum ada data</li>
+            </ol>
         </div>
     </section>
-
-    <section class="tugas-section" style="padding: 3rem 2rem; background-color: #ffffff; margin: 2rem auto; max-width: 1000px;">
-    <div style="text-align: center; margin-bottom: 2rem;">
-        <h2>SEKRETARIS</h2>
-        <p style="color: #666; margin-top: 10px;">Tugas dan Tanggung Jawab Sekretaris OSIS</p>
-    </div>
-
-    <div class="tugas-box" style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border-left: 6px solid #d4af37; border-radius: 8px; padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        <ol style="font-size: 1.1rem; line-height: 2; color: #444; padding-left: 1.5rem; margin: 0; font-weight: 500;">
-            <li>Mencatat seluruh hasil rapat dan kegiatan OSIS dalam bentuk notulen.</li>
-            <li>Mengelola dan menyimpan arsip atau dokumen OSIS.</li>
-            <li>Dapat mengoperasikan layanan Microsoft Word, Excel, PowerPoint serta dapat memahami fungsi fitur di dalamnya.</li>
-            <li>Bersedia mendampingi ketua dalam kegiatan rapat di luar.</li>
-        </ol>
-    </div>
-</section>
 
     <footer class="footer">
         <div class="footer-container">
@@ -244,16 +250,16 @@
             </div>
 
             <div class="footer-col">
-                <h4>Kontak & Lokasi</h4>
+                <h4>Kontak &amp; Lokasi</h4>
                 <p class="contact-item">📍 Jl. Parangtritis Km 11, Sabdodadi, Bantul, D.I. Yogyakarta</p>
             </div>
 
             <div class="footer-col">
                 <h4>Media Sosial</h4>
                 <div class="social-links">
-                <a href="https://www.instagram.com/osis.smkn1bantul/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
-                <a href="https://www.youtube.com/@osissabavoscho6471/" target="_blank" rel="noopener noreferrer" class="social-btn">YouTube</a>
-                <a href="https://www.tiktok.com/@osissmkn1bantul" target="_blank" rel="noopener noreferrer" class="social-btn">TikTok</a>
+                    <a href="https://www.instagram.com/osis.smkn1bantul/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+                    <a href="https://www.youtube.com/@osissabavoscho6471/" target="_blank" rel="noopener noreferrer" class="social-btn">YouTube</a>
+                    <a href="https://www.tiktok.com/@osissmkn1bantul" target="_blank" rel="noopener noreferrer" class="social-btn">TikTok</a>
                 </div>
             </div>
         </div>
@@ -263,8 +269,11 @@
         </div>
     </footer>
 
+    <!-- SDK Supabase HARUS dimuat sebelum ph-loader.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/sekbid.js"></script>
+    <script src="/js/ph-loader.js"></script>
     <script src="/struktur/ph/ketua/main.js"></script>
 </body>
 </html>

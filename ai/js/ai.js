@@ -1,20 +1,24 @@
 // ==========================================
-// ⚙️ LOGIKA MESIN PENCARI JAWABAN (AI LOKAL + SUPABASE)
+// ⚙️ LOGIKA MESIN PENCARI JAWABAN (AI LOKAL + SUPABASE + GEMINI)
 // ==========================================
 
-// Inisialisasi Supabase
-const SUPABASE_URL = 'https://apwgipefbiszpeoyvfta.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwd2dpcGVmYmlzenBlb3l2ZnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1MjU0MDcsImV4cCI6MjEwMTEwMTQwN30.JiO5Cq4KYZYU92seDkg8u-YDoqoLw7qzsY2MPKQIQlk';
+// ✅ Kalau halaman ini dipulihkan dari Back-Forward Cache, paksa reload penuh
+// biar tidak ada state/listener lama yang nyangkut (sering bikin chatbot "ngaco").
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        console.warn('Halaman dipulihkan dari bfcache — reload penuh...');
+        window.location.reload();
+    }
+});
 
 if (!window.supabase) {
     console.error('Supabase SDK belum termuat di halaman Chatbot.');
 }
 
+// Mengambil URL dan Key dari config.js
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 let databaseOSIS = { topics: [], smalltalk: [] };
-
-// Konteks percakapan: bot "inget" topik terakhir yang dibahas
 let topikTerakhir = null;
 
 // ==========================================
@@ -22,45 +26,92 @@ let topikTerakhir = null;
 // ==========================================
 async function muatDatabase() {
     try {
-        // 1. Ambil data dari file lokal JSON
         const localResponse = await fetch('js/database/database.json');
         const localData = await localResponse.json();
 
         if (localData.topics) databaseOSIS.topics.push(...localData.topics);
         if (localData.smalltalk) databaseOSIS.smalltalk.push(...localData.smalltalk);
 
-        // 2. Ambil data dari Supabase (jika SDK tersedia)
         if (supabaseClient) {
             const { data: supaData, error } = await supabaseClient
                 .from('chatbot_intents')
                 .select('*');
 
             if (!error && supaData) {
-                // Karena struktur tabel Supabase sama (punya keywords & fields), 
-                // kita bisa langsung gabungkan ke array topics!
                 databaseOSIS.topics.push(...supaData);
             } else if (error) {
-                console.error("Gagal memuat data dari Supabase:", error);
+                console.error('Gagal memuat data dari Supabase:', error);
             }
         }
 
-        console.log("Database AI siap! Total Topik:", databaseOSIS.topics.length);
+        console.log('Database AI siap! Total Topik:', databaseOSIS.topics.length, '| Total Smalltalk:', databaseOSIS.smalltalk.length);
     } catch (error) {
-        console.error("Terjadi kesalahan saat memuat database:", error);
+        console.error('Terjadi kesalahan saat memuat database:', error);
     }
 }
 
-// Jalankan fungsi muat database saat file diload
 muatDatabase();
 
 const chatForm = document.getElementById('chat-form');
 const chatInput = document.getElementById('chat-input');
 const chatMessages = document.getElementById('chat-messages');
 const typingIndicator = document.getElementById('typing-indicator-container');
+let statusBerpikirEl = document.getElementById('status-berpikir');
+if (typingIndicator && !statusBerpikirEl) {
+    statusBerpikirEl = document.createElement('div');
+    statusBerpikirEl.id = 'status-berpikir';
+    statusBerpikirEl.className = 'status-berpikir';
+    statusBerpikirEl.style.fontSize = '0.8em';
+    statusBerpikirEl.style.opacity = '0.7';
+    statusBerpikirEl.style.marginTop = '4px';
+    typingIndicator.querySelector('.avatar-chat')?.insertAdjacentElement('afterend', statusBerpikirEl);
+}
 
-// ------------------------------------------
-// Util: bersihkan teks
-// ------------------------------------------
+// ==========================================
+// ⏱️ TIMER "AI SEDANG BERPIKIR"
+// ==========================================
+let waktuMulaiBerpikir = 0;
+let intervalTimerBerpikir = null;
+let teksStatusSaatIni = '';
+
+function perbaruiTampilanStatus() {
+    if (!statusBerpikirEl) return;
+    if (waktuMulaiBerpikir) {
+        const detik = ((performance.now() - waktuMulaiBerpikir) / 1000).toFixed(1);
+        statusBerpikirEl.textContent = teksStatusSaatIni
+            ? `${teksStatusSaatIni} (${detik}d)`
+            : `${detik}d`;
+    } else {
+        statusBerpikirEl.textContent = teksStatusSaatIni;
+    }
+}
+
+function tampilkanStatusBerpikir(teks) {
+    teksStatusSaatIni = teks;
+    perbaruiTampilanStatus();
+}
+
+function mulaiTimerBerpikir() {
+    waktuMulaiBerpikir = performance.now();
+    if (intervalTimerBerpikir) clearInterval(intervalTimerBerpikir);
+    intervalTimerBerpikir = setInterval(perbaruiTampilanStatus, 100);
+}
+
+function hentikanTimerBerpikir() {
+    if (intervalTimerBerpikir) clearInterval(intervalTimerBerpikir);
+    const total = waktuMulaiBerpikir
+        ? ((performance.now() - waktuMulaiBerpikir) / 1000).toFixed(1)
+        : '0.0';
+    intervalTimerBerpikir = null;
+    waktuMulaiBerpikir = 0;
+    teksStatusSaatIni = '';
+    return total;
+}
+
+function jeda(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 function bersihkanTeks(teks) {
     return teks
         .toLowerCase()
@@ -70,9 +121,6 @@ function bersihkanTeks(teks) {
         .trim();
 }
 
-// ------------------------------------------
-// Util: jarak Levenshtein (toleransi typo ringan)
-// ------------------------------------------
 function jarakLevenshtein(a, b) {
     const m = a.length, n = b.length;
     if (m === 0) return n;
@@ -99,12 +147,10 @@ function kataMirip(kataUser, kataKunci) {
     if (kataUser === kataKunci) return true;
     if (kataUser.includes(kataKunci) || kataKunci.includes(kataUser)) return true;
 
-    // Kata pendek (≤4 huruf) butuh kemiripan HAMPIR persis (jarak ≤1)
-    const toleransi = kataKunci.length <= 4 ? 1 : kataKunci.length <= 8 ? 2 : 3;
+    const toleransi = kataKunci.length <= 3 ? 1 : kataKunci.length <= 7 ? 2 : 3;
     return jarakLevenshtein(kataUser, kataKunci) <= toleransi;
 }
 
-// Skor kecocokan (fuzzy) — dipakai untuk TOPIK
 function skorKecocokan(teksUser, kataUserList, kataKunciMentah) {
     const kataKunci = bersihkanTeks(kataKunciMentah);
     if (!kataKunci) return 0;
@@ -119,10 +165,9 @@ function skorKecocokan(teksUser, kataUserList, kataKunciMentah) {
         if (kataUserList.some((ku) => kataMirip(ku, kk))) kataCocok++;
     });
 
-    return kataCocok === kataKunciList.length ? kataKunci.length : 0;
+    return kataCocok === kataKunciList.length ? kataKunci.length * 2 : 0;
 }
 
-// Skor kecocokan KETAT (substring persis saja) untuk smalltalk
 function skorSubstringKetat(teksUser, kataKunciMentah) {
     const kataKunci = bersihkanTeks(kataKunciMentah);
     if (!kataKunci) return 0;
@@ -134,9 +179,6 @@ function skorSubstringKetat(teksUser, kataKunciMentah) {
     return kataKunci.length * 2;
 }
 
-// ------------------------------------------
-// Kata kunci Field
-// ------------------------------------------
 const FIELD_KEYWORDS = {
     ketua: ['ketua', 'koordinator', 'pj', 'penanggung jawab', 'kepala'],
     anggota: ['anggota', 'member', 'siapa aja', 'siapa saja', 'personil'],
@@ -144,6 +186,11 @@ const FIELD_KEYWORDS = {
     proker: ['proker', 'program kerja', 'kegiatan', 'agenda', 'acara'],
     deskripsi: ['apa itu', 'tentang', 'penjelasan', 'deskripsi', 'maksudnya'],
 };
+
+const KATA_GENERIK = new Set([
+    'smk', 'smkn', '1', 'satu', 'bantul', 'osis', 'sekolah',
+    'di', 'apa', 'yang', 'ada', 'itu', 'ini', 'kak', 'dong', 'nih'
+]);
 
 function deteksiField(teksUser, kataUserList) {
     let fieldTerbaik = null;
@@ -161,28 +208,44 @@ function deteksiField(teksUser, kataUserList) {
     return fieldTerbaik;
 }
 
-// Cari topik
+const AMBANG_MINIMUM_TOPIK = 10;
+
 function cariTopik(teksUser, kataUserList) {
     let topikTerbaik = null;
     let skorTerbaik = 0;
+    let keywordTerbaik = null;
 
     (databaseOSIS.topics || []).forEach((topic) => {
         (topic.keywords || []).forEach((kk) => {
+            const kkBersih = bersihkanTeks(kk);
+            const kataKk = kkBersih.split(' ').filter(Boolean);
+            const semuaGenerik = kataKk.length > 0 && kataKk.every((k) => KATA_GENERIK.has(k));
+            if (semuaGenerik) return; 
+
             const skor = skorKecocokan(teksUser, kataUserList, kk);
             if (skor > skorTerbaik) {
                 skorTerbaik = skor;
                 topikTerbaik = topic;
+                keywordTerbaik = kk;
             }
         });
     });
 
+    console.log(
+        'DEBUG cariTopik ->', teksUser,
+        '=>', topikTerbaik ? topikTerbaik.id : null,
+        '| keyword:', keywordTerbaik,
+        '(skor:', skorTerbaik, ')'
+    );
+
+    if (skorTerbaik < AMBANG_MINIMUM_TOPIK) return null;
     return topikTerbaik;
 }
 
-// Cari small talk
 function cariSmalltalk(teksUser) {
     let entriTerbaik = null;
     let skorTerbaik = 0;
+    let keywordCocok = null;
 
     (databaseOSIS.smalltalk || []).forEach((entri) => {
         (entri.keywords || []).forEach((kk) => {
@@ -190,9 +253,12 @@ function cariSmalltalk(teksUser) {
             if (skor > skorTerbaik) {
                 skorTerbaik = skor;
                 entriTerbaik = entri;
+                keywordCocok = kk;
             }
         });
     });
+
+    console.log('DEBUG cariSmalltalk ->', teksUser, '=> keyword:', keywordCocok, '(skor:', skorTerbaik, ')');
 
     if (!entriTerbaik) return null;
     const responses = entriTerbaik.responses || [];
@@ -211,11 +277,64 @@ function fallbackAcak() {
 }
 
 // ------------------------------------------
-// Fungsi utama AI
+// Panggil Gemini langsung dari client (Key diambil dari config.js)
 // ------------------------------------------
-function cariJawabanAI(pertanyaan) {
+async function tanyaGeminiAI(pertanyaanUser) {
+    const NAMA_MODEL = 'gemini-3.5-flash'; 
+    // Menggunakan variabel GEMINI_API_KEY yang ada di file config.js
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${NAMA_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+    const systemPrompt = `Kamu adalah OSIS-Bot, asisten AI resmi dari OSIS SMKN 1 Bantul.
+jika ada siswa bertanya seputar SMK N 1 bantul Jawab pertanyaan siswa dengan ramah, informatif, dan membantu.
+Gunakan bahasa yang santai namun tetap sopan khas anak sekolah/anak muda. (tidak hanya seputar organisasi OSIS, tapi juga seputar sekolah, kegiatan, dan info umum yang relevan).
+Jika ada pertanyaan seputar sekolah atau OSIS yang tidak kamu ketahui pastinya, berikan arahan agar siswa mengirim komentar di beranda. (jangan ada text yang pake huruf yang bold ya)`;
+
+    try {
+        tampilkanStatusBerpikir('🧠 Bertanya ke AI...');
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [
+                    { parts: [{ text: `${systemPrompt}\n\nPertanyaan Siswa: ${pertanyaanUser}` }] }
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error(`Gemini API error (status ${response.status}):`, errorData);
+
+            if (response.status === 429) {
+                return "Maaf, kuota pesan AI harian sedang penuh. Coba lagi nanti atau gunakan pertanyaan seputar menu yang tersedia ya!";
+            }
+
+            return `Maaf, AI sedang mengalami kendala (kode ${response.status}). Coba lagi beberapa saat ya!`;
+        }
+
+        const data = await response.json();
+
+        if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+            return data.candidates[0].content.parts[0].text;
+        } else {
+            return "Maaf, AI sedang kesulitan memproses jawaban. Coba tanya lagi ya!";
+        }
+    } catch (error) {
+        console.error('Error Gemini API:', error);
+        return "Oops, koneksi ke AI sedang bermasalah. Silakan coba beberapa saat lagi.";
+    }
+}
+
+async function cariJawabanAI(pertanyaan) {
+    tampilkanStatusBerpikir('🤔 Membaca pertanyaanmu...');
+    await jeda(400);
+
     const teksUser = bersihkanTeks(pertanyaan);
     const kataUserList = teksUser.split(' ').filter(Boolean);
+
+    tampilkanStatusBerpikir('📚 Mengecek data OSIS...');
+    await jeda(400);
 
     let topik = cariTopik(teksUser, kataUserList);
     const fieldDiminta = deteksiField(teksUser, kataUserList);
@@ -228,23 +347,47 @@ function cariJawabanAI(pertanyaan) {
         topikTerakhir = topik;
         const fields = topik.fields || {};
 
+        tampilkanStatusBerpikir('✅ Menemukan info yang cocok...');
+        await jeda(300);
+
         if (fieldDiminta && fields[fieldDiminta]) {
             return fields[fieldDiminta];
         }
         if (fields.default) {
             return fields.default;
         }
-        return fallbackAcak();
     }
+
+    tampilkanStatusBerpikir('💬 Mengecek obrolan santai...');
+    await jeda(300);
 
     const smalltalkJawaban = cariSmalltalk(teksUser);
     if (smalltalkJawaban) return smalltalkJawaban;
 
-    return fallbackAcak();
+    return await tanyaGeminiAI(pertanyaan);
 }
 
-// Logika ketika tombol kirim ditekan
-chatForm.addEventListener('submit', function(e) {
+function appendMessage(sender, icon, text, waktuDetik) {
+    const formattedText = text.replace(/\n/g, '<br>');
+    const isImage = /\.(png|jpg|jpeg|webp|gif|svg)$/i.test(icon);
+    const avatarContent = isImage
+        ? `<img src="${icon}" alt="Avatar ${sender}">`
+        : icon;
+
+    const waktuHtml = waktuDetik
+        ? `<div style="font-size:0.75em;opacity:0.6;margin-top:4px;">⏱️ ${waktuDetik} detik</div>`
+        : '';
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}`;
+    messageDiv.innerHTML = `
+        <div class="avatar-chat">${avatarContent}</div>
+        <div class="bubble">${formattedText}${waktuHtml}</div>
+    `;
+    chatMessages.appendChild(messageDiv);
+}
+
+chatForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     const userText = chatInput.value.trim();
     if (!userText) return;
@@ -253,32 +396,15 @@ chatForm.addEventListener('submit', function(e) {
     chatInput.value = '';
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    chatMessages.appendChild(typingIndicator); 
+    chatMessages.appendChild(typingIndicator);
     typingIndicator.style.display = 'flex';
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
-    setTimeout(() => {
-        const aiReplyText = cariJawabanAI(userText);
-        
-        typingIndicator.style.display = 'none';
-        appendMessage('ai', '/assets/logo-osis.png', aiReplyText);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 1500); 
+    mulaiTimerBerpikir(); // ⏱️ mulai hitung waktu berpikir
+    const aiReplyText = await cariJawabanAI(userText);
+    const totalWaktu = hentikanTimerBerpikir(); // ⏱️ hentikan & ambil totalnya
+
+    typingIndicator.style.display = 'none';
+    appendMessage('ai', '/assets/logo-osis.png', aiReplyText, totalWaktu);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 });
-
-// Fungsi untuk merender HTML balon chat
-function appendMessage(sender, icon, text) {
-    const formattedText = text.replace(/\n/g, '<br>');
-    const isImage = /\.(png|jpg|jpeg|webp|gif|svg)$/i.test(icon);
-    const avatarContent = isImage
-        ? `<img src="${icon}" alt="Avatar ${sender}">`
-        : icon;
-
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}`;
-    messageDiv.innerHTML = `
-        <div class="avatar-chat">${avatarContent}</div>
-        <div class="bubble">${formattedText}</div>
-    `;
-    chatMessages.appendChild(messageDiv);
-}

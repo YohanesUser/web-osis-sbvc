@@ -55,8 +55,18 @@
 <button type="button" class="admin-tab-btn active" data-tab="comments">Komentar Siswa</button>
 <button type="button" class="admin-tab-btn" data-tab="news">Kelola Berita</button>
 <button type="button" class="admin-tab-btn" data-tab="gallery">Galeri Sekbid</button>
+<button type="button" class="admin-tab-btn" data-tab="covers">Cover Struktur</button>
+<button type="button" class="admin-tab-btn" data-tab="profil">Profil Sekbid</button>
+<button type="button" class="admin-tab-btn" data-tab="ph">Pengurus Harian</button>
 <button type="button" class="admin-tab-btn" data-tab="whatwedo">Proker</button>
+<button type="button" class="admin-tab-btn" data-tab="oprec">Open Recruitment</button>
 <button type="button" class="admin-tab-btn" data-tab="chatbot">Kelola Chatbot</button>
+</div>
+<div class="admin-tabs-hint">
+  Geser untuk lihat tab lainnya
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
 </div>
 
             <section id="tab-comments" class="admin-tab-panel">
@@ -111,6 +121,229 @@
             </div>
             </section>
 
+                <section id="tab-covers" class="admin-tab-panel hidden">
+    <div class="admin-toolbar">
+        <h2>Cover Foto Struktur (PH & Sekbid)</h2>
+        <button id="covers-refresh-btn" class="btn-secondary">Muat Ulang</button>
+    </div>
+
+    <form id="covers-form" class="news-form-card">
+        <div class="admin-field-label">Pilih Slot Cover</div>
+        <select id="covers-slug-select" required>
+            <option value="">-- Pilih Slot --</option>
+            <optgroup label="Pengurus Harian">
+                <option value="ph-ketua">Ketua & Wakil</option>
+                <option value="ph-sekretaris">Sekretaris</option>
+                <option value="ph-bendahara">Bendahara</option>
+            </optgroup>
+            <optgroup label="Seksi Bidang">
+                <option value="sekbid-ketaqis">1. Ketaqwaan Islam</option>
+                <option value="sekbid-ketaqris">2. Ketaqwaan Kristen/Katolik</option>
+                <option value="sekbid-politik">3. Politik & Kepemimpinan</option>
+                <option value="sekbid-belneg">4. Bela Negara</option>
+                <option value="sekbid-kwu">5. Kewirausahaan</option>
+                <option value="sekbid-apres">6. Apresiasi Seni</option>
+                <option value="sekbid-jasmani">7. Jasmani & Kesehatan</option>
+            </optgroup>
+        </select>
+
+        <div class="admin-field-label">Upload Foto Cover (1 file, menggantikan cover lama di slot ini)</div>
+        <input type="file" id="covers-image-input" accept="image/*">
+        <div id="covers-image-preview" class="image-preview-wrap"></div>
+
+        <div class="admin-comment-actions">
+            <span id="covers-form-status" class="admin-save-status"></span>
+            <button type="submit" id="covers-submit-btn" class="btn-primary">Simpan Cover</button>
+        </div>
+    </form>
+
+    <div id="admin-covers-list" class="admin-comment-list">
+        <p class="admin-loading">Memuat cover...</p>
+    </div>
+</section>
+
+            <section id="tab-profil" class="admin-tab-panel hidden">
+    <div class="admin-toolbar">
+        <h2>Profil Sekbid — Tugas Umum, Koordinator, Syarat</h2>
+        <button id="profil-refresh-btn" class="btn-secondary">Muat Ulang</button>
+    </div>
+
+    <form id="profil-form" class="news-form-card">
+        <div class="admin-field-label">ID Sekbid</div>
+        <select id="profil-sekbid-select" required>
+            <option value="">-- Pilih Sekbid --</option>
+            <option value="ketaqis">1. Ketaqwaan Islam</option>
+            <option value="ketaqris">2. Ketaqwaan Kristen/Katolik</option>
+            <option value="politik">3. Politik &amp; Kepemimpinan</option>
+            <option value="belneg">4. Bela Negara</option>
+            <option value="kwu">5. Kewirausahaan</option>
+            <option value="apres">6. Apresiasi Seni</option>
+            <option value="jasmani">7. Jasmani &amp; Kesehatan</option>
+        </select>
+
+        <div class="admin-field-label">Tugas Umum</div>
+        <textarea id="profil-tugas-umum" placeholder="Deskripsi tugas umum sekbid ini..."></textarea>
+
+        <div class="admin-field-label">Nama Koordinator</div>
+        <input type="text" id="profil-koor-nama" placeholder="Nama koordinator">
+
+        <div class="admin-field-label">Kelas Koordinator</div>
+        <input type="text" id="profil-koor-kelas" placeholder="Contoh: XII MP 2">
+
+        <div class="admin-field-label">Foto Koordinator</div>
+        <input type="file" id="profil-koor-foto-input" accept="image/*">
+        <div id="profil-koor-foto-preview" class="image-preview-wrap"></div>
+
+        <div class="admin-field-label">Syarat Bergabung (1 baris = 1 syarat)</div>
+        <textarea id="profil-syarat-input" placeholder="Beragama Islam.&#10;Bergabung dalam anggota Rohis Tazzaka.&#10;Bertanggungjawab."></textarea>
+
+        <div class="admin-comment-actions">
+            <span id="profil-form-status" class="admin-save-status"></span>
+            <button type="submit" id="profil-submit-btn" class="btn-primary">Simpan Profil</button>
+        </div>
+    </form>
+
+    <div class="admin-toolbar" style="margin-top: 30px;">
+        <h2 style="font-size:1.05rem;">Anggota Tim (selain koordinator)</h2>
+    </div>
+
+    <form id="anggota-form" class="news-form-card">
+        <div class="admin-field-label">ID Sekbid</div>
+        <select id="anggota-sekbid-select" required>
+            <option value="">-- Pilih Sekbid --</option>
+            <option value="ketaqis">1. Ketaqwaan Islam</option>
+            <option value="ketaqris">2. Ketaqwaan Kristen/Katolik</option>
+            <option value="politik">3. Politik &amp; Kepemimpinan</option>
+            <option value="belneg">4. Bela Negara</option>
+            <option value="kwu">5. Kewirausahaan</option>
+            <option value="apres">6. Apresiasi Seni</option>
+            <option value="jasmani">7. Jasmani &amp; Kesehatan</option>
+        </select>
+
+        <div class="admin-field-label">Nama</div>
+        <input type="text" id="anggota-nama" placeholder="Nama anggota" required>
+
+        <div class="admin-field-label">Kelas</div>
+        <input type="text" id="anggota-kelas" placeholder="Contoh: XI TKJ 1">
+
+        <div class="admin-field-label">Role</div>
+        <input type="text" id="anggota-role" placeholder="Anggota" value="Anggota">
+
+        <div class="admin-field-label">Foto</div>
+        <input type="file" id="anggota-foto-input" accept="image/*">
+        <div id="anggota-foto-preview" class="image-preview-wrap"></div>
+
+        <div class="admin-field-label">Urutan Tampil (angka kecil tampil duluan)</div>
+        <input type="number" id="anggota-sort" value="0">
+
+        <div class="admin-comment-actions">
+            <span id="anggota-form-status" class="admin-save-status"></span>
+            <button type="button" id="anggota-cancel-btn" class="btn-secondary hidden">Batal Edit</button>
+            <button type="submit" id="anggota-submit-btn" class="btn-primary">Tambah Anggota</button>
+        </div>
+    </form>
+
+    <div id="anggota-filter-wrap" style="margin: 15px 0;">
+        <label for="anggota-filter-select" style="font-size:0.85rem;color:#64748b;">Tampilkan:</label>
+        <select id="anggota-filter-select">
+            <option value="">Semua Sekbid</option>
+        </select>
+    </div>
+
+    <div id="admin-anggota-list" class="admin-comment-list">
+        <p class="admin-loading">Memuat anggota...</p>
+    </div>
+</section>
+
+<section id="tab-ph" class="admin-tab-panel hidden">
+    <div class="admin-toolbar">
+        <h2>Pengurus Harian — Hero, Tugas & Anggota</h2>
+        <button id="ph-refresh-btn" class="btn-secondary">Muat Ulang</button>
+    </div>
+
+    <!-- ===== FORM PROFIL GRUP PH ===== -->
+    <form id="ph-profil-form" class="news-form-card">
+        <div class="admin-field-label">Grup Pengurus Harian</div>
+        <select id="ph-group-select" required>
+            <option value="">-- Pilih Grup --</option>
+            <option value="ketua">Ketua &amp; Wakil</option>
+            <option value="sekretaris">Sekretaris</option>
+            <option value="bendahara">Bendahara</option>
+        </select>
+
+        <div class="admin-field-label">Judul Hero (contoh: Bendahara)</div>
+        <input type="text" id="ph-hero-title" placeholder="Bendahara">
+
+        <div class="admin-field-label">Subjudul Hero</div>
+        <input type="text" id="ph-hero-subtitle" placeholder="BENDAHARA 1 DAN BENDAHARA 2 OSIS SMKN 1 BANTUL">
+
+        <div class="admin-field-label">Tugas Umum (paragraf)</div>
+        <textarea id="ph-tugas-umum" placeholder="Deskripsi tugas umum grup ini..."></textarea>
+
+        <div class="admin-field-label">Rincian Tugas (1 baris = 1 poin)</div>
+        <textarea id="ph-tugas-list-input" placeholder="Mengelola keuangan OSIS dengan transparan dan tertib.&#10;Membuat laporan keuangan secara berkala.&#10;Menyimpan bukti transaksi keuangan."></textarea>
+
+        <div class="admin-comment-actions">
+            <span id="ph-profil-status" class="admin-save-status"></span>
+            <button type="submit" id="ph-profil-submit-btn" class="btn-primary">Simpan Profil PH</button>
+        </div>
+    </form>
+
+    <!-- ===== FORM ANGGOTA PH ===== -->
+    <div class="admin-toolbar" style="margin-top: 30px;">
+        <h2 style="font-size:1.05rem;">Anggota Pengurus Harian</h2>
+    </div>
+
+    <form id="ph-member-form" class="news-form-card">
+        <div class="admin-field-label">Grup</div>
+        <select id="ph-member-group-select" required>
+            <option value="">-- Pilih Grup --</option>
+            <option value="ketua">Ketua &amp; Wakil</option>
+            <option value="sekretaris">Sekretaris</option>
+            <option value="bendahara">Bendahara</option>
+        </select>
+
+        <div class="admin-field-label">Jabatan / Label</div>
+        <input type="text" id="ph-member-label" placeholder="Contoh: Ketua OSIS / Bendahara 1">
+
+        <div class="admin-field-label">Nama</div>
+        <input type="text" id="ph-member-nama" placeholder="Nama lengkap" required>
+
+        <div class="admin-field-label">Kelas</div>
+        <input type="text" id="ph-member-kelas" placeholder="Contoh: XII AKL 4">
+
+        <div class="admin-field-label">Motto (opsional)</div>
+        <textarea id="ph-member-motto" placeholder="Motto atau kutipan singkat..."></textarea>
+
+        <div class="admin-field-label">Foto (idealnya PNG transparan)</div>
+        <input type="file" id="ph-member-foto-input" accept="image/*">
+        <div id="ph-member-foto-preview" class="image-preview-wrap"></div>
+
+        <div class="admin-field-label">Urutan Tampil (angka kecil tampil duluan)</div>
+        <input type="number" id="ph-member-sort" value="0">
+
+        <div class="admin-comment-actions">
+            <span id="ph-member-status" class="admin-save-status"></span>
+            <button type="button" id="ph-member-cancel-btn" class="btn-secondary hidden">Batal Edit</button>
+            <button type="submit" id="ph-member-submit-btn" class="btn-primary">Tambah Anggota PH</button>
+        </div>
+    </form>
+
+    <div style="margin: 15px 0;">
+        <label for="ph-member-filter-select" style="font-size:0.85rem;color:#64748b;">Tampilkan:</label>
+        <select id="ph-member-filter-select">
+            <option value="">Semua Grup</option>
+            <option value="ketua">Ketua &amp; Wakil</option>
+            <option value="sekretaris">Sekretaris</option>
+            <option value="bendahara">Bendahara</option>
+        </select>
+    </div>
+
+    <div id="admin-ph-member-list" class="admin-comment-list">
+        <p class="admin-loading">Memuat anggota PH...</p>
+    </div>
+</section>
+
             <section id="tab-whatwedo" class="admin-tab-panel hidden">
     <div class="admin-toolbar">
         <h2>Kelola "Proker"</h2>
@@ -160,6 +393,73 @@
         <p class="admin-loading">Memuat data...</p>
     </div>
 </section>
+
+            <section id="tab-oprec" class="admin-tab-panel hidden">
+                <div class="admin-toolbar">
+                    <h2>Open Recruitment</h2>
+                    <button id="oprec-refresh-btn" class="btn-secondary">Muat Ulang</button>
+                </div>
+
+                <form id="oprec-settings-form" class="news-form-card">
+                    <label class="news-publish-toggle">
+                        <input type="checkbox" id="oprec-is-open">
+                        Pendaftaran sedang dibuka
+                    </label>
+
+                    <div class="admin-field-label">Deskripsi / Pengumuman</div>
+                    <textarea id="oprec-description-input" placeholder="Teks yang tampil di bawah judul halaman Open Recruitment..."></textarea>
+
+                    <div class="admin-field-label">Tanggal Mulai</div>
+                    <input type="date" id="oprec-tanggal-mulai">
+
+                    <div class="admin-field-label">Tanggal Selesai</div>
+                    <input type="date" id="oprec-tanggal-selesai">
+
+                    <div class="admin-field-label">Link Google Form (isi jika pendaftaran dibuka)</div>
+                    <input type="text" id="oprec-form-url" placeholder="https://forms.gle/...">
+
+                    <div class="admin-field-label">Persyaratan Umum (1 baris = 1 syarat)</div>
+                    <textarea id="oprec-requirements-input" placeholder="Siswa aktif SMK Negeri 1 Bantul kelas X&#10;Memiliki integritas, dedikasi, dan loyalitas tinggi terhadap sekolah.&#10;Mampu bekerja dalam tim dan berkomunikasi dengan baik.&#10;Mendapat izin dari orang tua/wali murid."></textarea>
+
+                    <div class="admin-field-label">Pamflet (1 file, menggantikan pamflet lama)</div>
+                    <input type="file" id="oprec-pamphlet-input" accept="image/*">
+                    <div id="oprec-pamphlet-preview" class="image-preview-wrap"></div>
+
+                    <div class="admin-comment-actions">
+                        <span id="oprec-settings-status" class="admin-save-status"></span>
+                        <button type="submit" id="oprec-settings-submit-btn" class="btn-primary">Simpan Pengaturan</button>
+                    </div>
+                </form>
+
+                <div class="admin-toolbar" style="margin-top:10px;">
+                    <h2 style="font-size:1.05rem;">Contact Person</h2>
+                </div>
+
+                <form id="oprec-cp-form" class="news-form-card">
+                    <div class="admin-field-label">Nama</div>
+                    <input type="text" id="oprec-cp-name" placeholder="Kak Dafa" required>
+
+                    <div class="admin-field-label">Nomor WhatsApp (contoh: 6281327029613)</div>
+                    <input type="text" id="oprec-cp-phone" placeholder="6281327029613" required>
+
+                    <div class="admin-field-label">Urutan Tampil</div>
+                    <input type="number" id="oprec-cp-sort" value="0">
+
+                    <div class="admin-field-label">Foto</div>
+                    <input type="file" id="oprec-cp-photo-input" accept="image/*">
+                    <div id="oprec-cp-photo-preview" class="image-preview-wrap"></div>
+
+                    <div class="admin-comment-actions">
+                        <span id="oprec-cp-form-status" class="admin-save-status"></span>
+                        <button type="button" id="oprec-cp-cancel-btn" class="btn-secondary hidden">Batal Edit</button>
+                        <button type="submit" id="oprec-cp-submit-btn" class="btn-primary">Tambah Contact Person</button>
+                    </div>
+                </form>
+
+                <div id="admin-oprec-cp-list" class="admin-comment-list">
+                    <p class="admin-loading">Memuat contact person...</p>
+                </div>
+            </section>
 
             <section id="tab-news" class="admin-tab-panel hidden">
                 <div class="admin-toolbar">

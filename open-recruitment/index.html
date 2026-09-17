@@ -44,29 +44,31 @@
 
     <div class="oprec-header">
 
-        <div class="status-badge closed">
+        <div id="oprec-status-badge" class="status-badge closed">
             <span class="dot"></span>
-            PENDAFTARAN DITUTUP
+            <span id="oprec-status-text">MEMUAT...</span>
         </div>
 
-        <h1>Sampai Jumpa Tahun Depan!</h1>
+        <h1 id="oprec-title">Open Recruitment OSIS</h1>
 
-        <p style="color:#888;">
-            Terima kasih atas antusiasme kalian. Pendaftaran anggota baru
-            OSIS SMK Negeri 1 Bantul periode 2026/2027 telah resmi ditutup.
+        <p id="oprec-description" style="color:#888;">
+            Memuat informasi pendaftaran...
         </p>
+
+        <p id="oprec-dates" class="oprec-dates hidden"></p>
 
     </div>
 
     <!-- PAMFLET -->
-    <section class="oprec-section">
+    <section id="oprec-pamphlet-section" class="oprec-section hidden">
 
         <div class="pamflet-box">
 
-            <a href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/pamflet%20osis.jpeg" target="_blank">
+            <a id="oprec-pamphlet-link" href="#" target="_blank">
 
                 <img
-                    src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/pamflet%20osis.jpeg"
+                    id="oprec-pamphlet-img"
+                    src=""
                     alt="Pamflet Open Recruitment"
                     class="pamflet-img">
 
@@ -81,35 +83,28 @@
     </section>
 
     <!-- Persyaratan -->
-    <section class="oprec-section">
+    <section id="oprec-req-section" class="oprec-section hidden">
 
         <h2>Persyaratan Umum</h2>
 
-        <ul class="req-list">
-            <li>Siswa aktif SMK Negeri 1 Bantul kelas X</li>
-            <li>Memiliki integritas, dedikasi, dan loyalitas tinggi terhadap sekolah.</li>
-            <li>Mampu bekerja dalam tim dan berkomunikasi dengan baik.</li>
-            <li>Mendapat izin dari orang tua/wali murid.</li>
-        </ul>
+        <ul id="oprec-req-list" class="req-list"></ul>
 
     </section>
 
-    <!-- Formulir (ditutup) -->
+    <!-- Formulir -->
     <section class="oprec-section">
 
         <h2>Formulir Pendaftaran</h2>
 
-        <p style="text-align:center;color:#666;margin-bottom:25px;">
-            Mohon maaf, periode pendaftaran open recruitment saat ini
-            sudah ditutup. Pantau terus Instagram dan info sekolah untuk
-            pembukaan pendaftaran periode berikutnya.
+        <p id="oprec-form-note" style="text-align:center;color:#666;margin-bottom:25px;">
+            Memuat status pendaftaran...
         </p>
 
         <div style="text-align:center;">
 
-            <span class="btn-submit btn-disabled">
-                Pendaftaran Ditutup
-            </span>
+            <a id="oprec-form-btn" href="#" target="_blank" rel="noopener" class="btn-submit btn-disabled">
+                Memuat...
+            </a>
 
         </div>
 
@@ -117,80 +112,18 @@
 
     <div class="oprec-contact">
 
-    <h3>Contact Person</h3>
+        <h3>Contact Person</h3>
 
-    <p>
-        Jika mengalami kendala saat pendaftaran atau memiliki pertanyaan,
-        silakan hubungi panitia berikut.
-    </p>
+        <p>
+            Jika mengalami kendala saat pendaftaran atau memiliki pertanyaan,
+            silakan hubungi panitia berikut.
+        </p>
 
-    <div class="cp-list">
-
-        <!-- CP 1 -->
-        <a href="https://wa.me/+6281327029613" target="_blank" class="cp-card">
-
-            <img
-                src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/dapa.jpg"
-                alt="CP 1"
-                class="cp-photo">
-
-            <div class="cp-info">
-            <strong>Kak Dafa</strong>
-
-             <span class="wa-number">
-             <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-             alt="WhatsApp"
-             class="wa-icon">
-            081327029613
-            </span>
-            </div>
-
-        </a>
-
-        <!-- CP 2 -->
-        <a href="https://wa.me/+6283117404159" target="_blank" class="cp-card">
-
-            <img
-                src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/letha.jpg"
-                alt="CP 2"
-                class="cp-photo">
-
-            <div class="cp-info">
-            <strong>Kak Aletha</strong>
-
-            <span class="wa-number">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-             alt="WhatsApp"
-             class="wa-icon">
-            083117404159
-            </span>
-            </div>
-
-        </a>
-
-        <a href="https://wa.me/+6285870604642" target="_blank" class="cp-card">
-
-            <img
-                src="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/rara.jpg"
-                alt="CP 2"
-                class="cp-photo">
-
-            <div class="cp-info">
-            <strong>Kak Rara</strong>
-
-            <span class="wa-number">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-             alt="WhatsApp"
-             class="wa-icon">
-            085870604642
-            </span>
-            </div>
-
-        </a>
+        <div id="oprec-cp-list" class="cp-list">
+            <p class="oprec-loading">Memuat kontak...</p>
+        </div>
 
     </div>
-
-</div>
 
 </main>
 
@@ -279,6 +212,8 @@
 
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/js/oprec.js"></script>
 <script src="/js/main.js"></script>
 
 </body>

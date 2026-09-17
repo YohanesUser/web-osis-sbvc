@@ -120,6 +120,11 @@ document.addEventListener("DOMContentLoaded", function () {
             document.body.style.overflow = "";
         }
 
+        // Diekspos secara global supaya elemen yang dimuat belakangan lewat
+        // Supabase (mis. kartu anggota dari profile-loader.js) bisa pakai
+        // lightbox yang sama tanpa perlu bikin overlay baru.
+        window.openLightbox = openLightbox;
+
         // Tutup saat klik tombol X, klik area gelap, atau tekan Escape
         closeBtn.addEventListener("click", closeLightbox);
         overlay.addEventListener("click", (e) => {
@@ -129,7 +134,10 @@ document.addEventListener("DOMContentLoaded", function () {
             if (e.key === "Escape") closeLightbox();
         });
 
-        // Pasang listener ke SEMUA foto konten di halaman ini
+        // Pasang listener ke SEMUA foto konten yang SUDAH ADA di halaman ini
+        // saat load pertama (foto yang dimuat belakangan via Supabase perlu
+        // dipasangi listener sendiri oleh loader masing-masing — lihat
+        // profile-loader.js dan gallery-loader.js).
         const selectors = [
             ".bidang-hero-photo",
             ".koordinator-photo-wrap img",

@@ -114,33 +114,48 @@
     /* ===================== TAB SWITCHING ===================== */
     const tabButtons = document.querySelectorAll('.admin-tab-btn');
     const tabPanels = {
-comments: document.getElementById('tab-comments'),
-news: document.getElementById('tab-news'),
-gallery: document.getElementById('tab-gallery'),
-whatwedo: document.getElementById('tab-whatwedo'),
-chatbot: document.getElementById('tab-chatbot')
+    comments: document.getElementById('tab-comments'),
+    news: document.getElementById('tab-news'),
+    gallery: document.getElementById('tab-gallery'),
+    whatwedo: document.getElementById('tab-whatwedo'),
+    covers: document.getElementById('tab-covers'),
+    oprec: document.getElementById('tab-oprec'),
+    chatbot: document.getElementById('tab-chatbot'),
+    profil: document.getElementById('tab-profil'),
+    ph: document.getElementById('tab-ph')          // <-- BARU
 };
 
     tabButtons.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            tabButtons.forEach(function (b) { b.classList.remove('active'); });
-            btn.classList.add('active');
+    btn.addEventListener('click', function () {
+        tabButtons.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
 
-            Object.keys(tabPanels).forEach(function (key) {
-                tabPanels[key].classList.toggle('hidden', key !== btn.dataset.tab);
-            });
+        Object.keys(tabPanels).forEach(function (key) {
+            tabPanels[key].classList.toggle('hidden', key !== btn.dataset.tab);
+        });
 
-            if (btn.dataset.tab === 'news') {
+        if (btn.dataset.tab === 'news') {
     loadNews();
 } else if (btn.dataset.tab === 'gallery') {
     loadGallery();
 } else if (btn.dataset.tab === 'whatwedo') {
     loadWhatwedo();
+} else if (btn.dataset.tab === 'covers') {
+    loadCovers();
+} else if (btn.dataset.tab === 'oprec') {
+    loadOprecSettings();
+    loadOprecContacts();
 } else if (btn.dataset.tab === 'chatbot') {
     loadIntents();
-} 
-        });
+} else if (btn.dataset.tab === 'profil') {
+    loadProfil();
+    loadAnggota();
+} else if (btn.dataset.tab === 'ph') {            // <-- BARU
+    loadPhProfil();
+    loadPhMembers();
+}
     });
+});
 
     /* ===================== KOMENTAR SISWA ===================== */
     async function loadComments() {
@@ -519,6 +534,536 @@ function renderGalleryList(items) {
     });
 }
 
+/* ===================== COVER STRUKTUR (PH & SEKBID) ===================== */
+const SLOT_LABELS = {
+    'ph-ketua': 'PH — Ketua & Wakil',
+    'ph-sekretaris': 'PH — Sekretaris',
+    'ph-bendahara': 'PH — Bendahara',
+    'sekbid-ketaqis': '1. Ketaqwaan Islam',
+    'sekbid-ketaqris': '2. Ketaqwaan Kristen/Katolik',
+    'sekbid-politik': '3. Politik & Kepemimpinan',
+    'sekbid-belneg': '4. Bela Negara',
+    'sekbid-kwu': '5. Kewirausahaan',
+    'sekbid-apres': '6. Apresiasi Seni',
+    'sekbid-jasmani': '7. Jasmani & Kesehatan'
+};
+
+const coversForm = document.getElementById('covers-form');
+const coversSlugSelect = document.getElementById('covers-slug-select');
+const coversImageInput = document.getElementById('covers-image-input');
+const coversImagePreviewWrap = document.getElementById('covers-image-preview');
+const coversFormStatus = document.getElementById('covers-form-status');
+const coversSubmitBtn = document.getElementById('covers-submit-btn');
+const coversListEl = document.getElementById('admin-covers-list');
+const coversRefreshBtn = document.getElementById('covers-refresh-btn');
+
+let newCoverImageFile = null;
+
+function renderCoverImagePreview() {
+    coversImagePreviewWrap.innerHTML = '';
+    if (!newCoverImageFile) return;
+
+    const item = document.createElement('div');
+    item.className = 'image-preview-item';
+    item.innerHTML =
+        '<img src="' + URL.createObjectURL(newCoverImageFile) + '" alt="Pratinjau">' +
+        '<button type="button" class="image-preview-remove">✕</button>';
+
+    item.querySelector('.image-preview-remove').addEventListener('click', function () {
+        newCoverImageFile = null;
+        coversImageInput.value = '';
+        renderCoverImagePreview();
+    });
+
+    coversImagePreviewWrap.appendChild(item);
+}
+
+coversImageInput.addEventListener('change', function () {
+    if (coversImageInput.files && coversImageInput.files[0]) {
+        newCoverImageFile = coversImageInput.files[0];
+        renderCoverImagePreview();
+    }
+});
+
+async function uploadCoverImage(file) {
+    const ext = file.name.split('.').pop();
+    const path = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+
+    const { error } = await client.storage
+        .from('struktur-covers')
+        .upload(path, file, { upsert: false });
+
+    if (error) throw error;
+
+    const { data } = client.storage.from('struktur-covers').getPublicUrl(path);
+    return data.publicUrl;
+}
+
+coversForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const slug = coversSlugSelect.value;
+    if (!slug) {
+        coversFormStatus.style.color = '#dc2626';
+        coversFormStatus.textContent = 'Pilih slot dulu.';
+        return;
+    }
+    if (!newCoverImageFile) {
+        coversFormStatus.style.color = '#dc2626';
+        coversFormStatus.textContent = 'Pilih foto dulu.';
+        return;
+    }
+
+    coversSubmitBtn.disabled = true;
+    coversFormStatus.style.color = '#16a34a';
+    coversFormStatus.textContent = 'Mengunggah...';
+
+    try {
+        const url = await uploadCoverImage(newCoverImageFile);
+
+        const { error } = await client
+            .from('struktur_covers')
+            .upsert({ slug: slug, image_url: url, updated_at: new Date().toISOString() });
+
+        if (error) throw error;
+
+        coversFormStatus.textContent = 'Tersimpan.';
+        newCoverImageFile = null;
+        renderCoverImagePreview();
+        coversForm.reset();
+        loadCovers();
+    } catch (err) {
+        console.error(err);
+        coversFormStatus.style.color = '#dc2626';
+        coversFormStatus.textContent = 'Gagal mengunggah cover.';
+    } finally {
+        coversSubmitBtn.disabled = false;
+    }
+});
+
+coversRefreshBtn.addEventListener('click', loadCovers);
+
+async function loadCovers() {
+    coversListEl.innerHTML = '<p class="admin-loading">Memuat cover...</p>';
+
+    const { data, error } = await client
+        .from('struktur_covers')
+        .select('*')
+        .order('slug');
+
+    if (error) {
+        coversListEl.innerHTML = '<p class="admin-empty">Gagal memuat cover: ' + escapeHtml(error.message) + '</p>';
+        return;
+    }
+
+    renderCoversList(data);
+}
+
+function renderCoversList(items) {
+    if (!items || items.length === 0) {
+        coversListEl.innerHTML = '<p class="admin-empty">Belum ada cover di database — halaman struktur masih pakai gambar default di HTML.</p>';
+        return;
+    }
+
+    coversListEl.innerHTML = '';
+
+    items.forEach(function (c) {
+        const card = document.createElement('div');
+        card.className = 'admin-comment-card';
+        card.innerHTML =
+            '<img src="' + c.image_url + '" class="admin-news-thumb" alt="Cover">' +
+            '<div class="admin-comment-head">' +
+                '<span class="admin-comment-name">' + escapeHtml(SLOT_LABELS[c.slug] || c.slug) + '</span>' +
+                '<span class="admin-comment-date">' + formatTanggal(c.updated_at) + '</span>' +
+            '</div>' +
+            '<div class="admin-comment-actions">' +
+                '<button type="button" class="btn-danger btn-cover-delete">Hapus (kembali ke default)</button>' +
+            '</div>';
+
+        coversListEl.appendChild(card);
+
+        card.querySelector('.btn-cover-delete').addEventListener('click', async function () {
+            const yakin = confirm('Hapus cover untuk "' + (SLOT_LABELS[c.slug] || c.slug) + '"? Halaman akan kembali ke gambar default.');
+            if (!yakin) return;
+
+            const { error } = await client.from('struktur_covers').delete().eq('slug', c.slug);
+            if (error) {
+                alert('Gagal menghapus.');
+                return;
+            }
+            card.remove();
+        });
+    });
+}
+
+/* ===================== PROFIL SEKBID (Tugas Umum, Koordinator, Syarat) ===================== */
+const profilForm = document.getElementById('profil-form');
+const profilSekbidSelect = document.getElementById('profil-sekbid-select');
+const profilTugasUmum = document.getElementById('profil-tugas-umum');
+const profilKoorNama = document.getElementById('profil-koor-nama');
+const profilKoorKelas = document.getElementById('profil-koor-kelas');
+const profilKoorFotoInput = document.getElementById('profil-koor-foto-input');
+const profilKoorFotoPreview = document.getElementById('profil-koor-foto-preview');
+const profilSyaratInput = document.getElementById('profil-syarat-input');
+const profilFormStatus = document.getElementById('profil-form-status');
+const profilSubmitBtn = document.getElementById('profil-submit-btn');
+const profilRefreshBtn = document.getElementById('profil-refresh-btn');
+
+let existingKoorFotoUrl = null;
+let newKoorFotoFile = null;
+
+function renderKoorFotoPreview() {
+    profilKoorFotoPreview.innerHTML = '';
+    const url = newKoorFotoFile ? URL.createObjectURL(newKoorFotoFile) : existingKoorFotoUrl;
+    if (!url) return;
+
+    const item = document.createElement('div');
+    item.className = 'image-preview-item';
+    item.innerHTML =
+        '<img src="' + url + '" alt="Pratinjau foto koordinator">' +
+        '<button type="button" class="image-preview-remove">✕</button>';
+
+    item.querySelector('.image-preview-remove').addEventListener('click', function () {
+        newKoorFotoFile = null;
+        existingKoorFotoUrl = null;
+        profilKoorFotoInput.value = '';
+        renderKoorFotoPreview();
+    });
+
+    profilKoorFotoPreview.appendChild(item);
+}
+
+profilKoorFotoInput.addEventListener('change', function () {
+    if (profilKoorFotoInput.files && profilKoorFotoInput.files[0]) {
+        newKoorFotoFile = profilKoorFotoInput.files[0];
+        renderKoorFotoPreview();
+    }
+});
+
+async function uploadProfilImage(file) {
+    const ext = file.name.split('.').pop();
+    const path = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+
+    const { error } = await client.storage
+        .from('sekbid-profile')
+        .upload(path, file, { upsert: false });
+
+    if (error) throw error;
+
+    const { data } = client.storage.from('sekbid-profile').getPublicUrl(path);
+    return data.publicUrl;
+}
+
+function resetProfilFormFields() {
+    profilTugasUmum.value = '';
+    profilKoorNama.value = '';
+    profilKoorKelas.value = '';
+    profilSyaratInput.value = '';
+    existingKoorFotoUrl = null;
+    newKoorFotoFile = null;
+    renderKoorFotoPreview();
+}
+
+async function loadProfilForSekbid(sekbidId) {
+    profilFormStatus.textContent = '';
+    if (!sekbidId) {
+        resetProfilFormFields();
+        return;
+    }
+
+    const { data, error } = await client
+        .from('sekbid_profile')
+        .select('*')
+        .eq('sekbid_id', sekbidId)
+        .maybeSingle();
+
+    if (error) {
+        console.error(error);
+        profilFormStatus.style.color = '#dc2626';
+        profilFormStatus.textContent = 'Gagal memuat profil.';
+        return;
+    }
+
+    if (!data) {
+        resetProfilFormFields();
+        return;
+    }
+
+    profilTugasUmum.value = data.tugas_umum || '';
+    profilKoorNama.value = data.koordinator_nama || '';
+    profilKoorKelas.value = data.koordinator_kelas || '';
+    profilSyaratInput.value = Array.isArray(data.syarat_bergabung) ? data.syarat_bergabung.join('\n') : '';
+    existingKoorFotoUrl = data.koordinator_foto_url || null;
+    newKoorFotoFile = null;
+    renderKoorFotoPreview();
+}
+
+profilSekbidSelect.addEventListener('change', function () {
+    loadProfilForSekbid(profilSekbidSelect.value);
+});
+
+profilRefreshBtn.addEventListener('click', function () {
+    loadProfilForSekbid(profilSekbidSelect.value);
+});
+
+profilForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const sekbidId = profilSekbidSelect.value;
+    if (!sekbidId) {
+        profilFormStatus.style.color = '#dc2626';
+        profilFormStatus.textContent = 'Pilih sekbid dulu.';
+        return;
+    }
+
+    profilSubmitBtn.disabled = true;
+    profilFormStatus.style.color = '#16a34a';
+    profilFormStatus.textContent = 'Menyimpan...';
+
+    try {
+        let koorFotoUrl = existingKoorFotoUrl;
+        if (newKoorFotoFile) {
+            koorFotoUrl = await uploadProfilImage(newKoorFotoFile);
+        }
+
+        const syaratArray = profilSyaratInput.value
+            .split('\n')
+            .map(function (s) { return s.trim(); })
+            .filter(function (s) { return s.length > 0; });
+
+        const payload = {
+            sekbid_id: sekbidId,
+            tugas_umum: profilTugasUmum.value.trim() || null,
+            koordinator_nama: profilKoorNama.value.trim() || null,
+            koordinator_kelas: profilKoorKelas.value.trim() || null,
+            koordinator_foto_url: koorFotoUrl || null,
+            syarat_bergabung: syaratArray,
+            updated_at: new Date().toISOString()
+        };
+
+        const { error } = await client.from('sekbid_profile').upsert(payload);
+        if (error) throw error;
+
+        existingKoorFotoUrl = koorFotoUrl;
+        newKoorFotoFile = null;
+        renderKoorFotoPreview();
+
+        profilFormStatus.style.color = '#16a34a';
+        profilFormStatus.textContent = 'Tersimpan.';
+    } catch (err) {
+        console.error(err);
+        profilFormStatus.style.color = '#dc2626';
+        profilFormStatus.textContent = 'Gagal menyimpan profil.';
+    } finally {
+        profilSubmitBtn.disabled = false;
+    }
+});
+
+function loadProfil() {
+    // Dipanggil saat tab "Profil Sekbid" dibuka.
+    if (profilSekbidSelect.value) {
+        loadProfilForSekbid(profilSekbidSelect.value);
+    }
+}
+
+/* ===================== ANGGOTA TIM SEKBID ===================== */
+const anggotaForm = document.getElementById('anggota-form');
+const anggotaSekbidSelect = document.getElementById('anggota-sekbid-select');
+const anggotaNama = document.getElementById('anggota-nama');
+const anggotaKelas = document.getElementById('anggota-kelas');
+const anggotaRole = document.getElementById('anggota-role');
+const anggotaFotoInput = document.getElementById('anggota-foto-input');
+const anggotaFotoPreview = document.getElementById('anggota-foto-preview');
+const anggotaSort = document.getElementById('anggota-sort');
+const anggotaFormStatus = document.getElementById('anggota-form-status');
+const anggotaSubmitBtn = document.getElementById('anggota-submit-btn');
+const anggotaCancelBtn = document.getElementById('anggota-cancel-btn');
+const anggotaListEl = document.getElementById('admin-anggota-list');
+const anggotaFilterSelect = document.getElementById('anggota-filter-select');
+
+let editingAnggotaId = null;
+let existingAnggotaFotoUrl = null;
+let newAnggotaFotoFile = null;
+
+function renderAnggotaFotoPreview() {
+    anggotaFotoPreview.innerHTML = '';
+    const url = newAnggotaFotoFile ? URL.createObjectURL(newAnggotaFotoFile) : existingAnggotaFotoUrl;
+    if (!url) return;
+
+    const item = document.createElement('div');
+    item.className = 'image-preview-item';
+    item.innerHTML =
+        '<img src="' + url + '" alt="Pratinjau foto anggota">' +
+        '<button type="button" class="image-preview-remove">✕</button>';
+
+    item.querySelector('.image-preview-remove').addEventListener('click', function () {
+        newAnggotaFotoFile = null;
+        existingAnggotaFotoUrl = null;
+        anggotaFotoInput.value = '';
+        renderAnggotaFotoPreview();
+    });
+
+    anggotaFotoPreview.appendChild(item);
+}
+
+anggotaFotoInput.addEventListener('change', function () {
+    if (anggotaFotoInput.files && anggotaFotoInput.files[0]) {
+        newAnggotaFotoFile = anggotaFotoInput.files[0];
+        renderAnggotaFotoPreview();
+    }
+});
+
+function resetAnggotaForm() {
+    editingAnggotaId = null;
+    anggotaForm.reset();
+    anggotaRole.value = 'Anggota';
+    anggotaSort.value = 0;
+    existingAnggotaFotoUrl = null;
+    newAnggotaFotoFile = null;
+    renderAnggotaFotoPreview();
+    anggotaSubmitBtn.textContent = 'Tambah Anggota';
+    anggotaCancelBtn.classList.add('hidden');
+    anggotaFormStatus.textContent = '';
+}
+
+anggotaCancelBtn.addEventListener('click', resetAnggotaForm);
+anggotaFilterSelect.addEventListener('change', loadAnggota);
+
+anggotaForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const sekbidId = anggotaSekbidSelect.value;
+    if (!sekbidId) {
+        anggotaFormStatus.style.color = '#dc2626';
+        anggotaFormStatus.textContent = 'Pilih sekbid dulu.';
+        return;
+    }
+
+    anggotaSubmitBtn.disabled = true;
+    anggotaFormStatus.style.color = '#16a34a';
+    anggotaFormStatus.textContent = 'Menyimpan...';
+
+    try {
+        let fotoUrl = existingAnggotaFotoUrl;
+        if (newAnggotaFotoFile) {
+            fotoUrl = await uploadProfilImage(newAnggotaFotoFile);
+        }
+
+        const payload = {
+            sekbid_id: sekbidId,
+            nama: anggotaNama.value.trim(),
+            kelas: anggotaKelas.value.trim() || null,
+            role: anggotaRole.value.trim() || 'Anggota',
+            foto_url: fotoUrl || null,
+            sort_order: parseInt(anggotaSort.value, 10) || 0
+        };
+
+        let error;
+        if (editingAnggotaId) {
+            ({ error } = await client.from('sekbid_anggota').update(payload).eq('id', editingAnggotaId));
+        } else {
+            ({ error } = await client.from('sekbid_anggota').insert(payload));
+        }
+
+        if (error) throw error;
+
+        anggotaFormStatus.style.color = '#16a34a';
+        anggotaFormStatus.textContent = 'Tersimpan.';
+        resetAnggotaForm();
+        loadAnggota();
+    } catch (err) {
+        console.error(err);
+        anggotaFormStatus.style.color = '#dc2626';
+        anggotaFormStatus.textContent = 'Gagal menyimpan.';
+    } finally {
+        anggotaSubmitBtn.disabled = false;
+    }
+});
+
+async function loadAnggota() {
+    anggotaListEl.innerHTML = '<p class="admin-loading">Memuat anggota...</p>';
+
+    let query = client.from('sekbid_anggota').select('*').order('sekbid_id').order('sort_order', { ascending: true });
+    if (anggotaFilterSelect.value) {
+        query = query.eq('sekbid_id', anggotaFilterSelect.value);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        anggotaListEl.innerHTML = '<p class="admin-empty">Gagal memuat anggota: ' + escapeHtml(error.message) + '</p>';
+        return;
+    }
+
+    const uniqueIds = Array.from(new Set((data || []).map(function (d) { return d.sekbid_id; })));
+    const currentFilter = anggotaFilterSelect.value;
+    anggotaFilterSelect.innerHTML = '<option value="">Semua Sekbid</option>' +
+        uniqueIds.map(function (id) { return '<option value="' + escapeHtml(id) + '">' + escapeHtml(id) + '</option>'; }).join('');
+    anggotaFilterSelect.value = currentFilter;
+
+    renderAnggotaList(data);
+}
+
+function renderAnggotaList(items) {
+    if (!items || items.length === 0) {
+        anggotaListEl.innerHTML = '<p class="admin-empty">Belum ada anggota.</p>';
+        return;
+    }
+
+    anggotaListEl.innerHTML = '';
+
+    items.forEach(function (a) {
+        const card = document.createElement('div');
+        card.className = 'admin-comment-card';
+
+        const thumb = a.foto_url
+            ? '<img src="' + a.foto_url + '" class="admin-news-thumb" style="max-height:140px;" alt="Foto">'
+            : '';
+
+        card.innerHTML =
+            thumb +
+            '<div class="admin-comment-head">' +
+                '<span class="admin-comment-name">' + escapeHtml(a.nama) + '</span>' +
+                '<span class="admin-comment-date">' + escapeHtml(a.sekbid_id) + ' &middot; urutan ' + a.sort_order + '</span>' +
+            '</div>' +
+            '<p style="font-size:0.88rem;color:#334155;">' + escapeHtml(a.kelas || '-') + ' &middot; ' + escapeHtml(a.role || 'Anggota') + '</p>' +
+            '<div class="admin-comment-actions">' +
+                '<button type="button" class="btn-danger btn-anggota-delete">Hapus</button>' +
+                '<button type="button" class="btn-secondary btn-anggota-edit">Edit</button>' +
+            '</div>';
+
+        anggotaListEl.appendChild(card);
+
+        card.querySelector('.btn-anggota-edit').addEventListener('click', function () {
+            editingAnggotaId = a.id;
+            anggotaSekbidSelect.value = a.sekbid_id;
+            anggotaNama.value = a.nama;
+            anggotaKelas.value = a.kelas || '';
+            anggotaRole.value = a.role || 'Anggota';
+            anggotaSort.value = a.sort_order || 0;
+            existingAnggotaFotoUrl = a.foto_url || null;
+            newAnggotaFotoFile = null;
+            renderAnggotaFotoPreview();
+
+            anggotaSubmitBtn.textContent = 'Simpan Perubahan';
+            anggotaCancelBtn.classList.remove('hidden');
+            anggotaForm.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        card.querySelector('.btn-anggota-delete').addEventListener('click', async function () {
+            const yakin = confirm('Hapus anggota "' + a.nama + '"?');
+            if (!yakin) return;
+
+            const { error } = await client.from('sekbid_anggota').delete().eq('id', a.id);
+            if (error) {
+                alert('Gagal menghapus.');
+                return;
+            }
+            card.remove();
+        });
+    });
+}
+
 /* ===================== WHAT WE DO ===================== */
 const whatwedoForm = document.getElementById('whatwedo-form');
 const whatwedoSekbidSelect = document.getElementById('whatwedo-sekbid-select');
@@ -658,6 +1203,326 @@ function renderWhatwedoList(items) {
             if (!yakin) return;
 
             const { error } = await client.from('sekbid_whatwedo').delete().eq('id', w.id);
+            if (error) {
+                alert('Gagal menghapus.');
+                return;
+            }
+            card.remove();
+        });
+    });
+}
+
+/* ===================== OPEN RECRUITMENT ===================== */
+const oprecSettingsForm = document.getElementById('oprec-settings-form');
+const oprecIsOpen = document.getElementById('oprec-is-open');
+const oprecDescriptionInput = document.getElementById('oprec-description-input');
+const oprecTanggalMulai = document.getElementById('oprec-tanggal-mulai');
+const oprecTanggalSelesai = document.getElementById('oprec-tanggal-selesai');
+const oprecFormUrl = document.getElementById('oprec-form-url');
+const oprecRequirementsInput = document.getElementById('oprec-requirements-input');
+const oprecPamphletInput = document.getElementById('oprec-pamphlet-input');
+const oprecPamphletPreview = document.getElementById('oprec-pamphlet-preview');
+const oprecSettingsStatus = document.getElementById('oprec-settings-status');
+const oprecSettingsSubmitBtn = document.getElementById('oprec-settings-submit-btn');
+const oprecRefreshBtn = document.getElementById('oprec-refresh-btn');
+
+let existingPamphletUrl = null;
+let newPamphletFile = null;
+
+function renderPamphletPreview() {
+    oprecPamphletPreview.innerHTML = '';
+    const url = newPamphletFile ? URL.createObjectURL(newPamphletFile) : existingPamphletUrl;
+    if (!url) return;
+
+    const item = document.createElement('div');
+    item.className = 'image-preview-item';
+    item.innerHTML =
+        '<img src="' + url + '" alt="Pratinjau pamflet">' +
+        '<button type="button" class="image-preview-remove">✕</button>';
+
+    item.querySelector('.image-preview-remove').addEventListener('click', function () {
+        newPamphletFile = null;
+        existingPamphletUrl = null;
+        oprecPamphletInput.value = '';
+        renderPamphletPreview();
+    });
+
+    oprecPamphletPreview.appendChild(item);
+}
+
+oprecPamphletInput.addEventListener('change', function () {
+    if (oprecPamphletInput.files && oprecPamphletInput.files[0]) {
+        newPamphletFile = oprecPamphletInput.files[0];
+        renderPamphletPreview();
+    }
+});
+
+async function uploadOprecAsset(file) {
+    const ext = file.name.split('.').pop();
+    const path = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+
+    const { error } = await client.storage
+        .from('oprec-assets')
+        .upload(path, file, { upsert: false });
+
+    if (error) throw error;
+
+    const { data } = client.storage.from('oprec-assets').getPublicUrl(path);
+    return data.publicUrl;
+}
+
+async function loadOprecSettings() {
+    oprecSettingsStatus.textContent = '';
+
+    const { data, error } = await client
+        .from('oprec_settings')
+        .select('*')
+        .eq('id', 1)
+        .maybeSingle();
+
+    if (error) {
+        console.error(error);
+        oprecSettingsStatus.style.color = '#dc2626';
+        oprecSettingsStatus.textContent = 'Gagal memuat pengaturan.';
+        return;
+    }
+
+    if (!data) {
+        // Belum ada baris settings — biarkan form kosong, akan dibuat saat pertama kali disimpan.
+        return;
+    }
+
+    oprecIsOpen.checked = !!data.is_open;
+    oprecDescriptionInput.value = data.description || '';
+    oprecTanggalMulai.value = data.tanggal_mulai || '';
+    oprecTanggalSelesai.value = data.tanggal_selesai || '';
+    oprecFormUrl.value = data.form_url || '';
+    oprecRequirementsInput.value = Array.isArray(data.requirements) ? data.requirements.join('\n') : '';
+
+    existingPamphletUrl = data.pamphlet_url || null;
+    newPamphletFile = null;
+    renderPamphletPreview();
+}
+
+oprecRefreshBtn.addEventListener('click', function () {
+    loadOprecSettings();
+    loadOprecContacts();
+});
+
+oprecSettingsForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    oprecSettingsSubmitBtn.disabled = true;
+    oprecSettingsStatus.style.color = '#16a34a';
+    oprecSettingsStatus.textContent = 'Menyimpan...';
+
+    try {
+        let pamphletUrl = existingPamphletUrl;
+        if (newPamphletFile) {
+            pamphletUrl = await uploadOprecAsset(newPamphletFile);
+        }
+
+        const requirements = oprecRequirementsInput.value
+            .split('\n')
+            .map(function (r) { return r.trim(); })
+            .filter(function (r) { return r.length > 0; });
+
+        const payload = {
+            id: 1,
+            is_open: oprecIsOpen.checked,
+            description: oprecDescriptionInput.value.trim() || null,
+            tanggal_mulai: oprecTanggalMulai.value || null,
+            tanggal_selesai: oprecTanggalSelesai.value || null,
+            form_url: oprecFormUrl.value.trim() || null,
+            requirements: requirements,
+            pamphlet_url: pamphletUrl || null,
+            updated_at: new Date().toISOString()
+        };
+
+        const { error } = await client.from('oprec_settings').upsert(payload);
+        if (error) throw error;
+
+        existingPamphletUrl = pamphletUrl;
+        newPamphletFile = null;
+        renderPamphletPreview();
+
+        oprecSettingsStatus.style.color = '#16a34a';
+        oprecSettingsStatus.textContent = 'Tersimpan.';
+    } catch (err) {
+        console.error(err);
+        oprecSettingsStatus.style.color = '#dc2626';
+        oprecSettingsStatus.textContent = 'Gagal menyimpan pengaturan.';
+    } finally {
+        oprecSettingsSubmitBtn.disabled = false;
+    }
+});
+
+/* --- Contact Person Open Recruitment --- */
+const oprecCpForm = document.getElementById('oprec-cp-form');
+const oprecCpName = document.getElementById('oprec-cp-name');
+const oprecCpPhone = document.getElementById('oprec-cp-phone');
+const oprecCpSort = document.getElementById('oprec-cp-sort');
+const oprecCpPhotoInput = document.getElementById('oprec-cp-photo-input');
+const oprecCpPhotoPreview = document.getElementById('oprec-cp-photo-preview');
+const oprecCpFormStatus = document.getElementById('oprec-cp-form-status');
+const oprecCpSubmitBtn = document.getElementById('oprec-cp-submit-btn');
+const oprecCpCancelBtn = document.getElementById('oprec-cp-cancel-btn');
+const oprecCpListEl = document.getElementById('admin-oprec-cp-list');
+
+let editingCpId = null;
+let existingCpPhotoUrl = null;
+let newCpPhotoFile = null;
+
+function renderCpPhotoPreview() {
+    oprecCpPhotoPreview.innerHTML = '';
+    const url = newCpPhotoFile ? URL.createObjectURL(newCpPhotoFile) : existingCpPhotoUrl;
+    if (!url) return;
+
+    const item = document.createElement('div');
+    item.className = 'image-preview-item';
+    item.innerHTML =
+        '<img src="' + url + '" alt="Pratinjau foto">' +
+        '<button type="button" class="image-preview-remove">✕</button>';
+
+    item.querySelector('.image-preview-remove').addEventListener('click', function () {
+        newCpPhotoFile = null;
+        existingCpPhotoUrl = null;
+        oprecCpPhotoInput.value = '';
+        renderCpPhotoPreview();
+    });
+
+    oprecCpPhotoPreview.appendChild(item);
+}
+
+oprecCpPhotoInput.addEventListener('change', function () {
+    if (oprecCpPhotoInput.files && oprecCpPhotoInput.files[0]) {
+        newCpPhotoFile = oprecCpPhotoInput.files[0];
+        renderCpPhotoPreview();
+    }
+});
+
+function resetOprecCpForm() {
+    editingCpId = null;
+    oprecCpForm.reset();
+    oprecCpSort.value = 0;
+    existingCpPhotoUrl = null;
+    newCpPhotoFile = null;
+    renderCpPhotoPreview();
+    oprecCpSubmitBtn.textContent = 'Tambah Contact Person';
+    oprecCpCancelBtn.classList.add('hidden');
+    oprecCpFormStatus.textContent = '';
+}
+
+oprecCpCancelBtn.addEventListener('click', resetOprecCpForm);
+
+oprecCpForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    oprecCpSubmitBtn.disabled = true;
+    oprecCpFormStatus.style.color = '#16a34a';
+    oprecCpFormStatus.textContent = 'Menyimpan...';
+
+    try {
+        let photoUrl = existingCpPhotoUrl;
+        if (newCpPhotoFile) {
+            photoUrl = await uploadOprecAsset(newCpPhotoFile);
+        }
+
+        const payload = {
+            name: oprecCpName.value.trim(),
+            phone: oprecCpPhone.value.trim(),
+            sort_order: parseInt(oprecCpSort.value, 10) || 0,
+            photo_url: photoUrl || null
+        };
+
+        let error;
+        if (editingCpId) {
+            ({ error } = await client.from('oprec_contacts').update(payload).eq('id', editingCpId));
+        } else {
+            ({ error } = await client.from('oprec_contacts').insert(payload));
+        }
+
+        if (error) throw error;
+
+        oprecCpFormStatus.style.color = '#16a34a';
+        oprecCpFormStatus.textContent = 'Tersimpan.';
+        resetOprecCpForm();
+        loadOprecContacts();
+    } catch (err) {
+        console.error(err);
+        oprecCpFormStatus.style.color = '#dc2626';
+        oprecCpFormStatus.textContent = 'Gagal menyimpan.';
+    } finally {
+        oprecCpSubmitBtn.disabled = false;
+    }
+});
+
+async function loadOprecContacts() {
+    oprecCpListEl.innerHTML = '<p class="admin-loading">Memuat contact person...</p>';
+
+    const { data, error } = await client
+        .from('oprec_contacts')
+        .select('*')
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: true });
+
+    if (error) {
+        oprecCpListEl.innerHTML = '<p class="admin-empty">Gagal memuat: ' + escapeHtml(error.message) + '</p>';
+        return;
+    }
+
+    renderOprecCpList(data);
+}
+
+function renderOprecCpList(items) {
+    if (!items || items.length === 0) {
+        oprecCpListEl.innerHTML = '<p class="admin-empty">Belum ada contact person.</p>';
+        return;
+    }
+
+    oprecCpListEl.innerHTML = '';
+
+    items.forEach(function (c) {
+        const card = document.createElement('div');
+        card.className = 'admin-comment-card';
+
+        const thumb = c.photo_url
+            ? '<img src="' + c.photo_url + '" class="admin-news-thumb" style="max-height:120px;width:120px;border-radius:50%;" alt="Foto">'
+            : '';
+
+        card.innerHTML =
+            thumb +
+            '<div class="admin-comment-head">' +
+                '<span class="admin-comment-name">' + escapeHtml(c.name) + '</span>' +
+                '<span class="admin-comment-date">urutan ' + c.sort_order + '</span>' +
+            '</div>' +
+            '<p style="font-size:0.88rem;color:#334155;">' + escapeHtml(c.phone) + '</p>' +
+            '<div class="admin-comment-actions">' +
+                '<button type="button" class="btn-danger btn-oprec-cp-delete">Hapus</button>' +
+                '<button type="button" class="btn-secondary btn-oprec-cp-edit">Edit</button>' +
+            '</div>';
+
+        oprecCpListEl.appendChild(card);
+
+        card.querySelector('.btn-oprec-cp-edit').addEventListener('click', function () {
+            editingCpId = c.id;
+            oprecCpName.value = c.name;
+            oprecCpPhone.value = c.phone;
+            oprecCpSort.value = c.sort_order || 0;
+            existingCpPhotoUrl = c.photo_url || null;
+            newCpPhotoFile = null;
+            renderCpPhotoPreview();
+
+            oprecCpSubmitBtn.textContent = 'Simpan Perubahan';
+            oprecCpCancelBtn.classList.remove('hidden');
+            oprecCpForm.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        card.querySelector('.btn-oprec-cp-delete').addEventListener('click', async function () {
+            const yakin = confirm('Hapus contact person "' + c.name + '"?');
+            if (!yakin) return;
+
+            const { error } = await client.from('oprec_contacts').delete().eq('id', c.id);
             if (error) {
                 alert('Gagal menghapus.');
                 return;
@@ -1086,5 +1951,339 @@ function renderWhatwedoList(items) {
     }
 
     
+    /* ===================== PENGURUS HARIAN (PH) ===================== */
+const PH_GROUP_LABELS = {
+    ketua: 'Ketua & Wakil',
+    sekretaris: 'Sekretaris',
+    bendahara: 'Bendahara'
+};
+
+/* --- Elemen: profil grup --- */
+const phProfilForm      = document.getElementById('ph-profil-form');
+const phGroupSelect     = document.getElementById('ph-group-select');
+const phHeroTitle       = document.getElementById('ph-hero-title');
+const phHeroSubtitle    = document.getElementById('ph-hero-subtitle');
+const phTugasUmum       = document.getElementById('ph-tugas-umum');
+const phTugasListInput  = document.getElementById('ph-tugas-list-input');
+const phProfilStatus    = document.getElementById('ph-profil-status');
+const phProfilSubmitBtn = document.getElementById('ph-profil-submit-btn');
+const phRefreshBtn      = document.getElementById('ph-refresh-btn');
+
+/* --- Elemen: anggota --- */
+const phMemberForm        = document.getElementById('ph-member-form');
+const phMemberGroupSelect = document.getElementById('ph-member-group-select');
+const phMemberLabel       = document.getElementById('ph-member-label');
+const phMemberNama        = document.getElementById('ph-member-nama');
+const phMemberKelas       = document.getElementById('ph-member-kelas');
+const phMemberMotto       = document.getElementById('ph-member-motto');
+const phMemberFotoInput   = document.getElementById('ph-member-foto-input');
+const phMemberFotoPreview = document.getElementById('ph-member-foto-preview');
+const phMemberSort        = document.getElementById('ph-member-sort');
+const phMemberStatus      = document.getElementById('ph-member-status');
+const phMemberSubmitBtn   = document.getElementById('ph-member-submit-btn');
+const phMemberCancelBtn   = document.getElementById('ph-member-cancel-btn');
+const phMemberFilter      = document.getElementById('ph-member-filter-select');
+const phMemberListEl      = document.getElementById('admin-ph-member-list');
+
+let editingPhMemberId   = null;
+let existingPhFotoUrl   = null;
+let newPhFotoFile       = null;
+
+/* --- Upload foto PH ke bucket "ph-profile" --- */
+async function uploadPhImage(file) {
+    const ext  = file.name.split('.').pop();
+    const path = Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + ext;
+
+    const { error } = await client.storage
+        .from('ph-profile')
+        .upload(path, file, { upsert: false });
+
+    if (error) throw error;
+
+    const { data } = client.storage.from('ph-profile').getPublicUrl(path);
+    return data.publicUrl;
+}
+
+/* ---------- PROFIL GRUP ---------- */
+function resetPhProfilFields() {
+    phHeroTitle.value      = '';
+    phHeroSubtitle.value   = '';
+    phTugasUmum.value      = '';
+    phTugasListInput.value = '';
+}
+
+async function loadPhProfilForGroup(groupSlug) {
+    phProfilStatus.textContent = '';
+    if (!groupSlug) {
+        resetPhProfilFields();
+        return;
+    }
+
+    const { data, error } = await client
+        .from('ph_profile')
+        .select('*')
+        .eq('group_slug', groupSlug)
+        .maybeSingle();
+
+    if (error) {
+        console.error(error);
+        phProfilStatus.style.color = '#dc2626';
+        phProfilStatus.textContent = 'Gagal memuat profil PH.';
+        return;
+    }
+
+    if (!data) {
+        resetPhProfilFields();
+        return;
+    }
+
+    phHeroTitle.value      = data.hero_title || '';
+    phHeroSubtitle.value   = data.hero_subtitle || '';
+    phTugasUmum.value      = data.tugas_umum || '';
+    phTugasListInput.value = Array.isArray(data.tugas_list) ? data.tugas_list.join('\n') : '';
+}
+
+phGroupSelect.addEventListener('change', function () {
+    loadPhProfilForGroup(phGroupSelect.value);
+});
+
+phProfilForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const groupSlug = phGroupSelect.value;
+    if (!groupSlug) {
+        phProfilStatus.style.color = '#dc2626';
+        phProfilStatus.textContent = 'Pilih grup dulu.';
+        return;
+    }
+
+    phProfilSubmitBtn.disabled = true;
+    phProfilStatus.style.color = '#16a34a';
+    phProfilStatus.textContent = 'Menyimpan...';
+
+    const tugasArray = phTugasListInput.value
+        .split('\n')
+        .map(function (s) { return s.trim(); })
+        .filter(function (s) { return s.length > 0; });
+
+    const payload = {
+        group_slug:    groupSlug,
+        hero_title:    phHeroTitle.value.trim() || null,
+        hero_subtitle: phHeroSubtitle.value.trim() || null,
+        tugas_umum:    phTugasUmum.value.trim() || null,
+        tugas_list:    tugasArray,
+        updated_at:    new Date().toISOString()
+    };
+
+    const { error } = await client.from('ph_profile').upsert(payload);
+
+    phProfilSubmitBtn.disabled = false;
+
+    if (error) {
+        console.error(error);
+        phProfilStatus.style.color = '#dc2626';
+        phProfilStatus.textContent = 'Gagal menyimpan profil PH.';
+        return;
+    }
+
+    phProfilStatus.style.color = '#16a34a';
+    phProfilStatus.textContent = 'Tersimpan.';
+});
+
+function loadPhProfil() {
+    if (phGroupSelect.value) {
+        loadPhProfilForGroup(phGroupSelect.value);
+    }
+}
+
+/* ---------- ANGGOTA PH ---------- */
+function renderPhFotoPreview() {
+    phMemberFotoPreview.innerHTML = '';
+    const url = newPhFotoFile ? URL.createObjectURL(newPhFotoFile) : existingPhFotoUrl;
+    if (!url) return;
+
+    const item = document.createElement('div');
+    item.className = 'image-preview-item';
+    item.innerHTML =
+        '<img src="' + url + '" alt="Pratinjau foto PH">' +
+        '<button type="button" class="image-preview-remove">✕</button>';
+
+    item.querySelector('.image-preview-remove').addEventListener('click', function () {
+        newPhFotoFile     = null;
+        existingPhFotoUrl = null;
+        phMemberFotoInput.value = '';
+        renderPhFotoPreview();
+    });
+
+    phMemberFotoPreview.appendChild(item);
+}
+
+phMemberFotoInput.addEventListener('change', function () {
+    if (phMemberFotoInput.files && phMemberFotoInput.files[0]) {
+        newPhFotoFile = phMemberFotoInput.files[0];
+        renderPhFotoPreview();
+    }
+});
+
+function resetPhMemberForm() {
+    editingPhMemberId = null;
+    phMemberForm.reset();
+    phMemberSort.value = 0;
+    existingPhFotoUrl  = null;
+    newPhFotoFile      = null;
+    renderPhFotoPreview();
+    phMemberSubmitBtn.textContent = 'Tambah Anggota PH';
+    phMemberCancelBtn.classList.add('hidden');
+    phMemberStatus.textContent = '';
+}
+
+phMemberCancelBtn.addEventListener('click', resetPhMemberForm);
+phMemberFilter.addEventListener('change', loadPhMembers);
+
+phRefreshBtn.addEventListener('click', function () {
+    loadPhProfilForGroup(phGroupSelect.value);
+    loadPhMembers();
+});
+
+phMemberForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const groupSlug = phMemberGroupSelect.value;
+    if (!groupSlug) {
+        phMemberStatus.style.color = '#dc2626';
+        phMemberStatus.textContent = 'Pilih grup dulu.';
+        return;
+    }
+
+    phMemberSubmitBtn.disabled = true;
+    phMemberStatus.style.color = '#16a34a';
+    phMemberStatus.textContent = 'Menyimpan...';
+
+    try {
+        let fotoUrl = existingPhFotoUrl;
+        if (newPhFotoFile) {
+            fotoUrl = await uploadPhImage(newPhFotoFile);
+        }
+
+        const payload = {
+            group_slug: groupSlug,
+            label:      phMemberLabel.value.trim() || null,
+            nama:       phMemberNama.value.trim(),
+            kelas:      phMemberKelas.value.trim() || null,
+            motto:      phMemberMotto.value.trim() || null,
+            foto_url:   fotoUrl || null,
+            sort_order: parseInt(phMemberSort.value, 10) || 0
+        };
+
+        let error;
+        if (editingPhMemberId) {
+            ({ error } = await client.from('ph_members').update(payload).eq('id', editingPhMemberId));
+        } else {
+            ({ error } = await client.from('ph_members').insert(payload));
+        }
+
+        if (error) throw error;
+
+        phMemberStatus.style.color = '#16a34a';
+        phMemberStatus.textContent = 'Tersimpan.';
+        resetPhMemberForm();
+        loadPhMembers();
+    } catch (err) {
+        console.error(err);
+        phMemberStatus.style.color = '#dc2626';
+        phMemberStatus.textContent = 'Gagal menyimpan anggota PH.';
+    } finally {
+        phMemberSubmitBtn.disabled = false;
+    }
+});
+
+async function loadPhMembers() {
+    phMemberListEl.innerHTML = '<p class="admin-loading">Memuat anggota PH...</p>';
+
+    let query = client.from('ph_members')
+        .select('*')
+        .order('group_slug', { ascending: true })
+        .order('sort_order', { ascending: true });
+
+    if (phMemberFilter.value) {
+        query = query.eq('group_slug', phMemberFilter.value);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        phMemberListEl.innerHTML = '<p class="admin-empty">Gagal memuat: ' + escapeHtml(error.message) + '</p>';
+        return;
+    }
+
+    renderPhMemberList(data);
+}
+
+function renderPhMemberList(items) {
+    if (!items || items.length === 0) {
+        phMemberListEl.innerHTML = '<p class="admin-empty">Belum ada anggota PH.</p>';
+        return;
+    }
+
+    phMemberListEl.innerHTML = '';
+
+    items.forEach(function (m) {
+        const card = document.createElement('div');
+        card.className = 'admin-comment-card';
+
+        const thumb = m.foto_url
+            ? '<img src="' + m.foto_url + '" class="admin-news-thumb" style="max-height:140px;" alt="Foto">'
+            : '';
+
+        card.innerHTML =
+            thumb +
+            '<div class="admin-comment-head">' +
+                '<span class="admin-comment-name">' + escapeHtml(m.nama) + '</span>' +
+                '<span class="admin-comment-date">' +
+                    escapeHtml(PH_GROUP_LABELS[m.group_slug] || m.group_slug) +
+                    ' &middot; urutan ' + m.sort_order +
+                '</span>' +
+            '</div>' +
+            '<p style="font-size:0.88rem;color:#334155;">' +
+                escapeHtml(m.label || '-') + ' &middot; ' + escapeHtml(m.kelas || '-') +
+            '</p>' +
+            (m.motto ? '<p style="font-size:0.85rem;color:#64748b;font-style:italic;">“' + escapeHtml(m.motto) + '”</p>' : '') +
+            '<div class="admin-comment-actions">' +
+                '<button type="button" class="btn-danger btn-ph-delete">Hapus</button>' +
+                '<button type="button" class="btn-secondary btn-ph-edit">Edit</button>' +
+            '</div>';
+
+        phMemberListEl.appendChild(card);
+
+        card.querySelector('.btn-ph-edit').addEventListener('click', function () {
+            editingPhMemberId            = m.id;
+            phMemberGroupSelect.value    = m.group_slug;
+            phMemberLabel.value          = m.label || '';
+            phMemberNama.value           = m.nama;
+            phMemberKelas.value          = m.kelas || '';
+            phMemberMotto.value          = m.motto || '';
+            phMemberSort.value           = m.sort_order || 0;
+            existingPhFotoUrl            = m.foto_url || null;
+            newPhFotoFile                = null;
+            renderPhFotoPreview();
+
+            phMemberSubmitBtn.textContent = 'Simpan Perubahan';
+            phMemberCancelBtn.classList.remove('hidden');
+            phMemberForm.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        card.querySelector('.btn-ph-delete').addEventListener('click', async function () {
+            const yakin = confirm('Hapus anggota PH "' + m.nama + '"?');
+            if (!yakin) return;
+
+            const { error } = await client.from('ph_members').delete().eq('id', m.id);
+            if (error) {
+                alert('Gagal menghapus.');
+                return;
+            }
+            card.remove();
+        });
+    });
+}
 
 })();
