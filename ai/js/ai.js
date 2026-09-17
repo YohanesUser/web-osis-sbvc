@@ -19,7 +19,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // oleh siapa pun yang membuka DevTools / View Source. Sebaiknya pindahkan
 // pemanggilan Gemini ke backend (misalnya Supabase Edge Function) yang menyimpan
 // key sebagai secret, agar key tidak pernah terekspos di sisi client.
-const GEMINI_API_KEY = "AQ.Ab8RN6JEB1DQAoOyzRuDV1GbC_CeZDUkO2hOr82R1mvFaj0EIw";
+const GEMINI_API_KEY = "AQ.Ab8RN6JoOqkmlBDJxEMG_1SAYW_DLDEXlNpRoD_dqpB8f4BHEw";
 
 if (!window.supabase) {
     console.error('Supabase SDK belum termuat di halaman Chatbot.');
