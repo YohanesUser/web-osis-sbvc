@@ -1,337 +1,484 @@
 /* =========================================
-   HALAMAN STRUKTUR ORGANISASI — VERSI ELEGAN
-   Disederhanakan dari versi sebelumnya: satu
-   warna aksen konsisten (bukan gradasi emas-biru
-   yang bersaing), easing tenang tanpa efek
-   "mantul" berlebihan, overlay foto satu bahasa
-   visual untuk BPH maupun Sekbid. Memakai token
-   yang sama dari style-elegant.css.
+   HALAMAN STRUKTUR ORGANISASI — v3
+   Tema gelap navy + emas, sama dengan Beranda
+   Kelas HTML tidak berubah.
    ========================================= */
-
+ 
+/* Latar halaman ini mengikuti Beranda (hanya aktif di halaman yang memuat .struktur-container) */
+html:has(.struktur-container),
+body:has(.struktur-container) {
+    background-color: #050b1a;
+}
+ 
+body:has(.struktur-container) {
+    color: #f1f5ff;
+    background-image:
+        radial-gradient(ellipse 70% 40% at 15% 25%, rgba(30, 95, 214, 0.12), transparent 70%),
+        radial-gradient(ellipse 60% 35% at 85% 70%, rgba(245, 176, 37, 0.08), transparent 70%);
+}
+ 
 .struktur-container {
+    /* Token: memakai variabel global Beranda bila ada, jika tidak pakai nilai bawaan yang sama */
+    --s-ink: var(--text-main, #f1f5ff);
+    --s-ink-soft: var(--text-muted, #a9b7d6);
+    --s-bg-900: var(--ink-900, #0a1530);
+    --s-bg-800: var(--ink-800, #101f44);
+    --s-bg-700: var(--ink-700, #1a2d5c);
+    --s-bg-950: var(--ink-950, #050b1a);
+    --s-gold-300: var(--gold-300, #ffe08a);
+    --s-gold-400: var(--gold-400, #ffc94d);
+    --s-gold-500: var(--gold-500, #f5b025);
+    --s-card: linear-gradient(180deg, rgba(16, 31, 68, 0.62), rgba(10, 21, 48, 0.78));
+    --s-line: rgba(255, 201, 77, 0.12);
+    --s-line-hover: rgba(255, 201, 77, 0.42);
+    --s-radius: 24px;
+    --s-gap: 28px;
+    --s-ease: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    --s-ease-slow: 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    --s-shadow-rest: 0 20px 40px rgba(0, 0, 0, 0.35);
+    --s-shadow-hover: 0 0 0 1px rgba(255, 201, 77, 0.25), 0 22px 50px rgba(245, 176, 37, 0.16);
+    --font-display: inherit;
+ 
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 20px;
+    padding: 72px 22px 96px;
+    color: var(--s-ink);
+    box-sizing: border-box;
 }
-
+ 
+.struktur-container *,
+.struktur-container *::before,
+.struktur-container *::after {
+    box-sizing: border-box;
+}
+ 
+/* =========================================
+   INTRO (banner)
+   ========================================= */
 .section-intro {
-    text-align: center;
-    margin-bottom: 60px;
+    /* Foto latar banner. Simpan fotonya di path ini, atau ganti path-nya */
+    --foto-banner: url('/assets/foto-struktur.jpg');
+ 
+    position: relative;
+    overflow: hidden;
+    min-height: 260px;
+    margin-bottom: 56px;
+    padding: 56px 44px 60px 44px;
+    border-radius: 26px;
+    border: 1px solid rgba(255, 201, 77, 0.2);
+    color: var(--s-ink);
+    background-image:
+        linear-gradient(90deg, rgba(5, 11, 26, 0.88) 0%, rgba(5, 11, 26, 0.68) 55%, rgba(5, 11, 26, 0.36) 100%),
+        radial-gradient(circle at 88% 0%, rgba(245, 176, 37, 0.25), transparent 45%),
+        var(--foto-banner),
+        linear-gradient(130deg, var(--s-bg-700) 0%, var(--s-bg-800) 50%, var(--s-bg-900) 100%);
+    background-repeat: no-repeat;
+    background-size: auto, auto, cover, auto;
+    background-position: 0 0, 0 0, center, 0 0;
+    box-shadow: 0 0 0 1px rgba(255, 201, 77, 0.08), 0 24px 56px rgba(0, 0, 0, 0.45);
 }
-
+ 
+/* Garis emas pendek di dasar banner */
+.section-intro::after {
+    content: '';
+    position: absolute;
+    left: 44px;
+    bottom: 0;
+    width: 72px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--s-gold-300), var(--s-gold-500));
+    border-radius: 4px 4px 0 0;
+}
+ 
 .section-intro h2 {
     font-family: var(--font-display);
-    font-size: 2.1rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-    margin-bottom: 12px;
-}
-
-.section-intro p {
-    color: var(--ink-soft);
-    font-size: 1rem;
-    max-width: 550px;
-    margin: 0 auto;
-}
-
-.badge-gold {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 6px 16px;
-    background: var(--accent-soft);
-    border: 1px solid var(--accent-line);
-    color: var(--accent);
-    border-radius: var(--radius-pill);
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 16px;
-}
-
-.badge-gold::before {
-    content: '';
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-}
-
-/* =========================================
-   BPH — Kartu profil pengurus inti
-   Satu garis aksen tipis di atas, overlay gelap
-   polos, CTA berupa teks — pembeda dari Sekbid
-   cukup lewat bentuk CTA-nya saja, bukan lewat
-   warna overlay yang berbeda-beda.
-   ========================================= */
-.bph-grid {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    flex-wrap: wrap;
-    margin-bottom: 110px;
-}
-
-.bph-card {
-    position: relative;
-    width: 280px;
-    height: 250px;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    border: 1px solid var(--line);
-    transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease);
-}
-
-.bph-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 32px;
-    height: 2px;
-    background: var(--accent);
-    transform: translateX(-50%);
-    z-index: 3;
-    opacity: 0.85;
-    transition: width var(--ease), opacity var(--ease);
-}
-
-.bph-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 40px rgba(22, 21, 26, 0.1);
-    border-color: var(--accent-line);
-}
-
-.bph-card:hover::before {
-    width: 52px;
-    opacity: 1;
-}
-
-.bph-card img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    transition: transform 0.5s var(--ease);
-}
-
-.bph-card:hover img {
-    transform: scale(1.04);
-}
-
-.bph-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(22, 21, 26, 0.1) 0%, rgba(22, 21, 26, 0.82) 100%);
-    z-index: 1;
-}
-
-.bph-card h3,
-.bph-card p,
-.bph-card .bph-cta {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-}
-
-.bph-card h3 {
-    font-size: 1.08rem;
-    font-weight: 600;
+    font-size: clamp(2rem, 1.5rem + 2vw, 2.9rem);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.8px;
     color: #fff;
-    margin-bottom: 4px;
-    padding: 0 20px;
+    margin: 16px 0 14px;
+    text-wrap: balance;
 }
-
-.bph-card p {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.78);
-    font-weight: 500;
-    margin-bottom: 12px;
+ 
+.section-intro p {
+    color: var(--s-ink-soft);
+    font-size: 1.02rem;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0;
+    text-wrap: pretty;
 }
-
-.bph-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.76rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: #f0d9a8;
-    text-transform: uppercase;
-    padding: 10px 20px 18px;
-    justify-content: center;
-}
-
-.bph-cta-arrow {
+ 
+/* Badge pil emas — sama seperti Beranda */
+.struktur-container .badge-gold {
     display: inline-block;
-    transition: transform var(--ease);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a6d1d;
+  background: transparent;
+  border: 2px solid #c9a94a;
+  outline: 1px solid #c9a94a;
+  outline-offset: 2px;
+  border-radius: 0;
+  padding: 3px 8px;
+  line-height: 1.2;
+  transform: rotate(-2deg);
 }
-
-.bph-card:hover .bph-cta-arrow {
-    transform: translateX(3px);
+ 
+.struktur-container .badge-gold::before {
+    content: '✦';
+    width: auto;
+    height: auto;
+    background: none;
+    font-size: 0.8rem;
 }
-
+ 
 /* =========================================
-   SEKBID — Kartu program kerja
-   CTA pill, overlay netral memakai warna tinta
-   (bukan navy) supaya bahasa visualnya konsisten
-   dengan seluruh halaman lain, aksen kuningan
-   cukup tampil di garis bawah judul & pill CTA.
+   KARTU BERSAMA (BPH & Sekbid)
    ========================================= */
-.bidang-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 24px;
-}
-
+.bph-card,
 .bidang-card {
     position: relative;
-    height: 250px;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background-size: cover;
-    background-position: center;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--line);
-    transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease);
-}
-
-.bidang-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(22, 21, 26, 0.1);
-    border-color: var(--accent-line);
-}
-
-.bidang-overlay {
-    width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    text-align: center;
-    background: linear-gradient(180deg, rgba(22, 21, 26, 0.2) 0%, rgba(22, 21, 26, 0.72) 100%);
-    transition: background var(--ease);
+    background: var(--s-card);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--s-line);
+    border-radius: var(--s-radius);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--s-ink);
+    box-shadow: var(--s-shadow-rest);
+    transition: border-color var(--s-ease),
+                box-shadow var(--s-ease),
+                transform var(--s-ease);
+    animation: s-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
-
-.bidang-card:hover .bidang-overlay {
-    background: linear-gradient(180deg, rgba(22, 21, 26, 0.35) 0%, rgba(22, 21, 26, 0.85) 100%);
-}
-
-.bidang-overlay h2 {
-    color: #fff;
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    letter-spacing: -0.01em;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-}
-
-.bidang-overlay p {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.bidang-overlay h2::after {
+ 
+/* Garis emas di dasar kartu: tumbuh dari kiri saat hover/fokus */
+.bph-card::after,
+.bidang-card::after {
     content: '';
-    display: block;
-    width: 26px;
-    height: 2px;
-    background: var(--accent);
-    margin: 10px auto 0;
-    opacity: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--s-gold-300), var(--s-gold-500));
     transform: scaleX(0);
-    transition: opacity var(--ease), transform var(--ease);
+    transform-origin: left;
+    transition: transform var(--s-ease-slow);
+    pointer-events: none;
 }
-
-.bidang-card:hover .bidang-overlay h2::after {
-    opacity: 1;
+ 
+.bph-card:hover,
+.bidang-card:hover,
+.bph-card:focus-visible,
+.bidang-card:focus-visible {
+    border-color: var(--s-line-hover);
+    box-shadow: var(--s-shadow-hover);
+    transform: translateY(-6px);
+}
+ 
+.bph-card:hover::after,
+.bidang-card:hover::after,
+.bph-card:focus-visible::after,
+.bidang-card:focus-visible::after {
     transform: scaleX(1);
 }
-
+ 
+.bph-card:focus-visible,
+.bidang-card:focus-visible {
+    outline: 2px solid var(--s-gold-400);
+    outline-offset: 3px;
+}
+ 
+/* Gambar: rasio tetap, wajah tetap terlihat di bagian atas */
+.bph-card img,
+.bidang-card .bidang-media {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: center top;
+    background: var(--s-bg-900);
+    border-bottom: 1px solid var(--s-line);
+    transition: transform var(--s-ease-slow);
+}
+ 
+.bph-card:hover img,
+.bidang-card:hover .bidang-media {
+    transform: scale(1.04);
+}
+ 
+/* Sekbid: --cover dari inline style, gradasi navy lembut di dasar gambar */
+.bidang-card::before {
+    content: '';
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background:
+        linear-gradient(180deg, transparent 45%, rgba(10, 21, 48, 0.85)),
+        var(--cover) center top / cover no-repeat;
+    background-color: var(--s-bg-900);
+    transition: transform var(--s-ease-slow);
+}
+ 
+.bidang-card:hover::before {
+    transform: scale(1.04);
+}
+ 
+/* Teks */
+.bph-card h3,
+.bidang-overlay h2 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.3;
+    color: var(--s-ink);
+    margin: 22px 24px 8px;
+    letter-spacing: -0.3px;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+}
+ 
+.bidang-overlay {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 0 0 24px;
+}
+ 
+.bidang-overlay h2 {
+    font-size: 1.25rem;
+}
+ 
+.bidang-overlay p,
+.bph-card p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--s-ink-soft);
+    margin: 0 24px 16px;
+    overflow-wrap: anywhere;
+    text-wrap: pretty;
+}
+ 
+/* CTA — pil emas */
+.bph-cta,
 .bidang-cta {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 16px;
-    padding: 8px 18px;
-    font-size: 0.74rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
+    align-self: flex-start;
+    gap: 10px;
+    margin: auto 24px 0;
+    padding: 11px 18px 11px 20px;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: var(--radius-pill);
-    transition: background var(--ease), border-color var(--ease), color var(--ease);
+    text-decoration: none;
+    color: var(--s-gold-300);
+    background: linear-gradient(135deg, rgba(255, 201, 77, 0.12), rgba(245, 176, 37, 0.04));
+    border: 1px solid rgba(255, 201, 77, 0.45);
+    border-radius: 999px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition:
+        color var(--s-ease),
+        background var(--s-ease),
+        border-color var(--s-ease),
+        box-shadow var(--s-ease);
 }
 
+
+ 
+.bph-card .bph-cta {
+    margin-bottom: 24px;
+}
+ 
+.bph-card:hover .bph-cta,
 .bidang-card:hover .bidang-cta {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--ink);
+    background: linear-gradient(135deg, var(--s-gold-300), var(--s-gold-500));
+    border-color: transparent;
+    color: var(--s-bg-950);
 }
-
+ 
+.bph-cta-arrow,
 .bidang-cta-arrow {
-    display: inline-block;
-    transition: transform var(--ease);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    line-height: 1;
+    background: rgba(255, 201, 77, 0.15);
+    transition: transform var(--s-ease), background var(--s-ease);
 }
-
+ 
+.bph-card:hover .bph-cta-arrow,
 .bidang-card:hover .bidang-cta-arrow {
+    transform: translateX(4px);
+}
+
+.bidang-card:hover .bidang-cta,
+.bidang-card:focus-visible .bidang-cta {
+    color: var(--s-bg-950);
+    background: linear-gradient(135deg, var(--s-gold-300), var(--s-gold-500));
+    border-color: transparent;
+    box-shadow: 0 10px 24px rgba(245, 176, 37, 0.28);
+}
+
+.bidang-card:hover .bidang-cta-arrow,
+.bidang-card:focus-visible .bidang-cta-arrow {
     transform: translateX(3px);
+    background: rgba(5, 11, 26, 0.18);
 }
-
+ 
 /* =========================================
-   MODE DESKTOP
-   Ketua sendiri di baris atas, Sekretaris &
-   Bendahara berdampingan di bawahnya. Sekbid
-   terakhir dipusatkan bila jumlahnya ganjil.
+   BPH — Ketua tampil menonjol, dua kartu di bawahnya
    ========================================= */
-@media (min-width: 769px) {
-    .bph-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 280px);
-        justify-content: center;
-        gap: 24px;
+.bph-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-gap);
+    max-width: 860px;
+    margin: 0 auto 104px;
+}
+ 
+.bph-card:first-child {
+    grid-column: 1 / -1;
+}
+ 
+/* Ketua: tinggi mengikuti foto asli supaya wajah tidak terpotong */
+.bph-card:first-child img {
+    aspect-ratio: auto;
+    height: auto;
+    max-height: 640px;
+    object-position: center 70%;
+}
+ 
+.bph-card:first-child h3 {
+    font-size: 1.45rem;
+}
+ 
+/* Garis emas di atas kartu Ketua */
+.bph-card:first-child::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--s-gold-400), transparent);
+    z-index: 1;
+}
+ 
+/* =========================================
+   SEKBID — baris terakhir otomatis di tengah
+   ========================================= */
+.bidang-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-gap);
+}
+ 
+.bidang-card {
+    flex: 0 1 calc((100% - 2 * var(--s-gap)) / 3);
+    min-width: 260px;
+}
+ 
+/* Muncul bertahap */
+.bph-card:nth-child(2),
+.bidang-card:nth-child(1) { animation-delay: 0.08s; }
+.bph-card:nth-child(3),
+.bidang-card:nth-child(2) { animation-delay: 0.16s; }
+.bidang-card:nth-child(3) { animation-delay: 0.24s; }
+.bidang-card:nth-child(4) { animation-delay: 0.32s; }
+.bidang-card:nth-child(5) { animation-delay: 0.4s; }
+.bidang-card:nth-child(n+6) { animation-delay: 0.48s; }
+ 
+@keyframes s-rise {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
     }
-
-    .bph-card:nth-child(1) {
-        grid-column: 1 / span 2;
-        justify-self: center;
-    }
-
-    .bidang-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .bidang-card:last-child {
-        grid-column: 2;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
-
-@media (max-width: 768px) {
-    .bidang-grid {
-        grid-template-columns: 1fr;
+ 
+/* =========================================
+   RESPONSIF
+   ========================================= */
+@media (max-width: 960px) {
+    .section-intro {
+        min-height: 220px;
     }
-
-    .bph-card {
-        width: 100%;
-        max-width: 320px;
+ 
+    .bidang-card {
+        flex-basis: calc((100% - var(--s-gap)) / 2);
+    }
+}
+ 
+@media (max-width: 768px) {
+    .struktur-container {
+        --s-gap: 20px;
+        padding: 48px 18px 64px;
+    }
+ 
+    .section-intro {
+        margin-bottom: 40px;
+        min-height: 0;
+        padding: 44px 24px 48px;
+        border-radius: 20px;
+    }
+ 
+    .section-intro::after {
+        left: 24px;
+    }
+ 
+    .bph-grid {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+        margin-bottom: 72px;
+    }
+ 
+    .bidang-card {
+        flex-basis: 100%;
+        min-width: 0;
+        max-width: 440px;
+    }
+ 
+    .bph-card img,
+    .bidang-card .bidang-media,
+    .bidang-card::before {
+        aspect-ratio: 4 / 3;
+    }
+}
+ 
+/* Perangkat sentuh: jangan "melompat" saat disentuh */
+@media (hover: none) {
+    .bph-card:hover,
+    .bidang-card:hover {
+        transform: none;
+    }
+}
+ 
+@media (prefers-reduced-motion: reduce) {
+    .struktur-container *,
+    .struktur-container *::before,
+    .struktur-container *::after {
+        transition-duration: 0.01ms !important;
+        animation: none !important;
     }
 }

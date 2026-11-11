@@ -1,6 +1,42 @@
 /* =========================================
-   HALAMAN OPEN RECRUITMENT (TEMA TERANG)
+   HALAMAN OPEN RECRUITMENT (TEMA GELAP)
+   Navy gelap + aksen emas, sama dengan
+   halaman Info dan Struktur.
    ========================================= */
+
+:root {
+    --bg-navy: #040c1c;
+    --bg-navy-soft: #0e1a38;
+    --card-navy: #101c36;
+    --card-navy-deep: #0d1832;
+    --line: rgba(159, 179, 209, 0.16);
+    --ink: #e8eefb;
+    --ink-soft: #c9d6ec;
+    --ink-faint: #8fa3c4;
+    --accent: #f5b33c;
+    --accent-soft: rgba(245, 179, 60, 0.12);
+    --ink-on-accent: #0b1220;
+    --green: #4ade80;
+    --green-soft: rgba(34, 197, 94, 0.12);
+    --green-line: rgba(34, 197, 94, 0.35);
+    --red: #f87171;
+    --red-soft: rgba(239, 68, 68, 0.12);
+    --red-line: rgba(239, 68, 68, 0.35);
+}
+
+html,
+body {
+    background: linear-gradient(180deg, var(--bg-navy-soft) 0%, var(--bg-navy) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    min-height: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ---------- LAYOUT ---------- */
 
 .oprec-page {
     max-width: 900px;
@@ -18,22 +54,441 @@
     font-weight: 800;
     letter-spacing: -2px;
     margin: 15px 0;
-    color: #111111;
+    color: var(--ink);
 }
 
-/* =========================
-   STATUS BADGE
-========================= */
+/* ---------- STATUS BADGE ---------- */
+
+.status-badge {
+     display: inline-block;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a6d1d;
+  background: transparent;
+  border: 2px solid #c9a94a;
+  outline: 1px solid #c9a94a;
+  outline-offset: 2px;
+  border-radius: 0;
+  padding: 3px 8px;
+  line-height: 1.2;
+  transform: rotate(-2deg);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #22c55e;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%   { transform: scale(1);   opacity: 1; }
+    50%  { transform: scale(1.5); opacity: .5; }
+    100% { transform: scale(1);   opacity: 1; }
+}
+
+.status-badge.closed {
+    background: var(--red-soft);
+    border-color: var(--red-line);
+    color: var(--red);
+}
+
+.status-badge.closed .dot {
+    background: #ef4444;
+    box-shadow: 0 0 10px #ef4444;
+    animation: none;
+}
+
+/* ---------- SECTION (KARTU) ---------- */
+
+.oprec-section {
+    background: var(--card-navy);
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 30px;
+}
+
+.oprec-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    color: var(--ink);
+}
+
+/* ---------- PAMFLET ---------- */
+
+.pamflet-box {
+    text-align: center;
+}
+
+.pamflet-img {
+    width: 100%;
+    max-width: 720px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: .35s ease;
+}
+
+.pamflet-img:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+}
+
+.pamflet-caption {
+    margin-top: 15px;
+    color: var(--ink-faint);
+    font-size: .95rem;
+}
+
+/* ---------- PERSYARATAN ---------- */
+
+.req-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.req-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+}
+
+.req-list li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* ---------- TOMBOL DAFTAR ---------- */
+
+.btn-submit {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 34px;
+    background: var(--accent);
+    color: var(--ink-on-accent);
+    text-decoration: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: .3s;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.btn-submit:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(245, 179, 60, 0.25);
+}
+
+.btn-disabled {
+    background: #1e2d50 !important;
+    color: var(--ink-faint) !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    pointer-events: none;
+}
+
+.btn-disabled:hover {
+    transform: none !important;
+}
+
+/* ---------- KONTAK PERSON ---------- */
+
+.oprec-contact {
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.oprec-contact h3 {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+}
+
+.oprec-contact > p {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 1rem;
+    margin-bottom: 45px;
+    line-height: 1.7;
+}
+
+.cp-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+.cp-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--card-navy);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 40px 25px;
+    text-decoration: none;
+    color: var(--ink);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.cp-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--accent), #d89a2b);
+}
+
+.cp-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245, 179, 60, 0.45);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.cp-photo {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--bg-navy);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    margin-bottom: 20px;
+}
+
+.cp-info {
+    width: 100%;
+}
+
+.cp-info strong {
+    display: block;
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.wa-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    background: var(--green-soft);
+    color: var(--green);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid var(--green-line);
+}
+
+.wa-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.cp-card::after {
+    content: "💬 Chat via WhatsApp";
+    display: block;
+    margin-top: 25px;
+    background: var(--accent);
+    color: var(--ink-on-accent);
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.cp-card:hover::after {
+    background: #ffc857;
+}
+
+/* ---------- TEKS TAMBAHAN (DINAMIS) ---------- */
+
+.oprec-dates {
+    margin-top: 10px;
+    font-size: .95rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+}
+
+.oprec-loading {
+    text-align: center;
+    color: var(--ink-faint);
+    padding: 20px;
+    width: 100%;
+}
+
+#oprec-cp-list.cp-list {
+    min-height: 60px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+    .oprec-header h1 {
+        font-size: 2.3rem;
+    }
+
+    .oprec-section {
+        padding: 25px;
+    }
+
+    .oprec-section h2 {
+        font-size: 1.4rem;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
+
+    .cp-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .cp-card {
+        max-width: 100%;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 14px 16px;
+        border-radius: 14px;
+    }
+
+    .cp-photo {
+        width: 65px;
+        height: 65px;
+        margin: 0 15px 0 0;
+        flex-shrink: 0;
+    }
+
+    .cp-info {
+        flex: 1;
+        text-align: left;
+    }
+
+    .cp-info strong {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+
+    .wa-number {
+        font-size: .82rem;
+        padding: 6px 12px;
+    }
+
+    .wa-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .cp-card::after {
+        content: "Chat";
+        width: auto;
+        margin: 0 0 0 12px;
+        padding: 8px 14px;
+        font-size: .8rem;
+        border-radius: 8px;
+    }
+}/* =========================================
+   HALAMAN OPEN RECRUITMENT (TEMA GELAP)
+   Navy gelap + aksen emas, sama dengan
+   halaman Info dan Struktur.
+   ========================================= */
+
+:root {
+    --bg-navy: #0b1530;
+    --bg-navy-soft: #0e1a38;
+    --card-navy: #101c36;
+    --card-navy-deep: #0d1832;
+    --line: rgba(159, 179, 209, 0.16);
+    --ink: #e8eefb;
+    --ink-soft: #c9d6ec;
+    --ink-faint: #8fa3c4;
+    --accent: #f5b33c;
+    --accent-soft: rgba(245, 179, 60, 0.12);
+    --ink-on-accent: #0b1220;
+    --green: #4ade80;
+    --green-soft: rgba(34, 197, 94, 0.12);
+    --green-line: rgba(34, 197, 94, 0.35);
+    --red: #f87171;
+    --red-soft: rgba(239, 68, 68, 0.12);
+    --red-line: rgba(239, 68, 68, 0.35);
+}
+
+html,
+body {
+    background: linear-gradient(180deg, var(--bg-navy-soft) 0%, var(--bg-navy) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    min-height: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ---------- LAYOUT ---------- */
+
+.oprec-page {
+    max-width: 900px;
+    margin: 40px auto 100px;
+    padding: 0 20px;
+}
+
+.oprec-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.oprec-header h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin: 15px 0;
+    color: var(--ink);
+}
+
+/* ---------- STATUS BADGE ---------- */
 
 .status-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
-    background: rgba(34,197,94,.1);
-    border: 1px solid rgba(34,197,94,.3);
+    background: var(--green-soft);
+    border: 1px solid var(--green-line);
     border-radius: 30px;
-    color: #16a34a;
+    color: var(--green);
     font-size: .85rem;
     font-weight: 700;
 }
@@ -48,197 +503,121 @@
 }
 
 @keyframes pulse {
-
-    0%{
-        transform:scale(1);
-        opacity:1;
-    }
-
-    50%{
-        transform:scale(1.5);
-        opacity:.5;
-    }
-
-    100%{
-        transform:scale(1);
-        opacity:1;
-    }
-
+    0%   { transform: scale(1);   opacity: 1; }
+    50%  { transform: scale(1.5); opacity: .5; }
+    100% { transform: scale(1);   opacity: 1; }
 }
 
-/* =========================
-   STATUS BADGE - CLOSED
-========================= */
-
 .status-badge.closed {
-    background: rgba(239,68,68,.1);
-    border: 1px solid rgba(239,68,68,.3);
-    color: #dc2626;
+    background: transparent;
+    border: 1px solid var(--red);
+    border-radius: 0;
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .status-badge.closed .dot {
-    background: #ef4444;
-    box-shadow: 0 0 10px #ef4444;
+    background: var(--red);
+    box-shadow: none;
+    border-radius: 0;
     animation: none;
 }
 
-/* =========================
-   SECTION
-========================= */
+/* ---------- SECTION (KARTU) ---------- */
 
-.oprec-section{
-
-    background:#fff;
-    border:1px solid rgba(0,0,0,.08);
-    box-shadow:0 8px 30px rgba(0,0,0,.06);
-    border-radius:24px;
-    padding:40px;
-    margin-bottom:30px;
-
+.oprec-section {
+    background: var(--card-navy);
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 30px;
 }
 
-.oprec-section h2{
-
-    font-size:1.8rem;
-    margin-bottom:25px;
-    color:#111;
-
+.oprec-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    color: var(--ink);
 }
 
-/* =========================
-   PAMFLET
-========================= */
+/* ---------- PAMFLET ---------- */
 
-.pamflet-box{
-
-    text-align:center;
-
+.pamflet-box {
+    text-align: center;
 }
 
-.pamflet-img{
-
-    width:100%;
-    max-width:720px;
-
-    border-radius:18px;
-
-    border:1px solid #eee;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.12);
-
-    cursor:pointer;
-
-    transition:.35s ease;
-
+.pamflet-img {
+    width: 100%;
+    max-width: 720px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: .35s ease;
 }
 
-.pamflet-img:hover{
-
-    transform:translateY(-8px) scale(1.02);
-
-    box-shadow:0 25px 60px rgba(0,0,0,.18);
-
+.pamflet-img:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
 }
 
-.pamflet-caption{
-
-    margin-top:15px;
-
-    color:#777;
-
-    font-size:.95rem;
-
+.pamflet-caption {
+    margin-top: 15px;
+    color: var(--ink-faint);
+    font-size: .95rem;
 }
 
-/* =========================
-   PERSYARATAN
-========================= */
+/* ---------- PERSYARATAN ---------- */
 
-.req-list{
-
-    list-style:none;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:15px;
-
+.req-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.req-list li{
-
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:12px;
-
-    color:#555;
-
-    line-height:1.6;
-
+.req-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--ink-soft);
+    line-height: 1.6;
 }
 
-.req-list li::before{
-
-    content:"✓";
-
-    color:#16a34a;
-
-    font-weight:bold;
-
-    font-size:1.1rem;
-
+.req-list li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 
-/* =========================
-   TOMBOL GOOGLE FORM
-========================= */
+/* ---------- TOMBOL DAFTAR ---------- */
 
-.btn-submit{
-
-    display:inline-flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:16px 34px;
-
-    background:linear-gradient(135deg,#111,#333);
-
-    color:#fff;
-
-    text-decoration:none;
-
-    border-radius:14px;
-
-    font-size:1rem;
-
-    font-weight:700;
-
-    transition:.3s;
-
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-
+.btn-submit {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 34px;
+    background: var(--accent);
+    color: var(--ink-on-accent);
+    text-decoration: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: .3s;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
-.btn-submit:hover{
-
-    transform:translateY(-4px);
-
-    box-shadow:0 18px 40px rgba(0,0,0,.2);
-
+.btn-submit:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(245, 179, 60, 0.25);
 }
-
-/* =========================
-   TOMBOL DISABLED (RECRUITMENT DITUTUP)
-========================= */
 
 .btn-disabled {
-    background: #cbd5e1 !important;
-    color: #64748b !important;
+    background: #1e2d50 !important;
+    color: var(--ink-faint) !important;
     cursor: not-allowed;
     box-shadow: none !important;
     pointer-events: none;
@@ -248,171 +627,117 @@
     transform: none !important;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* ---------- KONTAK PERSON ---------- */
 
-@media(max-width:768px){
-
-    .oprec-header h1{
-
-        font-size:2.3rem;
-
-    }
-
-    .oprec-section{
-
-        padding:25px;
-
-    }
-
-    .oprec-section h2{
-
-        font-size:1.4rem;
-
-    }
-
-    .btn-submit{
-
-        width:100%;
-
-    }
-
-
-
-}
-
-/* ==========================================
-   CONTACT PERSON (VERSI KALEM & ELEGAN)
-   ========================================== */
-
-.oprec-contact{
+.oprec-contact {
     max-width: 1200px;
     margin: 80px auto;
     padding: 0 20px;
 }
 
-.oprec-contact h3{
+.oprec-contact h3 {
     text-align: center;
     font-size: 2.2rem;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--ink);
     margin-bottom: 12px;
 }
 
-.oprec-contact>p{
+.oprec-contact > p {
     text-align: center;
-    color: #64748b;
+    color: var(--ink-soft);
     font-size: 1rem;
     margin-bottom: 45px;
     line-height: 1.7;
 }
 
-.cp-list{
+.cp-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 28px;
 }
 
-/* ================= CARD ================= */
-
-.cp-card{
+.cp-card {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background: #ffffff;
-
-    border: 1px solid #f1f5f9;
+    background: var(--card-navy);
+    border: 1px solid var(--line);
     border-radius: 24px;
-
     padding: 40px 25px;
     text-decoration: none;
-    color: #1e293b;
+    color: var(--ink);
     overflow: hidden;
-
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.cp-card::before{
+.cp-card::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 5px;
-    background: linear-gradient(90deg, #cbd5e1, #94a3b8);
+    background: linear-gradient(90deg, var(--accent), #d89a2b);
 }
 
-.cp-card:hover{
+.cp-card:hover {
     transform: translateY(-6px);
-    border-color: #cbd5e1;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    border-color: rgba(245, 179, 60, 0.45);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
 }
 
-/* ================= FOTO ================= */
-
-.cp-photo{
+.cp-photo {
     width: 110px;
     height: 110px;
     object-fit: cover;
     border-radius: 50%;
-    border: 4px solid #f8fafc;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    border: 4px solid var(--bg-navy);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     margin-bottom: 20px;
 }
 
-/* ================= NAMA ================= */
-
-.cp-info{
+.cp-info {
     width: 100%;
 }
 
-.cp-info strong{
+.cp-info strong {
     display: block;
     font-size: 1.25rem;
-    color: #1e293b;
+    color: var(--ink);
     margin-bottom: 6px;
     font-weight: 700;
 }
 
-/* ================= NOMOR ================= */
-
-.wa-number{
+.wa-number {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     margin-top: 8px;
-
-    background: #f0fdf4;
-    color: #15803d;
-
+    background: var(--green-soft);
+    color: var(--green);
     padding: 8px 16px;
     border-radius: 999px;
     font-weight: 600;
     font-size: 0.9rem;
-    border: 1px solid #dcfce7;
+    border: 1px solid var(--green-line);
 }
 
-.wa-icon{
+.wa-icon {
     width: 18px;
     height: 18px;
 }
 
-/* ================= BUTTON ================= */
-
-.cp-card::after{
+.cp-card::after {
     content: "💬 Chat via WhatsApp";
     display: block;
     margin-top: 25px;
-
-    background: #0f172a;
-    color: #ffffff;
-
+    background: var(--accent);
+    color: var(--ink-on-accent);
     width: 100%;
     padding: 12px;
     border-radius: 14px;
@@ -421,95 +746,98 @@
     transition: background 0.3s ease;
 }
 
-.cp-card:hover::after{
-    background: #334155;
+.cp-card:hover::after {
+    background: #ffc857;
 }
 
-/* ================= MOBILE ================= */
-
-@media (max-width: 768px){
-
-    .cp-list{
-        display:flex;
-        flex-direction:column;
-        gap:15px;
-    }
-
-    .cp-card{
-        max-width:100%;
-        width:100%;
-
-        display:flex;
-        flex-direction:row;
-        align-items:center;
-        justify-content:flex-start;
-
-        padding:14px 16px;
-
-        border-radius:14px;
-    }
-
-    .cp-photo{
-        width:65px;
-        height:65px;
-        margin:0 15px 0 0;
-        flex-shrink:0;
-    }
-
-    .cp-info{
-        flex:1;
-        text-align:left;
-    }
-
-    .cp-info strong{
-        font-size:1rem;
-        margin-bottom:6px;
-    }
-
-    .wa-number{
-        font-size:.82rem;
-        padding:6px 12px;
-    }
-
-    .wa-icon{
-        width:16px;
-        height:16px;
-    }
-
-    .cp-card::after{
-        content:"Chat";
-        width:auto;
-        margin:0 0 0 12px;
-        padding:8px 14px;
-        font-size:.8rem;
-        border-radius:8px;
-    }
-
-}
-
-/* =========================================
-   TAMBAHAN UNTUK VERSI DINAMIS (SUPABASE)
-   Tambahkan blok ini ke akhir file css/oprec.css yang sudah ada
-   ========================================= */
-
-.hidden {
-    display: none !important;
-}
+/* ---------- TEKS TAMBAHAN (DINAMIS) ---------- */
 
 .oprec-dates {
     margin-top: 10px;
     font-size: .95rem;
-    color: #444;
+    color: var(--ink-soft);
     font-weight: 600;
 }
 
 .oprec-loading {
     text-align: center;
-    color: #888;
+    color: var(--ink-faint);
     padding: 20px;
     width: 100%;
 }
 
 #oprec-cp-list.cp-list {
     min-height: 60px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+    .oprec-header h1 {
+        font-size: 2.3rem;
+    }
+
+    .oprec-section {
+        padding: 25px;
+    }
+
+    .oprec-section h2 {
+        font-size: 1.4rem;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
+
+    .cp-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .cp-card {
+        max-width: 100%;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 14px 16px;
+        border-radius: 14px;
+    }
+
+    .cp-photo {
+        width: 65px;
+        height: 65px;
+        margin: 0 15px 0 0;
+        flex-shrink: 0;
+    }
+
+    .cp-info {
+        flex: 1;
+        text-align: left;
+    }
+
+    .cp-info strong {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+
+    .wa-number {
+        font-size: .82rem;
+        padding: 6px 12px;
+    }
+
+    .wa-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .cp-card::after {
+        content: "Chat";
+        width: auto;
+        margin: 0 0 0 12px;
+        padding: 8px 14px;
+        font-size: .8rem;
+        border-radius: 8px;
+    }
 }

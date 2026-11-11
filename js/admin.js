@@ -12,6 +12,7 @@
     }
 
     const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    window.__sbClient = client;
 
     /* ===================== ELEMEN LOGIN ===================== */
     const loginScreen = document.getElementById('login-screen');
@@ -122,7 +123,9 @@
     oprec: document.getElementById('tab-oprec'),
     chatbot: document.getElementById('tab-chatbot'),
     profil: document.getElementById('tab-profil'),
-    ph: document.getElementById('tab-ph')          // <-- BARU
+    ph: document.getElementById('tab-ph'),
+    prestasi: document.getElementById('tab-prestasi'),
+    otonom: document.getElementById('tab-otonom')   // BARU
 };
 
     tabButtons.forEach(function (btn) {

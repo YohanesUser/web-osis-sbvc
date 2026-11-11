@@ -465,49 +465,374 @@ header {
    RESPONSIVE
    ========================================= */
 @media (max-width: 768px) {
-    .hamburger { display: flex; }
-
-    .nav-menu {
-        display: none;
-        position: absolute;
-        top: 70px;
-        right: 1.5rem;
-        flex-direction: column;
-        width: 220px;
-        padding: 14px;
-        background: rgba(253, 252, 249, 0.98);
-        backdrop-filter: blur(16px);
-        border-radius: var(--radius-md);
-        border: 1px solid var(--line);
-        box-shadow: 0 12px 32px rgba(22, 21, 26, 0.08);
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
     }
 
-    .nav-menu.active { display: flex; }
+    .hamburger {
+        display: flex;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--paper-alt);
+        border: 1px solid var(--line);
+        transition: background-color var(--ease), border-color var(--ease);
+    }
 
-    .nav-menu li { width: 100%; }
+    .hamburger span {
+        position: absolute;
+        width: 18px;
+        transition: transform var(--ease), opacity .2s ease, width var(--ease);
+    }
+    .hamburger span:nth-child(1) { transform: translateY(-5px); }
+    .hamburger span:nth-child(2) { transform: translateY(0); }
+    .hamburger span:nth-child(3) { transform: translateY(5px); }
+
+    .hamburger.open {
+        background: var(--ink);
+        border-color: var(--ink);
+    }
+    .hamburger.open span { background: var(--paper); }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg); }
+
+    /* Panel menu: melebar penuh, meluncur turun dari atas */
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: 100vh;
+        overflow-y: auto;
+        padding: 84px 1.5rem 2rem;
+        background: rgba(253, 252, 249, 0.98);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: none;
+        border-bottom: 1px solid var(--line);
+        border-radius: 0 0 var(--radius-md) var(--radius-md);
+        box-shadow: 0 18px 40px rgba(22, 21, 26, 0.12);
+        opacity: 0;
+        transform: translateY(-100%);
+        pointer-events: none;
+        visibility: hidden;
+        transition: transform .45s var(--ease), opacity .3s ease, visibility .45s;
+        z-index: 999;
+    }
+
+    .nav-menu.active {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+        visibility: visible;
+    }
+
+    /* Item muncul satu per satu */
+    .nav-menu li {
+        width: 100%;
+        opacity: 0;
+        transform: translateX(14px);
+        transition: opacity .3s ease, transform var(--ease);
+    }
+    .nav-menu.active li {
+        opacity: 1;
+        transform: none;
+    }
+    .nav-menu.active li:nth-child(1) { transition-delay: .05s; }
+    .nav-menu.active li:nth-child(2) { transition-delay: .10s; }
+    .nav-menu.active li:nth-child(3) { transition-delay: .15s; }
+    .nav-menu.active li:nth-child(4) { transition-delay: .20s; }
+    .nav-menu.active li:nth-child(5) { transition-delay: .25s; }
 
     .nav-link {
         width: 100%;
-        text-align: center;
-        padding: 12px;
+        justify-content: flex-start;
+        padding: 12px 14px;
         border-radius: var(--radius-sm);
+        font-size: 0.95rem;
+        transition: background-color var(--ease), color var(--ease);
+    }
+    .nav-link::after { display: none; }
+
+    .nav-link:hover,
+    .nav-link:active {
+        background: var(--accent-soft);
+        color: var(--ink);
+    }
+
+    .nav-link.active {
+        background: var(--ink);
+        color: var(--paper);
+        font-weight: 600;
     }
 
     .hero { min-height: 68vh; }
-
     .hero h1 { font-size: 2.4rem; }
-
-    .hero p {
-        font-size: 1rem;
-        padding: 0 10px;
-    }
-
+    .hero p { font-size: 1rem; padding: 0 10px; }
     .brand-text { font-size: 0.9rem; }
-
     .particles span:nth-child(3) { display: none; }
+    .footer-container { grid-template-columns: 1fr; gap: 32px; }
+}
 
-    .footer-container {
-        grid-template-columns: 1fr;
-        gap: 32px;
+/* =========================================
+   EFEK GERAK BACKGROUND — HANYA DESKTOP
+   Aktif di layar > 768px, dan tetap dimatikan
+   jika pengguna mengaktifkan reduced motion.
+   ========================================= */
+@media (min-width: 769px) and (prefers-reduced-motion: no-preference) {
+
+    /* Blob cahaya kuningan yang bergerak pelan
+       di belakang konten, melengkapi titik cahaya
+       yang sudah ada di body::before */
+    body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        background-image:
+            radial-gradient(circle at 30% 40%, rgba(169, 129, 47, 0.08) 0%, transparent 35%),
+            radial-gradient(circle at 70% 60%, rgba(169, 129, 47, 0.05) 0%, transparent 40%);
+        animation: drift 32s ease-in-out infinite alternate;
+        will-change: transform;
     }
+
+    /* Garis-garis tipis diagonal yang perlahan bergeser,
+       memberi tekstur halus tanpa mengganggu bacaan */
+    .bg-lines {
+        position: fixed;
+        inset: -50%;
+        z-index: -3;
+        pointer-events: none;
+        background-image: repeating-linear-gradient(
+            115deg,
+            transparent 0px,
+            transparent 118px,
+            var(--line) 119px,
+            transparent 120px
+        );
+        opacity: 0.35;
+        animation: linesShift 60s linear infinite;
+        will-change: transform;
+    }
+
+    @keyframes drift {
+        0%   { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(4%, -3%) scale(1.08); }
+    }
+
+    @keyframes linesShift {
+        0%   { transform: translate(0, 0); }
+        100% { transform: translate(120px, 120px); }
+    }
+}
+
+/* =========================================
+   PEMBEDAAN NAVBAR & FOOTER (REVISI)
+   Navbar sedikit lebih terang dari sebelumnya,
+   footer lebih terang dari body, dan semua
+   teks footer dibuat ulang agar terbaca.
+   ========================================= */
+:root {
+    --nav-bg: rgba(16, 28, 54, 0.88);
+    --nav-bg-solid: rgba(16, 28, 54, 0.98);
+
+    --footer-bg-top: #17274a;
+    --footer-bg-bottom: #0c1730;
+    --footer-line: rgba(245, 179, 60, 0.5);
+    --footer-divider: rgba(159, 179, 209, 0.16);
+
+    --footer-text: #c9d6ec;
+    --footer-muted: #9fb3d1;
+    --footer-heading: #f5b33c;
+    --footer-white: #e8eefb;
+}
+
+header {
+    background-color: var(--nav-bg);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        background: var(--nav-bg-solid);
+    }
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+    background: linear-gradient(180deg, var(--footer-bg-top) 0%, var(--footer-bg-bottom) 100%);
+    border-top: 1px solid var(--footer-line);
+}
+
+.footer-brand,
+.footer-col h4 {
+    color: var(--footer-white);
+}
+
+.footer-col h4 {
+    color: var(--footer-heading);
+}
+
+.footer-desc,
+.contact-item,
+.footer-bottom {
+    color: var(--footer-text);
+}
+
+.footer-links a {
+    color: var(--footer-text);
+}
+
+.footer-links a:hover {
+    color: var(--footer-heading);
+}
+
+.social-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--footer-divider);
+    color: var(--footer-white);
+}
+
+.social-btn:hover {
+    background: var(--footer-heading);
+    border-color: var(--footer-heading);
+    color: var(--ink-on-accent, #0b1220);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--footer-divider);
+}
+
+/* =========================================
+   FIX MENU MOBILE
+   Latar panel dibuat solid dan semua link
+   dipaksa memakai warna terang agar terbaca.
+   ========================================= */
+@media (max-width: 768px) {
+    .nav-menu {
+        background-color: #101c36;
+        opacity: 1;
+    }
+
+    .nav-menu.active {
+        opacity: 1;
+    }
+
+    .nav-menu .nav-link {
+        color: #c9d6ec;
+        background-color: transparent;
+        font-weight: 500;
+    }
+
+    .nav-menu .nav-link:hover,
+    .nav-menu .nav-link:active {
+        background-color: rgba(245, 179, 60, 0.12);
+        color: #e8eefb;
+    }
+
+    .nav-menu .nav-link.active {
+        background-color: #f5b33c;
+        color: #0b1220;
+        font-weight: 600;
+    }
+}
+
+/* =========================================
+   FIX KETERBACAAN NAVBAR DESKTOP
+   Latar dibuat lebih solid agar tidak
+   tembus ke gambar di belakang, dan semua
+   teks navbar dipaksa terang.
+   ========================================= */
+header {
+    background-color: #101c36;
+    background-image: none;
+}
+
+header .navbar .brand,
+header .navbar .brand-text,
+header .navbar .brand-text span {
+    color: #ffffff;
+}
+
+header .navbar .brand-text span {
+    color: #c9d6ec;
+}
+
+header .navbar .nav-menu .nav-link {
+    color: #d6e2f5;
+    font-weight: 500;
+}
+
+header .navbar .nav-menu .nav-link:hover {
+    color: #ffffff;
+}
+
+header .navbar .nav-menu .nav-link.active {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+header .navbar .nav-menu .nav-link::after {
+    background: #f5b33c;
+    height: 2px;
+}
+
+@media (max-width: 768px) {
+    header .navbar .nav-menu .nav-link {
+        color: #c9d6ec;
+    }
+}
+
+/* =========================================
+   FIX TOMBOL HAMBURGER
+   Dibuat gelap dengan garis emas/terang
+   agar serasi dengan navbar.
+   ========================================= */
+@media (max-width: 768px) {
+    header .navbar .hamburger {
+        background: rgba(245, 179, 60, 0.12);
+        border: 1px solid rgba(245, 179, 60, 0.35);
+    }
+
+    header .navbar .hamburger span {
+        background-color: #f5b33c;
+    }
+
+    header .navbar .hamburger.open {
+        background: #f5b33c;
+        border-color: #f5b33c;
+    }
+
+    header .navbar .hamburger.open span {
+        background-color: #0b1220;
+    }
+}
+
+/* =========================================
+   LATAR PUTIH DI BELAKANG LOGO (SIMETRIS)
+   Logo dibuat persegi dengan lingkaran putih
+   yang tidak lonjong.
+   ========================================= */
+header .navbar .logo-img,
+header .navbar img {
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    background-color: #ffffff;
+    border-radius: 50%;
+    padding: 4px;
+    box-sizing: border-box;
+    display: block;
 }

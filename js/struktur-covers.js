@@ -18,15 +18,16 @@
         });
 
         document.querySelectorAll('[data-cover-slug]').forEach(function (el) {
-            const url = map[el.dataset.coverSlug];
-            if (!url) return; // belum ada cover di DB -> tetap pakai default
+    const url = map[el.dataset.coverSlug];
+    if (!url) return;
 
-            const img = el.querySelector('img');
-            if (img) {
-                img.src = url; // kartu PH
-            } else {
-                el.style.backgroundImage = "url('" + url + "')"; // kartu Sekbid
-            }
-        });
+    const img = el.querySelector('img');
+    if (img) {
+        img.src = url; // kartu PH
+    } else {
+        el.style.setProperty('--cover', "url('" + url + "')");
+        el.style.backgroundImage = 'none';
+    }
+});
     });
 })();

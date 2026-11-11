@@ -791,3 +791,76 @@
         transition: none;
     }
 }
+
+/* =========================================
+   SYARAT BERGABUNG
+   ========================================= */
+.syarat-section {
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    max-width: 1000px;
+    background: var(--sekbid-bg-900);
+    border-top: 1px solid var(--sekbid-line);
+    border-bottom: 1px solid var(--sekbid-line);
+}
+
+.syarat-section .syarat-head {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.syarat-section h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+}
+
+.syarat-section h2::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 3px;
+    margin: 16px auto 0;
+    background: linear-gradient(90deg, var(--sekbid-gold-300), var(--sekbid-gold-500));
+    border-radius: 2px;
+}
+
+.syarat-subtitle {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: var(--sekbid-muted);
+}
+
+.syarat-box {
+    padding: 2rem;
+    background: var(--sekbid-glass);
+    border: 1px solid var(--sekbid-line);
+    border-left: 6px solid var(--sekbid-gold);
+    border-radius: 16px;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+#syarat-list {
+    margin: 0;
+    padding-left: 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 2;
+    color: var(--sekbid-text);
+}
+
+#syarat-list li::marker {
+    color: var(--sekbid-gold);
+    font-weight: 700;
+}
+
+@media (max-width: 640px) {
+    .syarat-section {
+        padding: 2rem 1rem;
+    }
+
+    .syarat-box {
+        padding: 1.25rem;
+    }
+}

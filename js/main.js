@@ -29,18 +29,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const hamburger = document.getElementById("hamburger-menu");
-    const navMenu = document.getElementById("nav-menu");
+const navMenu = document.getElementById("nav-menu");
 
-    if (hamburger && navMenu) {
-        hamburger.addEventListener("click", function () {
-            // Menambah/menghapus class 'active' pada menu
-            navMenu.classList.toggle("active");
-        });
+if (hamburger && navMenu) {
+    function closeMenu() {
+        hamburger.classList.remove("open");
+        navMenu.classList.remove("active");
     }
 
-    // Jalankan saat halaman pertama kali dimuat
-    revealElement();
-    
-    // Jalankan setiap kali pengunjung melakukan scroll
-    window.addEventListener("scroll", revealElement);
+    hamburger.addEventListener("click", function (e) {
+        e.stopPropagation();
+        const isOpen = navMenu.classList.toggle("active");
+        hamburger.classList.toggle("open", isOpen);
+    });
+
+    // Tutup saat klik di luar menu
+    document.addEventListener("click", function (e) {
+        if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            closeMenu();
+        }
+    });
+
+    // Tutup saat tekan Escape
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeMenu();
+    });
+}
 });

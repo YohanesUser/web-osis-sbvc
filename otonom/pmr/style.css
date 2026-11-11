@@ -1,0 +1,421 @@
+/* =========================================
+   PMR — gaya khusus halaman ini (Tema Merah Kehitaman)
+   ========================================= */
+
+html { scroll-behavior: smooth; }
+
+/* ---------- 1. Kerangka halaman ---------- */
+.pmr-hero,
+.pmr-nav,
+.pmr-section {
+    width: 100%;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pmr-section {
+    margin-bottom: 80px;
+    scroll-margin-top: 110px;
+}
+
+/* ---------- 2. Hero ---------- */
+.pmr-hero {
+    text-align: center;
+    padding: 60px 20px 48px;
+}
+
+.pmr-hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    margin: 14px 0 12px;
+    color: #ff4d4d;
+}
+
+.pmr-hero p {
+    max-width: 620px;
+    margin: 0 auto;
+    opacity: .85;
+    color: #f1f5ff;
+}
+
+.pmr-hero::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #e60000;
+    margin: 20px auto 0;
+    border-radius: 2px;
+}
+
+/* ---------- 3. Navigasi cepat ---------- */
+.pmr-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 28px;
+    margin-bottom: 72px;
+}
+
+.pmr-nav a {
+    padding: 9px 20px;
+    border: 1px solid rgba(255, 77, 77, .3);
+    border-radius: 999px;
+    background: rgba(20, 0, 0, .4);
+    color: #f1f5ff;
+    font-size: .85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color .25s, color .25s, background .25s;
+}
+
+.pmr-nav a:hover,
+.pmr-nav a:focus-visible {
+    border-color: rgba(255, 77, 77, .8);
+    color: #ff4d4d;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+/* ---------- 4. Header tiap section ---------- */
+.pmr-section .section-intro {
+    min-height: 0;
+    margin: 0 0 32px;
+    padding: 0 0 22px;
+    text-align: left;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 77, 77, .2);
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+    position: relative;
+}
+
+.pmr-section .section-intro::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: #e60000;
+}
+
+.pmr-section .section-intro h2 {
+    margin: 14px 0 8px;
+    font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.1rem);
+    color: #ffffff;
+}
+
+.pmr-section .section-intro p {
+    max-width: 560px;
+    color: #cccccc;
+}
+
+/* ---------- 5. Kartu kaca ---------- */
+.pengertian-box,
+.tugas-card {
+    background: rgba(25, 5, 5, .6);
+    border: 1px solid rgba(255, 77, 77, .15);
+    border-radius: 16px;
+}
+
+/* ---------- 6. Pengertian ---------- */
+.pengertian-box {
+    position: relative;
+    padding: 30px 32px 30px 76px;
+    border-left: 4px solid #e60000;
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: #e2e8f0;
+}
+
+.pengertian-box::before {
+    content: '“';
+    position: absolute;
+    top: 14px;
+    left: 24px;
+    font-family: Georgia, serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: #ff4d4d;
+    opacity: .6;
+}
+
+/* ---------- 7. Tugas ---------- */
+.tugas-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.tugas-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 22px 24px;
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+
+.tugas-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 77, 77, .5);
+    box-shadow: 0 14px 30px rgba(255, 0, 0, .1);
+}
+
+.tugas-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+.tugas-num {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff4d4d, #b30000);
+    color: #ffffff;
+    font-weight: 800;
+}
+
+.tugas-card p {
+    font-size: 15px;
+    line-height: 1.7;
+    opacity: .9;
+    color: #e2e8f0;
+    margin: 0;
+}
+
+/* ---------- 8. Galeri ---------- */
+.galeri-bar {
+    margin-bottom: 14px;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: #a9b7d6;
+}
+
+.galeri-bar strong {
+    color: #ff4d4d;
+}
+
+.foto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+.foto-item {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #110505;
+    border: 1px solid rgba(255, 77, 77, 0.1);
+}
+
+.foto-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+    position: relative;
+}
+
+.foto-btn:focus-visible {
+    outline: 3px solid #ff4d4d;
+    outline-offset: -3px;
+}
+
+.foto-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s;
+}
+
+.foto-item:hover img {
+    transform: scale(1.06);
+}
+
+.foto-caption {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 40px 16px 14px;
+    background: linear-gradient(transparent, rgba(15, 0, 0, .9));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.foto-zoom-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, .55);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity .25s;
+    pointer-events: none;
+}
+
+.foto-item:hover .foto-zoom-icon,
+.foto-btn:focus-visible .foto-zoom-icon {
+    opacity: 1;
+}
+
+/* ---------- 9. Lightbox ---------- */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 0, 0, .94);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s, visibility .25s;
+}
+
+.lightbox.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    max-width: 92vw;
+    max-height: 92vh;
+    transition: transform .35s ease, opacity .35s ease;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
+}
+
+.lightbox-figure.dragging {
+    transition: none;
+    cursor: grabbing;
+}
+
+.lightbox-img {
+    max-width: 92vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(255, 0, 0, .15);
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+.lightbox-caption {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.lightbox-counter {
+    color: #a9b7d6;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .05em;
+}
+
+.lightbox-close,
+.lightbox-nav {
+    position: absolute;
+    border: 1px solid rgba(255, 77, 77, .35);
+    background: rgba(20, 0, 0, .75);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .25s, border-color .25s, color .25s;
+}
+
+.lightbox-close:hover,
+.lightbox-nav:hover,
+.lightbox-close:focus-visible,
+.lightbox-nav:focus-visible {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+    outline: none;
+}
+
+.lightbox-close {
+    top: 20px;
+    right: 20px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    font-size: 22px;
+}
+
+.lightbox-nav {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 26px;
+}
+
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+body.lightbox-open {
+    overflow: hidden;
+}
+
+/* ---------- 10. Responsif ---------- */
+@media (max-width: 768px) {
+    .pmr-section { margin-bottom: 60px; }
+    .pmr-nav { margin-bottom: 52px; }
+
+    .tugas-list { grid-template-columns: 1fr; }
+
+    .pengertian-box {
+        padding: 56px 22px 24px;
+    }
+    .pengertian-box::before {
+        top: 8px;
+        left: 20px;
+    }
+
+    .foto-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 14px;
+    }
+
+    .lightbox-nav {
+        top: auto;
+        bottom: 24px;
+        transform: none;
+        width: 46px;
+        height: 46px;
+    }
+}

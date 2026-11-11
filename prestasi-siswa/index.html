@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO -->
+    <title>Prestasi Siswa | OSIS SMKN 1 Bantul</title>
+    <meta name="description" content="Daftar prestasi siswa SMK Negeri 1 Bantul di bidang akademik, olahraga, seni, dan keagamaan. Website resmi OSIS SMKN 1 Bantul.">
+    <meta name="keywords" content="Prestasi Siswa SMKN 1 Bantul, OSIS SMKN 1 Bantul, SMK Negeri 1 Bantul, Juara Lomba SMKN 1 Bantul, OSIS Bantul">
+    <meta name="author" content="OSIS SMKN 1 Bantul">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="googlebot" content="index,follow">
+    <link rel="canonical" href="https://osissmkn1bantul.pages.dev/prestasi-siswa/">
+
+    <!-- Theme & PWA -->
+    <meta name="theme-color" content="#0f172a">
+    <link rel="manifest" href="/manifest.webmanifest">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <link rel="apple-touch-icon" href="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="OSIS SMKN 1 Bantul">
+    <meta property="og:title" content="Prestasi Siswa | OSIS SMKN 1 Bantul">
+    <meta property="og:description" content="Prestasi membanggakan siswa SMK Negeri 1 Bantul di berbagai bidang.">
+    <meta property="og:url" content="https://osissmkn1bantul.pages.dev/prestasi-siswa/">
+    <meta property="og:image" content="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Prestasi Siswa | OSIS SMKN 1 Bantul">
+    <meta name="twitter:description" content="Prestasi membanggakan siswa SMK Negeri 1 Bantul.">
+    <meta name="twitter:image" content="https://apwgipefbiszpeoyvfta.supabase.co/storage/v1/object/public/foto/logo-osis.jpg">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Prestasi Siswa",
+      "url": "https://osissmkn1bantul.pages.dev/prestasi-siswa/",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "OSIS SMKN 1 Bantul",
+        "url": "https://osissmkn1bantul.pages.dev/"
+      }
+    }
+    </script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+
+    <!-- Style khusus halaman Prestasi Siswa -->
+    <style>
+        /* =========================================
+           HALAMAN PRESTASI
+           Tampilan disamakan dengan halaman Info
+           ========================================= */
+
+        :root {
+            --ink: #e8eefb;
+            --ink-soft: #c9d6ec;
+            --ink-faint: #8fa3c4;
+            --paper: #040c1c;
+            --card: #101c36;
+            --line: rgba(159, 179, 209, 0.16);
+            --accent: #f5b33c;
+            --accent-soft: rgba(245, 179, 60, 0.12);
+            --ink-on-accent: #0b1220;
+            --media-bg: #0b1220;
+            --font-display: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--paper);
+            font-family: var(--font-body);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ---------- HEADER HALAMAN ---------- */
+        #daftar-prestasi {
+            max-width: 1040px;
+            margin: 48px auto 110px;
+            padding: 0 22px;
+            color: var(--ink);
+            font-family: var(--font-body);
+        }
+
+        #daftar-prestasi .section-title {
+            text-align: left;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--ink);
+        }
+
+        #daftar-prestasi .section-title .badge-gold {
+            display: inline-block;
+            padding: 3px 0;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--accent);
+            border-radius: 0;
+            margin-bottom: 8px;
+        }
+
+        #daftar-prestasi .section-title h2 {
+            font-family: var(--font-display);
+            font-size: 2.9rem;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+            margin: 12px 0 10px;
+            color: var(--ink);
+        }
+
+        #daftar-prestasi .section-title p {
+            color: var(--ink-soft);
+            max-width: 580px;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+
+        /* ---------- FILTER KATEGORI ---------- */
+        .prestasi-filter {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 6px 22px;
+            margin-bottom: 36px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .prestasi-filter button {
+            position: relative;
+            border: none;
+            background: none;
+            color: var(--ink-faint);
+            padding: 10px 0 12px;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.15s ease;
+        }
+
+        .prestasi-filter button::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+            height: 2px;
+            background: transparent;
+            transition: background 0.15s ease;
+        }
+
+        .prestasi-filter button:hover,
+        .prestasi-filter button.active {
+            color: var(--ink);
+        }
+
+        .prestasi-filter button.active::after {
+            background: var(--accent);
+        }
+
+        /* ---------- GRID KARTU ---------- */
+        .prestasi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 28px 24px;
+            align-items: stretch;
+        }
+
+        .prestasi-card {
+            position: relative;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.2s ease;
+        }
+
+        .prestasi-card:hover {
+            border-color: rgba(245, 179, 60, 0.45);
+        }
+
+        /* Cover kartu: blur di belakang, foto utuh di depan */
+        .prestasi-cover-wrap {
+            position: relative;
+            height: 230px;
+            overflow: hidden;
+            background: var(--media-bg);
+            border-bottom: 1px solid var(--line);
+            cursor: zoom-in;
+        }
+
+        .prestasi-cover-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(22px) brightness(0.9) saturate(0.85);
+            transform: scale(1.12);
+        }
+
+        .prestasi-cover {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .prestasi-noimg {
+            height: 230px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--media-bg);
+            border-bottom: 1px solid var(--line);
+            font-size: 2.5rem;
+            color: var(--ink-faint);
+        }
+
+        .prestasi-body {
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            color: var(--ink);
+            flex-grow: 1;
+        }
+
+        /* Badge kategori: abu-abu netral seperti badge BERITA */
+        .prestasi-kategori {
+            display: inline-block;
+            align-self: flex-start;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            padding: 2px 8px;
+            border-radius: 2px;
+            border: 1px solid var(--line);
+            background: rgba(159, 179, 209, 0.08);
+            margin-bottom: 0;
+        }
+
+        .prestasi-body h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--ink);
+            margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .prestasi-meta {
+            font-family: var(--font-body);
+            font-size: 0.76rem;
+            color: var(--ink-faint);
+            font-weight: 600;
+            line-height: 1.5;
+            margin: 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .prestasi-juara {
+            margin: 0;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Tombol "Lihat Selengkapnya" bergaya tautan bergaris emas */
+        .pr-btn-detail {
+            align-self: flex-start;
+            margin-top: 6px;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: var(--font-body);
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 4px;
+        }
+
+        .pr-btn-detail::after {
+            content: " →";
+        }
+
+        .pr-btn-detail:hover {
+            text-decoration-thickness: 2px;
+        }
+
+        /* ---------- EMPTY STATE ---------- */
+        .prestasi-empty {
+            grid-column: 1 / -1;
+            text-align: left;
+            color: var(--ink-faint);
+            font-size: 0.92rem;
+            padding: 48px 0;
+            border-top: 1px dashed var(--line);
+        }
+
+        /* ---------- MODAL DETAIL ---------- */
+        .pr-modal, .pr-lightbox {
+            position: fixed;
+            inset: 0;
+            display: none;
+            z-index: 999;
+        }
+
+        .pr-modal {
+            background: rgba(3, 7, 16, 0.75);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-top: 90px;
+        }
+
+        .pr-modal.open {
+            display: flex;
+        }
+
+        .pr-modal-box {
+            position: relative;
+            background: var(--card);
+            color: var(--ink);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            max-width: 660px;
+            width: 100%;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 36px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+        }
+
+        .pr-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--card);
+            color: var(--ink);
+            border: 1px solid var(--line);
+            width: 34px;
+            height: 34px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .pr-modal-close:hover {
+            border-color: var(--accent);
+        }
+
+        /* Cover modal: blur di belakang, foto utuh di depan */
+        .pr-modal-cover-wrap {
+            position: relative;
+            width: calc(100% + 72px);
+            margin: -36px -36px 22px;
+            height: 360px;
+            overflow: hidden;
+            cursor: zoom-in;
+            background: var(--media-bg);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .pr-modal-cover-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(24px) brightness(0.9) saturate(0.85);
+            transform: scale(1.12);
+        }
+
+        .pr-modal-cover {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .pr-modal-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .pr-modal-date {
+            font-size: 0.8rem;
+            color: var(--ink-faint);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .pr-modal-judul {
+            font-family: var(--font-display);
+            font-size: 1.7rem;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--ink);
+            margin: 0 0 18px;
+            padding-right: 24px;
+        }
+
+        .pr-modal-body {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px dashed var(--line);
+            line-height: 1.8;
+            font-size: 0.96rem;
+            color: var(--ink-soft);
+        }
+
+        .pr-modal-body p {
+            margin: 0 0 12px;
+        }
+
+        .pr-muted {
+            color: var(--ink-faint);
+            font-style: italic;
+        }
+
+        /* Galeri */
+        .pr-galeri {
+            margin-top: 26px;
+        }
+
+        .pr-galeri-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .pr-galeri-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .pr-galeri-grid img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border: 1px solid var(--line);
+            border-radius: 2px;
+            cursor: zoom-in;
+        }
+
+        /* Bagikan: tombol dibuka menjadi pilihan */
+        .pr-share-block {
+            margin: 24px 0 4px;
+        }
+
+        .pr-share-toggle,
+        .pr-share-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 2px;
+            border: 1px solid var(--line);
+            background: rgba(159, 179, 209, 0.06);
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: border-color 0.15s ease;
+        }
+
+        .pr-share-toggle:hover,
+        .pr-share-icon:hover {
+            border-color: var(--accent);
+        }
+
+        .pr-share-icon.wa {
+            background: var(--accent-soft);
+            border-color: rgba(245, 179, 60, 0.35);
+            color: var(--accent);
+        }
+
+        .pr-share-options {
+            display: none;
+            gap: 8px;
+        }
+
+        .pr-share-block.expanded .pr-share-toggle {
+            display: none;
+        }
+
+        .pr-share-block.expanded .pr-share-options {
+            display: flex;
+        }
+
+        .pr-share-options .pr-share-icon {
+            flex: 1;
+        }
+
+        .pr-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: var(--ink-on-accent);
+            padding: 10px 18px;
+            border-radius: 2px;
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 600;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+        }
+
+        .pr-toast.show {
+            opacity: 1;
+        }
+
+        /* ---------- LIGHTBOX FOTO ---------- */
+        .pr-lightbox {
+            background: rgba(3, 7, 16, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            z-index: 1100;
+            cursor: zoom-out;
+        }
+
+        .pr-lightbox.open {
+            display: flex;
+        }
+
+        .pr-lightbox img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 2px;
+        }
+
+        .pr-lb-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            width: 40px;
+            height: 40px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .pr-lb-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 600px) {
+            #daftar-prestasi {
+                margin-top: 40px;
+            }
+
+            #daftar-prestasi .section-title h2 {
+                font-size: 2.2rem;
+            }
+
+            .prestasi-cover-wrap,
+            .prestasi-noimg {
+                height: 200px;
+            }
+
+            .pr-modal-box {
+                padding: 24px 20px;
+            }
+
+            .pr-modal-cover-wrap {
+                width: calc(100% + 40px);
+                margin: -24px -20px 16px;
+                height: 260px;
+            }
+
+            .pr-modal-judul {
+                font-size: 1.4rem;
+            }
+
+            .pr-galeri-grid img {
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <a href="/" class="brand">
+                <img src="/assets/logo-osis.png" alt="Logo OSIS" class="logo-img">
+                <span class="brand-text">OSIS <span>SMKN 1 Bantul</span></span>
+            </a>
+
+            <div class="hamburger" id="hamburger-menu">
+                <span></span><span></span><span></span>
+            </div>
+
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="/" class="nav-link">Beranda</a></li>
+                <li><a href="/struktur" class="nav-link">Struktur</a></li>
+                <li><a href="/open-recruitment" class="nav-link">Open Recruitment</a></li>
+                <li><a href="/otonom/" class="nav-link active" aria-current="page">Organisasi Otonom</a></li>
+                <li><a href="/prestasi-siswa/" class="nav-link active">Prestasi Siswa</a></li>
+                <li><a href="/info" class="nav-link">Info</a></li>
+                <li><a href="https://mpk.smkn1bantul.sch.id" class="nav-link">MPK</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <br><br><br>
+
+    <section class="home-section container" id="daftar-prestasi">
+        <div class="section-title">
+            <span class="badge-gold">PRESTASI</span>
+            <h2>Daftar Prestasi Siswa</h2>
+            <p>Prestasi akademik, olahraga, seni, dan keagamaan yang diraih siswa SMKN 1 Bantul.</p>
+        </div>
+
+        <div class="prestasi-filter" id="prestasi-filter">
+            <button class="active" data-kategori="semua">Semua</button>
+            <button data-kategori="akademik">Akademik</button>
+            <button data-kategori="olahraga">Olahraga</button>
+            <button data-kategori="seni">Seni</button>
+            <button data-kategori="keagamaan">Keagamaan</button>
+        </div>
+
+        <div class="prestasi-grid" id="prestasi-grid">
+            <p class="prestasi-empty">Memuat prestasi...</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <div class="footer-brand">
+                    <img src="/assets/logo-osis.png" alt="Logo OSIS" class="footer-logo">
+                    <span>OSIS SMKN 1 Bantul</span>
+                </div>
+                <p class="footer-desc">Wadah aspirasi, kreasi, dan inovasi seluruh siswa SMK Negeri 1 Bantul untuk mewujudkan generasi yang berkarakter unggul.</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigasi</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Beranda</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Kontak & Lokasi</h4>
+                <p class="contact-item">📍 Jl. Parangtritis Km 11, Sabdodadi, Bantul, D.I. Yogyakarta</p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Media Sosial</h4>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/osis.smkn1bantul/" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+                    <a href="https://www.youtube.com/@osissabavoscho6471/" target="_blank" rel="noopener noreferrer" class="social-btn">YouTube</a>
+                    <a href="https://www.tiktok.com/@osissmkn1bantul" target="_blank" rel="noopener noreferrer" class="social-btn">TikTok</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 OSIS SMKN 1 Bantul. All Rights Reserved. Crafted with passion.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/prestasi-admin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script>
+    (function () {
+        const sb = window.supabase.createClient(
+            'https://apwgipefbiszpeoyvfta.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwd2dpcGVmYmlzenBlb3l2ZnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1MjU0MDcsImV4cCI6MjEwMTEwMTQwN30.JiO5Cq4KYZYU92seDkg8u-YDoqoLw7qzsY2MPKQIQlk'
+        );
+
+        const grid = document.getElementById('prestasi-grid');
+        const filterWrap = document.getElementById('prestasi-filter');
+        const KAT_LABEL = { akademik: 'AKADEMIK', olahraga: 'OLAHRAGA', seni: 'SENI', keagamaan: 'KEAGAMAAN' };
+        let semua = [];
+
+        function esc(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        /* ---------- Toast ---------- */
+        const toast = document.createElement('div');
+        toast.className = 'pr-toast';
+        document.body.appendChild(toast);
+        let toastTimer;
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 2000);
+        }
+
+        /* ---------- Lightbox foto ---------- */
+        const lightbox = document.createElement('div');
+        lightbox.className = 'pr-lightbox';
+        lightbox.innerHTML = '<button type="button" class="pr-lb-close" aria-label="Tutup">✕</button>' +
+                             '<img alt="Foto diperbesar">';
+        document.body.appendChild(lightbox);
+        const lbImg = lightbox.querySelector('img');
+
+        function openLightbox(src, alt) {
+            lbImg.src = src;
+            lbImg.alt = alt || '';
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox || e.target.classList.contains('pr-lb-close')) closeLightbox();
+        });
+
+        /* ---------- Modal detail ---------- */
+        const modal = document.createElement('div');
+        modal.className = 'pr-modal';
+        modal.innerHTML =
+            '<div class="pr-modal-box" role="dialog" aria-modal="true">' +
+                '<button type="button" class="pr-modal-close" aria-label="Tutup">✕</button>' +
+                '<div class="pr-modal-content"></div>' +
+            '</div>';
+        document.body.appendChild(modal);
+        const modalContent = modal.querySelector('.pr-modal-content');
+
+        async function openModal(p) {
+            const meta = [p.nama_siswa, p.kelas, p.tingkat].filter(Boolean).map(esc).join(' • ');
+            const cerita = p.deskripsi
+                ? esc(p.deskripsi).split(/\n+/).map(function (par) { return '<p>' + par + '</p>'; }).join('')
+                : '<p class="pr-muted">Belum ada cerita untuk prestasi ini.</p>';
+
+            const url = location.origin + location.pathname + '#' + p.id;
+            const teks = p.judul + (p.nama_siswa ? ' — ' + p.nama_siswa : '') + ' | OSIS SMKN 1 Bantul';
+            const waUrl = 'https://wa.me/?text=' + encodeURIComponent(teks + '\n' + url);
+
+            modalContent.innerHTML =
+                (p.foto_url
+                    ? '<div class="pr-modal-cover-wrap">' +
+                        '<img class="pr-modal-cover-bg" src="' + esc(p.foto_url) + '" alt="">' +
+                        '<img class="pr-modal-cover" src="' + esc(p.foto_url) + '" alt="' + esc(p.judul) + '">' +
+                      '</div>'
+                    : '') +
+                '<div class="pr-modal-meta">' +
+                    '<span class="prestasi-kategori">' + esc(KAT_LABEL[p.kategori] || p.kategori) + '</span>' +
+                    '<span class="pr-modal-date">' + esc(p.tahun || '') + '</span>' +
+                '</div>' +
+                '<h3 class="pr-modal-judul">' + esc(p.judul) + '</h3>' +
+                '<p class="prestasi-meta">' + meta + '</p>' +
+                (p.juara ? '<p class="prestasi-juara">🏆 ' + esc(p.juara) + '</p>' : '') +
+                '<div class="pr-modal-body">' + cerita + '</div>' +
+                '<div class="pr-galeri" id="pr-galeri"></div>' +
+                '<div class="pr-share-block" id="pr-share-block">' +
+                    '<button type="button" class="pr-share-toggle">Bagikan Prestasi</button>' +
+                    '<div class="pr-share-options">' +
+                        '<a class="pr-share-icon wa" href="' + waUrl + '" target="_blank" rel="noopener noreferrer">WhatsApp</a>' +
+                        '<button type="button" class="pr-share-icon" id="pr-copy-btn">Salin Tautan</button>' +
+                    '</div>' +
+                '</div>';
+
+            const coverImg = modalContent.querySelector('.pr-modal-cover');
+            if (coverImg) coverImg.addEventListener('click', function () { openLightbox(p.foto_url, p.judul); });
+
+            /* Galeri foto lomba */
+            const galeriWrap = modalContent.querySelector('#pr-galeri');
+            const { data: galeri } = await sb
+                .from('prestasi_galeri')
+                .select('*')
+                .eq('prestasi_id', p.id)
+                .order('sort_order', { ascending: true });
+
+            if (galeri && galeri.length) {
+                galeriWrap.innerHTML =
+                    '<div class="pr-galeri-title">Galeri Lomba</div>' +
+                    '<div class="pr-galeri-grid">' +
+                    galeri.map(function (g, i) {
+                        return '<img src="' + esc(g.image_url) + '" alt="Galeri ' + (i + 1) + '" data-idx="' + i + '">';
+                    }).join('') +
+                    '</div>';
+
+                galeriWrap.querySelectorAll('img').forEach(function (img) {
+                    img.addEventListener('click', function () {
+                        openLightbox(galeri[img.dataset.idx].image_url, p.judul);
+                    });
+                });
+            }
+
+            /* Bagikan */
+            const shareBlock = modalContent.querySelector('#pr-share-block');
+            shareBlock.querySelector('.pr-share-toggle').addEventListener('click', function () {
+                shareBlock.classList.add('expanded');
+            });
+            modalContent.querySelector('#pr-copy-btn').addEventListener('click', async function () {
+                try {
+                    await navigator.clipboard.writeText(teks + '\n' + url);
+                    showToast('Tautan disalin');
+                } catch (e) {
+                    showToast('Gagal menyalin tautan');
+                }
+            });
+
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            modal.querySelector('.pr-modal-box').scrollTop = 0;
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal || e.target.classList.contains('pr-modal-close')) closeModal();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                if (lightbox.classList.contains('open')) closeLightbox();
+                else if (modal.classList.contains('open')) closeModal();
+            }
+        });
+
+        /* ---------- Render kartu ---------- */
+        function render(kat) {
+            const list = kat === 'semua' ? semua : semua.filter(function (p) { return p.kategori === kat; });
+
+            if (list.length === 0) {
+                grid.innerHTML = '<p class="prestasi-empty">Belum ada prestasi untuk kategori ini.</p>';
+                return;
+            }
+
+            grid.innerHTML = '';
+            list.forEach(function (p) {
+                const meta = [p.nama_siswa, p.kelas, p.tingkat, p.tahun].filter(Boolean).map(esc).join(' • ');
+                const card = document.createElement('article');
+                card.className = 'prestasi-card';
+                card.innerHTML =
+                    (p.foto_url
+                        ? '<div class="prestasi-cover-wrap">' +
+                            '<img class="prestasi-cover-bg" src="' + esc(p.foto_url) + '" alt="">' +
+                            '<img class="prestasi-cover" src="' + esc(p.foto_url) + '" alt="' + esc(p.judul) + '" loading="lazy">' +
+                          '</div>'
+                        : '<div class="prestasi-noimg">🏆</div>') +
+                    '<div class="prestasi-body">' +
+                        '<span class="prestasi-kategori">' + esc(KAT_LABEL[p.kategori] || p.kategori) + '</span>' +
+                        '<h3>' + esc(p.judul) + '</h3>' +
+                        '<p class="prestasi-meta">' + meta + '</p>' +
+                        (p.juara ? '<p class="prestasi-juara">🏆 ' + esc(p.juara) + '</p>' : '') +
+                        '<button type="button" class="pr-btn-detail">Lihat Selengkapnya</button>' +
+                    '</div>';
+
+                card.querySelector('.pr-btn-detail').addEventListener('click', function () { openModal(p); });
+                const coverEl = card.querySelector('.prestasi-cover-wrap');
+                if (coverEl && p.foto_url) {
+                    coverEl.addEventListener('click', function () { openLightbox(p.foto_url, p.judul); });
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        filterWrap.addEventListener('click', function (e) {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            filterWrap.querySelectorAll('button').forEach(function (b) {
+                b.classList.toggle('active', b === btn);
+            });
+            render(btn.dataset.kategori);
+        });
+
+        async function init() {
+            const { data, error } = await sb
+                .from('prestasi')
+                .select('*')
+                .eq('is_published', true)
+                .order('sort_order', { ascending: true })
+                .order('tahun', { ascending: false });
+
+            if (error) {
+                console.error(error);
+                grid.innerHTML = '<p class="prestasi-empty">Gagal memuat data prestasi.</p>';
+                return;
+            }
+
+            semua = data || [];
+
+            /* Buka otomatis jika URL berisi #id prestasi (hasil share) */
+            const hashId = location.hash.slice(1);
+            if (hashId) {
+                const target = semua.find(function (p) { return p.id === hashId; });
+                if (target) openModal(target);
+            }
+
+            render('semua');
+        }
+
+        init();
+    })();
+    </script>
+</body>
+</html>

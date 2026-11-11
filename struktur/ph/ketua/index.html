@@ -121,6 +121,141 @@
                 justify-content: center;
             }
         }
+        /* ===== Override warna bagian Ketua: tema navy + emas ===== */
+.pengurus-section {
+    background: #0a1530;
+}
+
+.pengurus-section.is-alt {
+    background: #050b1a;
+}
+
+.pengurus-label {
+    color: #ffc94d;
+}
+
+.pengurus-name {
+    color: #f1f5ff;
+}
+
+.pengurus-kelas {
+    color: #a9b7d6;
+}
+
+.pengurus-photo-wrap img {
+    filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.45));
+}
+
+/* Kartu motto */
+.motto-card {
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 201, 77, 0.12);
+    padding: 20px 22px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1a2d5c, #101f44);
+    box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.6);
+}
+
+.motto-card-label {
+    padding: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffc94d;
+    border-bottom: 1px solid rgba(255, 201, 77, 0.12);
+}
+
+.motto-card p {
+    color: #a9b7d6;
+}
+
+.motto-card-quote {
+    padding: 18px 20px;
+    text-align: center;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #f1f5ff;
+}
+
+.motto-list li {
+    position: relative;
+    padding: 6px 0 6px 22px;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #a9b7d6;
+}
+
+.motto-list li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 0.95em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ffc94d;
+}
+
+/* Kartu pengalaman */
+.pengalaman-card {
+    padding: 18px 20px;
+    background: linear-gradient(180deg, rgba(16, 31, 68, 0.62), rgba(10, 21, 48, 0.78));
+    border: 1px solid rgba(255, 201, 77, 0.12);
+    border-radius: 16px;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+.pengalaman-title {
+    color: #ffc94d;
+}
+
+.pengalaman-item h4 {
+    color: #f1f5ff;
+}
+
+.pengalaman-item span {
+    color: #a9b7d6;
+}
+
+/* ===== Rincian Tugas: tema navy + emas ===== */
+.tugas-section[style*="background-color"] {
+    background-color: #050b1a !important;
+    box-shadow: none !important;
+}
+
+#ph-tugas-judul {
+    color: #f1f5ff !important;
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+#ph-tugas-judul + p,
+.tugas-section[style*="background-color"] p {
+    color: #a9b7d6 !important;
+}
+
+.tugas-section[style*="background-color"] .tugas-box {
+    background: linear-gradient(135deg, #1a2d5c, #101f44) !important;
+    border-left: 6px solid #ffc94d !important;
+    box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.6) !important;
+}
+
+.ph-tugas-list {
+    color: #a9b7d6 !important;
+}
+
+.ph-tugas-list li {
+    color: #a9b7d6 !important;
+}
+
+.ph-tugas-list li.ph-empty {
+    color: #7c8db0 !important;
+}
     </style>
 </head>
 <body data-ph-group="ketua">
@@ -140,10 +275,12 @@
 
             <ul class="nav-menu" id="nav-menu">
                 <li><a href="/" class="nav-link">Beranda</a></li>
-                <li><a href="/struktur" class="nav-link active">Struktur</a></li>
+                <li><a href="/struktur" class="nav-link">Struktur</a></li>
                 <li><a href="/open-recruitment" class="nav-link">Open Recruitment</a></li>
+                <li><a href="/otonom/" class="nav-link active" aria-current="page">Organisasi Otonom</a></li>
+                <li><a href="/prestasi-siswa/" class="nav-link active">Prestasi Siswa</a></li>
                 <li><a href="/info" class="nav-link">Info</a></li>
-                <li><a href="/ai" class="nav-link">AI</a></li>
+                <li><a href="https://mpk.smkn1bantul.sch.id" class="nav-link">MPK</a></li>
             </ul>
         </div>
     </header>
@@ -170,18 +307,6 @@
     <section class="tugas-section">
         <div class="tugas-grid" style="align-items: flex-start;">
 
-            <h2 style="margin-top: 0;">Tugas Umum</h2>
-
-            <div class="tugas-content-wrapper">
-                <p id="ph-tugas-umum" class="ph-empty" style="margin-top: 0;">Belum ada data</p>
-
-                <div class="visi-misi-box" style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 10px; border-left: 5px solid #0056b3;">
-                    <h3 style="margin-top: 0;">Fokus Utama Kami</h3>
-                    <ul class="ph-tugas-list" style="margin-top: 10px; padding-left: 20px; line-height: 1.6; margin-bottom: 0;">
-                        <li class="ph-empty">Belum ada data</li>
-                    </ul>
-                </div>
-            </div>
 
         </div>
     </section>
@@ -243,10 +368,6 @@
                 <h4>Navigasi</h4>
                 <ul class="footer-links">
                     <li><a href="/">Beranda</a></li>
-                    <li><a href="/struktur">Struktur Organisasi</a></li>
-                    <li><a href="/open-recruitment">Open Recruitment</a></li>
-                    <li><a href="/info">Pusat Info</a></li>
-                    <li><a href="/ai">OSIS-Bot AI</a></li>
                 </ul>
             </div>
 
