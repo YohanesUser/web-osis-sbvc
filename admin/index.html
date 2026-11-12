@@ -55,9 +55,16 @@
 
             <nav class="sidebar-nav" aria-label="Menu admin">
 
+                <div class="nav-group-title">Ringkasan</div>
+
+<button type="button" class="admin-tab-btn active" data-tab="dashboard" data-title="Beranda Admin">
+    <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg></span>
+    <span>Beranda Admin</span>
+</button>
+
                 <div class="nav-group-title">Konten</div>
 
-                <button type="button" class="admin-tab-btn active" data-tab="news" data-title="Kelola Berita">
+                <button type="button" class="admin-tab-btn" data-tab="news" data-title="Kelola Berita">
                     <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
                     <span>Kelola Berita</span>
                 </button>
@@ -130,6 +137,27 @@
             </header>
 
             <main class="admin-main">
+
+                <!-- ===== BERANDA ADMIN ===== -->
+<section id="tab-dashboard" class="admin-tab-panel">
+    <div id="welcome-banner" class="welcome-banner">
+        <div>
+            <h2 id="welcome-text">Selamat datang, Admin</h2>
+            <p id="welcome-time" class="welcome-sub"></p>
+        </div>
+        <button id="dashboard-refresh-btn" type="button" class="btn-secondary">Muat Ulang</button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card"><span class="stat-label">Komentar Baru (24 jam)</span><strong id="stat-comments">-</strong></div>
+        <div class="stat-card"><span class="stat-label">Total Berita</span><strong id="stat-news">-</strong></div>
+        <div class="stat-card"><span class="stat-label">Pengunjung Aktif</span><strong id="stat-visitors">-</strong></div>
+        <div class="stat-card"><span class="stat-label">Status Database</span><strong id="stat-db">-</strong></div>
+        <div class="stat-card"><span class="stat-label">CPU Server</span><strong id="stat-cpu">-</strong><div class="meter"><span id="meter-cpu"></span></div></div>
+        <div class="stat-card"><span class="stat-label">RAM Server</span><strong id="stat-ram">-</strong><div class="meter"><span id="meter-ram"></span></div></div>
+    </div>
+    <p id="stats-updated" class="page-desc"></p>
+</section>
 
                 <!-- ===== KOMENTAR SISWA ===== -->
                 <section id="tab-comments" class="admin-tab-panel hidden">
@@ -568,7 +596,7 @@
                 </section>
 
                 <!-- ===== KELOLA BERITA ===== -->
-                <section id="tab-news" class="admin-tab-panel">
+                <section id="tab-news" class="admin-tab-panel hidden">
                     <div class="admin-toolbar">
                         <div>
                             <h2>Kelola Berita</h2>
@@ -805,6 +833,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="/js/admin.js"></script>
+    <script src="/js/dashboard-admin.js"></script>
     <script src="/js/prestasi-admin.js"></script>
     <script src="/js/otonom-admin.js"></script>
 

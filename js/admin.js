@@ -55,11 +55,21 @@
     }
 
     function showDashboard(session) {
-        loginScreen.classList.add('hidden');
-        dashboard.classList.remove('hidden');
-        adminEmailEl.textContent = session.user.email || '';
-        loadComments();
-    }
+    loginScreen.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+    adminEmailEl.textContent = session.user.email || '';
+
+    // Pastikan hanya tab Beranda yang tampil saat pertama login
+    Object.keys(tabPanels).forEach(function (key) {
+        tabPanels[key].classList.toggle('hidden', key !== 'dashboard');
+    });
+    tabButtons.forEach(function (b) {
+        b.classList.toggle('active', b.dataset.tab === 'dashboard');
+    });
+    document.getElementById('page-title').textContent = 'Beranda Admin';
+
+    if (window.loadDashboard) window.loadDashboard();
+}
 
     function showLogin() {
         dashboard.classList.add('hidden');
@@ -115,6 +125,7 @@
     /* ===================== TAB SWITCHING ===================== */
     const tabButtons = document.querySelectorAll('.admin-tab-btn');
     const tabPanels = {
+        dashboard: document.getElementById('tab-dashboard'),
     comments: document.getElementById('tab-comments'),
     news: document.getElementById('tab-news'),
     gallery: document.getElementById('tab-gallery'),

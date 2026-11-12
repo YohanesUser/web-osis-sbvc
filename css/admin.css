@@ -846,3 +846,43 @@ input, select, textarea { font-family: inherit; font-size: 14px; }
 @media (min-width: 1400px) {
     .admin-main { max-width: 1120px; }
 }
+
+.welcome-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: linear-gradient(135deg, #0b3d91, #0b1f44);
+    color: #fff;
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+}
+.welcome-banner h2 { margin: 0; font-size: 1.25rem; font-weight: 800; }
+.welcome-banner .btn-secondary { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.25); }
+.welcome-sub { margin: 4px 0 0; font-size: .85rem; color: #c9d4e8; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.stat-label { font-size: .75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
+.stat-card strong { font-size: 1.35rem; font-weight: 800; color: var(--text); }
+.meter { height: 6px; background: var(--border-light); border-radius: 999px; overflow: hidden; }
+.meter span { display: block; height: 100%; width: 0; background: var(--primary); transition: width .4s var(--ease); }
+.meter span.warn { background: #f59e0b; }
+.meter span.danger { background: var(--danger); }
