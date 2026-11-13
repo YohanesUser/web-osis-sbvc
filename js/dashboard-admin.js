@@ -44,16 +44,6 @@
         setText('welcome-time', new Date().toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' }));
     }
 
-    async function loadCounts(client) {
-        const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
-        const [newsRes, commentRes] = await Promise.all([
-            client.from('news').select('id', { count: 'exact', head: true }),
-            client.from('comments').select('id', { count: 'exact', head: true }).gte('created_at', since)
-        ]);
-        setText('stat-news', newsRes.count ?? '-');
-        setText('stat-comments', commentRes.count ?? '-');
-    }
-
     async function loadDbStatus(client) {
         const t0 = performance.now();
         const ping = await client.from('news').select('id', { head: true, count: 'exact' }).limit(1);
@@ -63,7 +53,6 @@
 
     async function loadServerStats(client) {
         if (!STATS_ENDPOINT) {
-            setText('stat-visitors', '-');
             setText('stat-cpu', 'Belum tersedia');
             setText('stat-ram', 'Belum tersedia');
             return;
@@ -94,11 +83,38 @@
             console.error('Supabase client belum siap.');
             return;
         }
+
+        const now = Date.now();
+        const since24h = new Date(now - 24 * 3600 * 1000).toISOString();
+        const since30d = new Date(now - 30 * 24 * 3600 * 1000).toISOString();
+        const since5m  = new Date(now - 5 * 60 * 1000).toISOString();
+
         try {
-            await Promise.all([loadCounts(client), loadDbStatus(client), loadServerStats(client)]);
+            const [comments, news, visitors30, visitorsNow, egress] = await Promise.all([
+                client.from('comments').select('id', { count: 'exact', head: true }).gte('created_at', since24h),
+                client.from('news').select('id', { count: 'exact', head: true }),
+                client.from('page_views').select('id', { count: 'exact', head: true }).gte('visited_at', since30d),
+                client.from('page_views').select('id', { count: 'exact', head: true }).gte('visited_at', since5m),
+                client.from('site_stats').select('value, updated_at').eq('key', 'cached_egress').maybeSingle()
+            ]);
+
+            setText('stat-comments', comments.count ?? '-');
+            setText('stat-news', news.count ?? '-');
+            setText('stat-visitors', visitorsNow.count ?? '-');
+            setText('stat-visitors-30d', visitors30.count ?? '-');
+            setText('stat-db', (comments.error || news.error) ? 'Gangguan' : 'Online');
+
+            if (egress.data && egress.data.value != null) {
+                setText('stat-cached-egress', (egress.data.value / 1024 ** 3).toFixed(2) + ' GB');
+            } else {
+                setText('stat-cached-egress', 'Belum ada data');
+            }
         } catch (err) {
             console.error(err);
         }
+
+        await Promise.all([loadDbStatus(client), loadServerStats(client)]);
+
         setText('stats-updated', 'Diperbarui ' +
             new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
     }

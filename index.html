@@ -234,8 +234,25 @@
     </footer>
 
     <script src="/js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script>
+    (function () {
+        if (sessionStorage.getItem('pv_logged')) return;
+        sessionStorage.setItem('pv_logged', '1');
+
+        const sb = supabase.createClient(
+            'https://apwgipefbiszpeoyvfta.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwd2dpcGVmYmlzenBlb3l2ZnRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1MjU0MDcsImV4cCI6MjEwMTEwMTQwN30.JiO5Cq4KYZYU92seDkg8u-YDoqoLw7qzsY2MPKQIQlk'        );
+
+        sb.from('page_views')
+            .insert({ path: location.pathname })
+            .then(function (res) {
+                if (res.error) console.error('Gagal catat kunjungan:', res.error);
+            });
+    })();
+    </script>
     <script src="/js/comment.js"></script>
     <script src="/js/berita.js"></script>
+</body>
 </body>
 </html>
